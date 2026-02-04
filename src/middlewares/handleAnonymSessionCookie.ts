@@ -1,50 +1,61 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { AnonymSessionCookieName, AnonymSessionCSRFTokenHeaderName } from '@/constants/http';
-import { AnonymUserSession } from '@/types/http';
+import { AnonymSessionCookieName, AnonymSessionDataCookieName } from '@/constants/http';
+import { AnonymUserSession, AnonymUserSessionData } from '@/types/http';
 import { decryptWeb, encryptWeb } from '@/utils/app/crypt';
 import { getCsrfToken } from '@/utils/common/csrf';
-import { uuidv4 } from '@/utils/common/uuid';
 
 export async function handleAnonymSessionCookie(req: NextRequest, res: NextResponse) {
   if (!process.env.DIAL_API_KEY || !process.env.ANONYM_SESSION_SECRET_KEY) return;
 
-  const anonymSessionSecretKey = process.env.ANONYM_SESSION_SECRET_KEY || '';
+  const anonymSessionSecretKey = process.env.ANONYM_SESSION_SECRET_KEY;
   const existingCookie = req.cookies.get(AnonymSessionCookieName);
 
   let session: AnonymUserSession;
+  let shouldSetCookie = false;
+  let isRecaptchaRequired = true;
 
-  if (existingCookie) {
+  if (existingCookie?.value) {
     try {
       session = await decryptWeb(existingCookie.value, anonymSessionSecretKey);
 
-      if (!session?.userId || !session?.token) {
+      if (!session?.token) {
         throw new Error('Invalid anonym cookie session payload');
       }
+
+      isRecaptchaRequired = !session.requestQuota || session.requestQuota < 1;
     } catch {
-      session = {
-        userId: uuidv4(),
-        token: getCsrfToken(),
-      };
+      session = { token: getCsrfToken() };
+      shouldSetCookie = true;
     }
   } else {
-    session = {
-      userId: uuidv4(),
-      token: getCsrfToken(),
-    };
+    session = { token: getCsrfToken() };
+    shouldSetCookie = true;
   }
 
-  const encrypted = await encryptWeb(JSON.stringify(session), anonymSessionSecretKey);
+  if (shouldSetCookie) {
+    const encrypted = await encryptWeb(JSON.stringify(session), anonymSessionSecretKey);
 
-  res.cookies.set(AnonymSessionCookieName, encrypted, {
-    path: '/',
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'none',
-    partitioned: true,
-  });
+    res.cookies.set(AnonymSessionCookieName, encrypted, {
+      path: '/',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
+      partitioned: true,
+      httpOnly: true,
+    });
+  }
 
   if (session?.token) {
-    res.headers.set(AnonymSessionCSRFTokenHeaderName, session.token);
+    const sessionData: AnonymUserSessionData = {
+      token: session.token,
+      isChallengeRequired: isRecaptchaRequired,
+    };
+    res.cookies.set(AnonymSessionDataCookieName, JSON.stringify(sessionData), {
+      path: '/',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
+      partitioned: true,
+      httpOnly: false,
+    });
   }
 }

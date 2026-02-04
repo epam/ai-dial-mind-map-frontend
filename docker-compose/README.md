@@ -2,7 +2,7 @@
 <p align="center"><p align="center">
         <br>
         <a href="https://dialx.ai/">
-          <img src="https://dialx.ai/dialx_logo.svg" alt="About DIALX">
+          <img src="https://dialx.ai/logo/dialx_logo.svg" alt="About DIALX">
         </a>
     </p>
 <h4 align="center">
@@ -15,7 +15,7 @@
 
 ## Overview
 
-This Docker Compose setup allows you to run **DIAL AI** and **Mind Map** services locally.
+This Docker Compose setup allows you to run **AI DIAL** and **Mind Map** services locally.
 
 ## Prerequisites
 
@@ -27,17 +27,26 @@ Before starting, you need to configure **three required AI models** for the Mind
 
 ## Configuration
 
-Update the `upstreams` section for each model in the following file:
-
-./dial_dir/core/config.json
+Update the `upstreams` section for each model in the following file `./dial_dir/core/config.json`. Example configuration if you have an azure deployment:
 
 ```json
-Example configuration:
+Example configuration for an Azure deployment
 
 "upstreams": [
     {
         "endpoint": "Azure model deployment endpoint",
-        "key": "YOUR_API_KEY"
+        "key": "Azure api key"
+    }
+]
+```
+
+```json
+Example configuration for existing AI DIAL deployment
+
+"upstreams": [
+    {
+        "endpoint": "https://core.dialx.ai/openai/deployments/gpt-5/chat/completions",
+        "key": "YOUR-DIAL-API-KEY"
     }
 ]
 ```
@@ -51,3 +60,5 @@ Once the configuration is complete, start all services with:
 ```bash
 docker compose up
 ```
+
+The AI DIAL Chat will be availiable at `http://localhost:3000`.

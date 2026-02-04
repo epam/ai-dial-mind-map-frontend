@@ -1,7 +1,8 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
-import { AnonymSessionSelectors } from '@/store/chat/anonymSession/anonymSession.slice';
-import { useChatSelector } from '@/store/chat/hooks';
+import { AnonymSessionDataCookieName } from '@/constants/http';
+import { AnonymUserSessionData } from '@/types/http';
+import { getJsonCookie } from '@/utils/app/cookies';
 import { getRecaptchaInstance } from '@/utils/app/recaptcha';
 
 import { useRecaptchaScript } from './useRecaptcha';
@@ -18,9 +19,7 @@ export const RecaptchaProvider: React.FC<{
   enabled: boolean;
   children: React.ReactNode;
 }> = ({ siteKey, children, enabled }) => {
-  const isRecaptchaRequired = useChatSelector(AnonymSessionSelectors.selectIsRecaptchaRequired);
-  const isEnabled = enabled && isRecaptchaRequired;
-  const isScriptLoaded = useRecaptchaScript(siteKey, isEnabled);
+  const isScriptLoaded = useRecaptchaScript(siteKey, enabled);
   const [isExecuting, setIsExecuting] = useState(false);
   const recaptchaDivID = useRef<number | null>(null);
   const recaptchaDiv = useRef<HTMLDivElement | null>(null);
@@ -69,9 +68,18 @@ export const RecaptchaProvider: React.FC<{
 
   const executeRecaptcha = useCallback(
     (onToken: (token: string) => void) => {
-      if (!isEnabled || !isScriptLoaded) {
+      if (!enabled || !isScriptLoaded) {
         onToken('');
         console.debug('The system is configured to skip the reCAPTCHA.');
+        return;
+      }
+
+      const anonymSessionData = getJsonCookie<AnonymUserSessionData>(AnonymSessionDataCookieName, {});
+      const isRecaptchaRequired = anonymSessionData.isChallengeRequired ?? false;
+
+      if (!isRecaptchaRequired) {
+        onToken('');
+        console.debug('The system is configured to skip the reCAPTCHA for this request.');
         return;
       }
 
@@ -87,11 +95,11 @@ export const RecaptchaProvider: React.FC<{
       onTokenCallback.current = onToken;
       grecaptcha.execute(recaptchaDivID.current);
     },
-    [isEnabled, isScriptLoaded],
+    [enabled, isScriptLoaded],
   );
 
   return (
-    <RecaptchaContext.Provider value={{ isLoaded: isScriptLoaded, isExecuting, executeRecaptcha, isEnabled }}>
+    <RecaptchaContext.Provider value={{ isLoaded: isScriptLoaded, isExecuting, executeRecaptcha, isEnabled: enabled }}>
       {children}
       {/* Render the reCAPTCHA widget here */}
       <div ref={recaptchaDiv} style={{ display: 'none' }}></div>

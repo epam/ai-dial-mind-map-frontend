@@ -40,6 +40,7 @@ const resetEpic: ChatRootEpic = action$ =>
     switchMap(() => {
       return concat(
         of(MindmapActions.setFocusNodeId('')),
+        of(MindmapActions.setDepth(2)),
         of(MindmapActions.setVisitedNodes({})),
         of(MindmapActions.updateElements({ elements: [] })),
         of(MindmapActions.fetchGraph()),
@@ -91,9 +92,7 @@ const handleNavigationEpic: ChatRootEpic = (action$, state$) =>
     })),
     switchMap(({ payload, focusNodeId, conversation }) => {
       const visitedNodeIds = cloneDeep(conversation.customViewState.visitedNodeIds) ?? {};
-      if (!visitedNodeIds[payload.clickedNodeId] && visitedNodeIds[focusNodeId] !== payload.clickedNodeId) {
-        visitedNodeIds[payload.clickedNodeId] = focusNodeId;
-      }
+      visitedNodeIds[payload.clickedNodeId] = focusNodeId;
 
       const actionsToDispatch: Action[] = [
         MindmapActions.closeFullscreenReferences(),

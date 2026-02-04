@@ -70,9 +70,7 @@ export const createChatStore = ({
   mindmapIframeTitle,
   isAllowApiKeyAuth,
   recaptchaSiteKey,
-  isRecaptchaRequired,
   isRecaptchaConfigured,
-  anonymCsrfToken,
   chatDisclaimer,
   providers,
   themeConfig,
@@ -90,9 +88,7 @@ export const createChatStore = ({
   mindmapIframeTitle: string;
   isAllowApiKeyAuth: boolean;
   recaptchaSiteKey: string;
-  isRecaptchaRequired: boolean;
   isRecaptchaConfigured: boolean;
-  anonymCsrfToken: string;
   chatDisclaimer?: string;
   providers: string[];
   themeConfig?: ThemeConfig;
@@ -119,9 +115,7 @@ export const createChatStore = ({
     },
     anonymSession: {
       recaptchaSiteKey,
-      isRecaptchaRequired,
       isRecaptchaConfigured,
-      anonymCsrfToken,
     },
     appearance: {
       themeConfig,

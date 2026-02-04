@@ -15,7 +15,6 @@ import { Toasts } from '@/components/common/Toasts';
 import { CustomStylesTagId } from '@/constants/app';
 import { montserrat } from '@/fonts/fonts';
 import { AuthUiMode } from '@/types/auth';
-import { handleAnonymSession } from '@/utils/app/anonymSession';
 import { getFontUrl } from '@/utils/app/fonts';
 import { getChatAppCookie } from '@/utils/app/getChatAppCookie';
 import { nextauthOptions } from '@/utils/auth/auth-callbacks';
@@ -51,14 +50,6 @@ export default async function RootLayout({
     AuthUiMode.Popup;
 
   const isPlayback = (await headers()).get('x-playback') === 'true';
-
-  let isRecaptchaRequired = false;
-  let anonymCsrfToken = '';
-  if (isRecaptchaConfigured) {
-    const settings = await handleAnonymSession(anonymSessionSecretKey);
-    isRecaptchaRequired = settings.isRecaptchaRequired;
-    anonymCsrfToken = settings.anonymCsrfToken;
-  }
 
   const appCookie = await getChatAppCookie();
 
@@ -105,9 +96,7 @@ export default async function RootLayout({
             mindmapIframeTitle={mindmapIframeTitle}
             isAllowApiKeyAuth={isAllowApiKeyAuth || false}
             recaptchaSiteKey={recaptchaSiteKey}
-            isRecaptchaRequired={isRecaptchaRequired}
             isRecaptchaConfigured={isRecaptchaConfigured}
-            anonymCsrfToken={anonymCsrfToken}
             chatDisclaimer={chatDisclaimer}
             providers={availableProviders ? Object.values(availableProviders).map(provider => provider.id) : []}
             themeConfig={themeConfig ?? undefined}

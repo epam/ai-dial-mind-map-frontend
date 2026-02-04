@@ -3,10 +3,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   AnonymSessionCookieName,
   AnonymSessionCSRFTokenHeaderName,
-  RecaptchaRequiredHeaderName,
+  AnonymSessionDataCookieName,
 } from '@/constants/http';
 import { CaptchaToken } from '@/types/common';
-import { AnonymUserSession } from '@/types/http';
+import { AnonymUserSession, AnonymUserSessionData } from '@/types/http';
 
 import { getCsrfToken } from '../../common/csrf';
 import { decryptNode, encryptNode } from '../crypt';
@@ -22,7 +22,9 @@ export function withCaptcha<T = unknown>(handler: (req: NextRequest, context: T,
     const ANONYM_SESSION_SECRET_KEY = process.env.ANONYM_SESSION_SECRET_KEY ?? '';
     const GCP_PROJECT_ID = process.env.GCP_PROJECT_ID ?? '';
     const RECAPTCHA_SITE_KEY = process.env.RECAPTCHA_SITE_KEY ?? '';
-    const RECAPTCHA_SCORE_THRESHOLD = process.env.RECAPTCHA_SCORE_THRESHOLD ? Number() : undefined;
+    const RECAPTCHA_SCORE_THRESHOLD = process.env.RECAPTCHA_SCORE_THRESHOLD
+      ? Number(process.env.RECAPTCHA_SCORE_THRESHOLD)
+      : undefined;
     const RECAPTCHA_REQUEST_QUOTA = process.env.RECAPTCHA_REQUEST_QUOTA
       ? Number(process.env.RECAPTCHA_REQUEST_QUOTA)
       : 1;
@@ -53,29 +55,23 @@ export function withCaptcha<T = unknown>(handler: (req: NextRequest, context: T,
     }
 
     const session = JSON.parse(decrypted) as AnonymUserSession;
-    const userId = session.userId;
+    const headerToken = req.headers.get(AnonymSessionCSRFTokenHeaderName) ?? '';
 
-    if (!userId) {
-      logger.debug("User session cookie isn't correct");
-      return NextResponse.json({ error: 'Failed. Invalid user.' }, { status: 400 });
-    }
+    const isTokenValid = !!headerToken && (headerToken === session.token || headerToken === session.prevToken);
 
-    const token = req.headers.get(AnonymSessionCSRFTokenHeaderName);
-
-    if (session.token && session.token !== token) {
+    if (!isTokenValid) {
       logger.warn(
         {
-          isCookieTokenMatch: session.token === token,
+          hasHeaderToken: Boolean(headerToken),
+          matchesCurrent: headerToken === session.token,
+          matchesPrev: headerToken === session.prevToken,
         },
         "CSRF token doesn't match",
       );
       return NextResponse.json({ error: 'Failed. Invalid security token.' }, { status: 400 });
     }
 
-    const newCsrfToken = getCsrfToken();
-    session.token = newCsrfToken;
-
-    let shouldSetRecaptchaRequiredHeader = false;
+    let isNextRecaptchaRequired = false;
 
     const { captchaToken } = body as CaptchaToken;
 
@@ -103,25 +99,36 @@ export function withCaptcha<T = unknown>(handler: (req: NextRequest, context: T,
     }
 
     if (session.requestQuota === 0) {
-      shouldSetRecaptchaRequiredHeader = true;
+      isNextRecaptchaRequired = true;
     }
 
     try {
       const response = await handler(req, context, body);
 
-      response.headers.set(AnonymSessionCSRFTokenHeaderName, newCsrfToken);
+      const nextToken = getCsrfToken();
+      const nextPrevToken = session.token;
+      session.prevToken = nextPrevToken;
+      session.token = nextToken;
 
-      if (shouldSetRecaptchaRequiredHeader) {
-        response.headers.set(RecaptchaRequiredHeaderName, 'true');
-      }
+      const anonymSessionData: AnonymUserSessionData = {
+        token: session.token,
+        isChallengeRequired: isNextRecaptchaRequired,
+      };
+      response.cookies.set(AnonymSessionDataCookieName, JSON.stringify(anonymSessionData), {
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'none',
+        partitioned: true,
+        httpOnly: false,
+      });
 
       const encryptedSession = encryptNode(JSON.stringify(session), ANONYM_SESSION_SECRET_KEY);
       response.cookies.set(AnonymSessionCookieName, encryptedSession, {
         path: '/',
-        httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'none',
         partitioned: true,
+        httpOnly: true,
       });
 
       return response;

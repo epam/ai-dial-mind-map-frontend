@@ -24,8 +24,8 @@ import {
 import { errorsMessages } from '@/constants/errors';
 import {
   AnonymSessionCSRFTokenHeaderName,
+  AnonymSessionDataCookieName,
   DeploymentIdHeaderName,
-  RecaptchaRequiredHeaderName,
 } from '@/constants/http';
 import {
   AttachmentTitle,
@@ -41,15 +41,16 @@ import { EntityType } from '@/types/common';
 import { DialAIError } from '@/types/error';
 import { NodesMIMEType } from '@/types/files';
 import { Element, Node } from '@/types/graph';
+import { AnonymUserSessionData } from '@/types/http';
 import { ChatRootEpic } from '@/types/store';
 import { cleanGraphElementsForPlayback } from '@/utils/app/clean';
 import { generateUniqueConversationName, getDuplicateMessageId } from '@/utils/app/conversation';
+import { getJsonCookie } from '@/utils/app/cookies';
 import { ConversationService } from '@/utils/app/data/conversation-service';
 import { isEntityIdLocal } from '@/utils/app/id';
 import { mergeMessages, parseStreamMessages } from '@/utils/app/merge-streams';
 import { isAbortError } from '@/utils/common/error';
 
-import { anonymSessionActions, AnonymSessionSelectors } from '../anonymSession/anonymSession.slice';
 import { ApplicationSelectors } from '../application/application.reducer';
 import { BucketSelectors } from '../bucket/bucket.reducer';
 import { MindmapActions, MindmapSelectors } from '../mindmap/mindmap.reducers';
@@ -123,7 +124,9 @@ const streamMessageEpic: ChatRootEpic = (action$, state$) =>
     }),
     mergeMap(({ payload, chatBody }) => {
       const conversationSignal = ConversationSelectors.selectConversationSignal(state$.value);
-      const anonymCsrfToken = AnonymSessionSelectors.selectAnonymSessionCsrfToken(state$.value);
+      const anonymSessionData = getJsonCookie<AnonymUserSessionData>(AnonymSessionDataCookieName, {});
+      const anonymCsrfToken = anonymSessionData.token ?? '';
+
       const decoder = new TextDecoder();
       let eventData = '';
       let message = payload.message;
@@ -174,13 +177,11 @@ const streamMessageEpic: ChatRootEpic = (action$, state$) =>
 
           return observable.pipe(
             map(val => ({
-              isRecaptchaRequired: Boolean(response.headers.get(RecaptchaRequiredHeaderName)),
-              anonymCsrfToken: String(response.headers.get(AnonymSessionCSRFTokenHeaderName)),
               resp: val,
             })),
           );
         }),
-        mergeMap(({ resp, isRecaptchaRequired, anonymCsrfToken }) =>
+        mergeMap(({ resp }) =>
           iif(
             () => resp.done,
             concat(
@@ -190,12 +191,8 @@ const streamMessageEpic: ChatRootEpic = (action$, state$) =>
                 }),
               ),
               of(ConversationActions.streamMessageSuccess()),
-              of(anonymSessionActions.setIsRecaptchaRequired(isRecaptchaRequired)),
-              of(anonymSessionActions.setAnonymCsrfToken(anonymCsrfToken)),
             ),
             concat(
-              of(anonymSessionActions.setIsRecaptchaRequired(isRecaptchaRequired)),
-              of(anonymSessionActions.setAnonymCsrfToken(anonymCsrfToken)),
               of(resp).pipe(
                 tap(() => {
                   const decodedValue = decoder.decode(resp.value);
@@ -712,7 +709,7 @@ const saveConversationEpic: ChatRootEpic = (action$, state$) =>
       window?.parent.postMessage(
         {
           type: `${mindmapIframeTitle}/UPDATED_CONVERSATION_SUCCESS`,
-          payload: { conversation: { ...conversation, updatedAt: conversation.updatedAt } },
+          payload: { conversation: { ...conversation, updatedAt: Date.now() } },
         },
         '*',
       );

@@ -79,9 +79,7 @@ export const mindmapSlice = createSlice({
       state.focusNodeId = payload;
     },
     addVisitedNodeId: (state, { payload }: PayloadAction<{ prevNodeId: string; newNodeId: string }>) => {
-      if (!state.visitedNodes[payload.newNodeId] && state.visitedNodes[payload.prevNodeId] !== payload.newNodeId) {
-        state.visitedNodes[payload.newNodeId] = payload.prevNodeId;
-      }
+      state.visitedNodes[payload.newNodeId] = payload.prevNodeId;
     },
     setVisitedNodes: (state, { payload }: PayloadAction<Record<string, string>>) => {
       state.visitedNodes = payload;

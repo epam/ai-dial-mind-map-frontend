@@ -12,7 +12,7 @@ export const globalCatchChatUnauthorized = <T>() =>
     if (error.status === 403) {
       return of(chatAuthActions.redirectToForbidden());
     }
-    if (error.status === 502) {
+    if (error.status === 502 || error.status === 503) {
       return of(ChatUIActions.setIsServerUnavailable(true));
     }
     if (error.message === 'Failed to fetch') {

@@ -410,15 +410,15 @@ const NodeEditor = () => {
           />
           <span>Highlight node with neon</span>
         </Space>
-        <Space className="border-t border-t-tertiary px-5 pt-2" direction="vertical" align="start">
+        <Space className="border-t border-t-tertiary px-5 pt-2" direction="vertical" align="start" fullWidth>
           <span className="text-xs uppercase text-secondary">Connections</span>
-          <Space size="middle" align="start">
+          <Space size="middle" align="start" fullWidth className="w-full">
             <label htmlFor="node-inbound-connections" className="mb-1 mt-[10px] flex min-w-20 items-start text-sm">
               Inbound
             </label>
             <ConnectionsSelector type={EdgeDirectionType.Inbound} />
           </Space>
-          <Space size="middle" align="start">
+          <Space size="middle" align="start" fullWidth className="w-full">
             <label htmlFor="node-outbound-connections" className="mb-1 mt-[10px] flex min-w-20 items-start text-sm">
               Outbound
             </label>

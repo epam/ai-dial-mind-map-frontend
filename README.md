@@ -2,7 +2,7 @@
 <p align="center"><p align="center">
         <br>
         <a href="https://dialx.ai/">
-          <img src="https://dialx.ai/dialx_logo.svg" alt="About DIALX">
+          <img src="https://dialx.ai/logo/dialx_logo.svg" alt="About DIALX">
         </a>
     </p>
 <h4 align="center">
@@ -48,7 +48,6 @@ Execute `npm run dev` to run a frontend server in dev mode.
 
 The **Mind Map Studio** application uses environment variables to configure authentication, API connections, and theming settings. Below is a list of environment variables used in this project.
 
-
 | Variable                     | Required | Description                                                                                                                                                                                                                                                                                                                                |
 | ---------------------------- | :------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `NEXTAUTH_SECRET`            | **Yes**  | Secret key for NextAuth.js authentication. Possible to generate with `openssl rand -base64 32`.                                                                                                                                                                                                                                            |
@@ -73,10 +72,9 @@ The **Mind Map Studio** application uses environment variables to configure auth
 | `GOOGLE_FONTS_API_KEY`       |  **No**  | A unique API key required to authenticate and enable access to the Google Fonts API. Without it, font family validation cannot be performed.                                                                                                                                                                                               |
 | `AUTH_UI_MODE`               |  **No**  | Controls the authentication UI mode: set to `popup` to use a popup window, `tab` to open a new browser tab, or `sameWindow` to authorize in the same window where the mindmap is embedded. Defaults to `popup` if unset                                                                                                                    |
 | `DEFAULT_CHAT_MODEL`         |  **No**  | Default chat model **id/slug**. If unset, a code-level fallback is used — [`DEFAULT_CHAT_MODEL`](https://gitlab.deltixhub.com/Deltix/openai-apps/mindmap/-/blob/development/src/constants/app.ts#L81).                                                                                                                                     |
-| `AVAILABLE_LITE_MODE_MODELS` |  **No**  | A comma-separated list of model identifiers available for the **Lite Mode** graph generation (e.g., `gpt-4.1-2025-04-14,gpt-5-2025-08-07,gemini-2.5-pro`). If unset or empty, all models will be available.                                                                                                                                |
+| `AVAILABLE_LITE_MODE_MODELS` |  **No**  | A comma-separated list of model identifiers available for the **Advanced mode** graph generation (e.g., `gpt-4.1-2025-04-14,gpt-5-2025-08-07,gemini-2.5-pro`). If unset or empty, all models will be available.                                                                                                                            |
 | `AVAILABLE_CHAT_MODELS`      |  **No**  | A comma-separated list of model identifiers available for the **Chat** RAG. If unset or empty, all models will be available.                                                                                                                                                                                                               |
 | `LITE_MODE_TOKENS_LIMIT`     |  **No**  | The maximum allowed token usage across all sources when generating a graph. If the combined token usage of all sources exceeds this limit, graph generation will be blocked, and the user will be prompted to adjust their sources or reduce token usage.                                                                                  |
-
 
 > [!IMPORTANT]
 > Make sure to define all required variables in your `.env` file or provide them through your deployment configuration.
@@ -86,4 +84,4 @@ The **Mind Map Studio** application uses environment variables to configure auth
 ## Authors
 
 - [Valery Dluski](https://github.com/valerydluski)
-- Mikhail Hahalushka
+- [Mikhail Hahalushka](https://github.com/likeamike)

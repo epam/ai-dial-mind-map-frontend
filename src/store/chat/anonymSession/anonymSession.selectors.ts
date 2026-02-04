@@ -7,8 +7,4 @@ const rootSelector = (state: ChatRootState): AnonymSessionState => state.anonymS
 
 export const selectRecaptchaSiteKey = createSelector([rootSelector], state => state.recaptchaSiteKey);
 
-export const selectIsRecaptchaRequired = createSelector([rootSelector], state => state.isRecaptchaRequired);
-
 export const selectIsRecaptchaConfigured = createSelector([rootSelector], state => state.isRecaptchaConfigured);
-
-export const selectAnonymSessionCsrfToken = createSelector([rootSelector], state => state.anonymCsrfToken);

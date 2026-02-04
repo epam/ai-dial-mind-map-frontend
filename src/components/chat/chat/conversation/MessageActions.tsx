@@ -91,13 +91,13 @@ export const MessageActions = ({
     <Space
       className={classNames([
         'text-xs text-secondary w-full mt-3 md:mt-4 chat-conversation__message-actions',
-        isMessageSending && 'justify-between',
-        !isMessageSending && 'justify-end',
+        (isMessageSending || isAIGenerated) && 'justify-between',
+        !isMessageSending && !isAIGenerated && 'justify-end',
       ])}
     >
-      {text && isMessageSending && <DialEllipsisTooltip text={text} />}
+      {text && (isMessageSending || isAIGenerated) && <DialEllipsisTooltip text={text} />}
       <div className="flex items-center gap-2">
-        {isMessageSending && (
+        {(isMessageSending || isAIGenerated) && (
           <button
             onClick={regenerateHandler}
             disabled={isRelayoutInProgress || isMessageStreaming}

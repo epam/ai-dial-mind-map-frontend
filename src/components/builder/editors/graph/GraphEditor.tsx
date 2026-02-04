@@ -113,7 +113,7 @@ export const GraphEditor = () => {
           {isNodeEditorOpen && !!focusNode && (
             <div
               className={classNames([
-                'z-10 flex flex-col',
+                'z-20 flex flex-col',
                 currentView === 'graph' ? 'absolute left-3 h-[calc(100%-12px)]' : 'ml-3 h-full',
               ])}
             >

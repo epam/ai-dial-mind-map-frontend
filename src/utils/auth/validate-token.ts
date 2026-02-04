@@ -14,14 +14,6 @@ export const validateToken = async (token: JWT | null): Promise<{ error?: string
     logger.warn(`Client for providerId ${token.providerId} not found.`);
     return { error: 'NoClientForProvider' };
   }
-  if (!client.introspect) {
-    logger.warn(`Introspection URL for providerId ${token.providerId} not found.`);
-    return { error: 'NoClientForProvider' };
-  }
-  if (token.access_token) {
-    const response = await client?.introspect(token.access_token);
-    return { error: response.active ? undefined : 'RefreshAccessTokenError' };
-  }
 
   return {};
 };

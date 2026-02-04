@@ -469,7 +469,7 @@ export const MainToolbar = () => {
                   }}
                 />
               </Tooltip>
-              <label className="flex min-w-20 text-sm text-primary">Lite mode</label>
+              <label className="flex min-w-[120px] text-sm text-primary">Advanced mode</label>
             </Space>
           )}
           <div className="border-l border-l-tertiary">
