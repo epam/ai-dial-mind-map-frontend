@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = phase => {
+const nextConfig = () => {
   return {
     output: 'standalone',
     experimental: {

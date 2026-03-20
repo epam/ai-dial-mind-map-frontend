@@ -1,5 +1,6 @@
 import Auth0Provider from 'next-auth/providers/auth0';
 import AzureProvider from 'next-auth/providers/azure-ad';
+import AzureB2CProvider from 'next-auth/providers/azure-ad-b2c';
 import CognitoProvider from 'next-auth/providers/cognito';
 import GoogleProvider from 'next-auth/providers/google';
 import { Provider, TokenEndpointHandler } from 'next-auth/providers/index';
@@ -42,6 +43,24 @@ const allProviders: (Provider | boolean)[] = [
       authorization: {
         params: {
           scope: process.env.AUTH_AZURE_AD_SCOPE || 'openid profile user.Read email offline_access',
+        },
+      },
+      token: tokenConfig,
+    }),
+
+  !!process.env.AUTH_AZURE_B2C_CLIENT_ID &&
+    !!process.env.AUTH_AZURE_B2C_SECRET &&
+    !!process.env.AUTH_AZURE_B2C_TENANT_ID &&
+    AzureB2CProvider({
+      clientId: process.env.AUTH_AZURE_B2C_CLIENT_ID,
+      clientSecret: process.env.AUTH_AZURE_B2C_SECRET,
+      tenantId: process.env.AUTH_AZURE_B2C_TENANT_ID,
+      primaryUserFlow: process.env.AUTH_AZURE_B2C_USER_FLOW,
+      issuer: process.env.AUTH_AZURE_B2C_ISSUER,
+      name: process.env.AUTH_AZURE_B2C_NAME ?? DEFAULT_NAME,
+      authorization: {
+        params: {
+          scope: process.env.AUTH_AZURE_B2C_SCOPE || 'openid profile user.Read email offline_access',
         },
       },
       token: tokenConfig,

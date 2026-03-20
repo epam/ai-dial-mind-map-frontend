@@ -27,9 +27,14 @@ export interface GenerationEventData {
 }
 
 export interface AnonymUserSession {
-  userId: string;
   token?: string;
+  prevToken?: string;
   requestQuota?: number;
+}
+
+export interface AnonymUserSessionData {
+  token?: string;
+  isChallengeRequired?: boolean;
 }
 
 export interface ChatAppCookie {

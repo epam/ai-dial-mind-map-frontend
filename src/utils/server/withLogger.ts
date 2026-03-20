@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export function withLogger<T = unknown>(handler: (req: NextRequest, context: T) => Promise<NextResponse>) {
-  return async (req: NextRequest, context: T) => {
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  return String(error);
+}
+
+export function withLogger<TContext>(handler: (req: NextRequest, context: TContext) => Promise<NextResponse>) {
+  return async (req: NextRequest, context: TContext) => {
     const start = process.hrtime();
     const { pathname, searchParams } = req.nextUrl;
 
@@ -22,14 +27,14 @@ export function withLogger<T = unknown>(handler: (req: NextRequest, context: T) 
       console.log(`[Next] - ${new Date().toISOString()} - LOG [LoggingMiddleware]`, log);
 
       return response;
-    } catch (error: any) {
+    } catch (error: unknown) {
       const duration = getDuration(start);
       console.error(`[Next] - ${new Date().toISOString()} - ERROR [LoggingMiddleware]`, {
         msg: 'Request failed',
         url: pathname,
         method: req.method,
         duration,
-        error: error.message,
+        error: getErrorMessage(error),
       });
       return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }

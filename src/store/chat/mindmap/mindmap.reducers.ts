@@ -24,6 +24,7 @@ export const MindmapInitialState: MindmapState = {
   fullscreenReferences: null,
   fullscreenInitialSlide: null,
   activeFullscreenReferenceId: null,
+  relayoutInProgress: false,
 };
 
 export const mindmapSlice = createSlice({
@@ -78,9 +79,7 @@ export const mindmapSlice = createSlice({
       state.focusNodeId = payload;
     },
     addVisitedNodeId: (state, { payload }: PayloadAction<{ prevNodeId: string; newNodeId: string }>) => {
-      if (!state.visitedNodes[payload.newNodeId] && state.visitedNodes[payload.prevNodeId] !== payload.newNodeId) {
-        state.visitedNodes[payload.newNodeId] = payload.prevNodeId;
-      }
+      state.visitedNodes[payload.newNodeId] = payload.prevNodeId;
     },
     setVisitedNodes: (state, { payload }: PayloadAction<Record<string, string>>) => {
       state.visitedNodes = payload;
@@ -138,6 +137,17 @@ export const mindmapSlice = createSlice({
     },
     setActiveFullscreenReferenceId: (state, { payload }: PayloadAction<string | null>) => {
       state.activeFullscreenReferenceId = payload;
+    },
+    closeFullscreenReferences: state => {
+      state.fullscreenReferences = null;
+      state.fullscreenInitialSlide = null;
+      state.activeFullscreenReferenceId = null;
+    },
+    setRelayoutInProgress: (state, { payload }: PayloadAction<boolean>) => {
+      state.relayoutInProgress = payload;
+    },
+    setCompletionGraphResponseId: (state, { payload }: PayloadAction<string | undefined>) => {
+      state.completionGraphResponseId = payload;
     },
   },
 });

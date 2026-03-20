@@ -1,5 +1,7 @@
 import classNames from 'classnames';
+import { useMemo } from 'react';
 
+import { ConversationSelectors } from '@/store/chat/conversation/conversation.reducers';
 import { useChatDispatch, useChatSelector } from '@/store/chat/hooks';
 import { MindmapActions, MindmapSelectors } from '@/store/chat/mindmap/mindmap.reducers';
 import { DepthType } from '@/store/chat/mindmap/mindmap.types';
@@ -9,6 +11,12 @@ export const LevelSwitcher = ({ classes, onChange }: { classes?: string; onChang
   const dispatch = useChatDispatch();
   const depth = useChatSelector(MindmapSelectors.selectDepth);
   const isPlayback = useChatSelector(PlaybackSelectors.selectIsPlayback);
+  const relayoutInProgress = useChatSelector(MindmapSelectors.selectRelayoutInProgress);
+  const isMessageStreaming = useChatSelector(ConversationSelectors.selectIsMessageStreaming);
+  const disabled = useMemo(
+    () => isPlayback || relayoutInProgress || isMessageStreaming,
+    [isPlayback, relayoutInProgress, isMessageStreaming],
+  );
 
   const baseButtonClasses =
     'flex h-9 px-3 text-sm items-center justify-center bg-layer-3 hover:bg-layer-4 hover:text-accent-primary transition-colors duration-200 level-switcher__button';
@@ -21,9 +29,9 @@ export const LevelSwitcher = ({ classes, onChange }: { classes?: string; onChang
             baseButtonClasses,
             'rounded-l-[10px]',
             depth === 1 && 'text-accent-primary level-switcher__button--active',
-            isPlayback && 'pointer-events-none',
+            disabled && 'pointer-events-none',
           ])}
-          disabled={isPlayback}
+          disabled={disabled}
           onClick={() => {
             onChange?.(1);
             if (depth !== 1) {
@@ -39,9 +47,9 @@ export const LevelSwitcher = ({ classes, onChange }: { classes?: string; onChang
             baseButtonClasses,
             'rounded-r-[10px]',
             depth === 2 && 'text-accent-primary level-switcher__button--active',
-            isPlayback && 'pointer-events-none',
+            disabled && 'pointer-events-none',
           ])}
-          disabled={isPlayback}
+          disabled={disabled}
           onClick={() => {
             onChange?.(2);
             if (depth !== 2) {

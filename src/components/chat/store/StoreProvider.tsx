@@ -11,11 +11,11 @@ import { BrowserStorage } from '@/utils/app/browser-storage';
 export const ChatStoreProvider = ({
   children,
   dialChatHost,
+  dialIframeAllowedHosts,
   mindmapIframeTitle,
   isAllowApiKeyAuth,
   recaptchaSiteKey,
-  isRecaptchaRequired,
-  anonymCsrfToken,
+  isRecaptchaConfigured,
   chatDisclaimer,
   providers,
   themeConfig,
@@ -25,14 +25,16 @@ export const ChatStoreProvider = ({
   redirectToForbidden = false,
   authUiMode,
   isPlayback = false,
+  isProdEnv,
+  theme,
 }: Readonly<{
   children: React.ReactNode;
   dialChatHost: string;
+  dialIframeAllowedHosts: string[];
   mindmapIframeTitle: string;
   isAllowApiKeyAuth: boolean;
   recaptchaSiteKey: string;
-  isRecaptchaRequired: boolean;
-  anonymCsrfToken: string;
+  isRecaptchaConfigured: boolean;
   chatDisclaimer?: string;
   providers: string[];
   themeConfig?: ThemeConfig;
@@ -42,14 +44,16 @@ export const ChatStoreProvider = ({
   redirectToForbidden?: boolean;
   authUiMode: AuthUiMode;
   isPlayback?: boolean;
+  isProdEnv: boolean;
+  theme?: string;
 }>) => {
   const store = createChatStore({
     dialChatHost,
+    dialIframeAllowedHosts,
     mindmapIframeTitle,
     isAllowApiKeyAuth,
     recaptchaSiteKey,
-    isRecaptchaRequired,
-    anonymCsrfToken,
+    isRecaptchaConfigured,
     chatDisclaimer,
     providers,
     themeConfig,
@@ -59,6 +63,8 @@ export const ChatStoreProvider = ({
     application: { application: application },
     authUiMode,
     isPlayback,
+    isProdEnv,
+    theme,
   });
   BrowserStorage.init();
 

@@ -1,9 +1,11 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
-import { AnonymSessionSelectors } from '@/store/chat/anonymSession/anonymSession.slice';
-import { useChatSelector } from '@/store/chat/hooks';
+import { AnonymSessionDataCookieName } from '@/constants/http';
+import { AnonymUserSessionData } from '@/types/http';
+import { getJsonCookie } from '@/utils/app/cookies';
+import { getRecaptchaInstance } from '@/utils/app/recaptcha';
 
-import { useRecaptcha } from './useRecaptcha';
+import { useRecaptchaScript } from './useRecaptcha';
 
 const RecaptchaContext = createContext<{
   isLoaded: boolean;
@@ -14,12 +16,10 @@ const RecaptchaContext = createContext<{
 
 export const RecaptchaProvider: React.FC<{
   siteKey: string;
-  isApiKeyAllowed: boolean;
+  enabled: boolean;
   children: React.ReactNode;
-}> = ({ siteKey, children, isApiKeyAllowed }) => {
-  const isRecaptchaRequired = useChatSelector(AnonymSessionSelectors.selectIsRecaptchaRequired);
-  const isEnabled = isApiKeyAllowed && isRecaptchaRequired;
-  const isScriptLoaded = useRecaptcha(siteKey, isEnabled);
+}> = ({ siteKey, children, enabled }) => {
+  const isScriptLoaded = useRecaptchaScript(siteKey, enabled);
   const [isExecuting, setIsExecuting] = useState(false);
   const recaptchaDivID = useRef<number | null>(null);
   const recaptchaDiv = useRef<HTMLDivElement | null>(null);
@@ -32,7 +32,7 @@ export const RecaptchaProvider: React.FC<{
     setIsExecuting(false);
 
     // Reset the reCAPTCHA widget to allow future executions
-    const grecaptcha = (globalThis as any).window.grecaptcha;
+    const grecaptcha = getRecaptchaInstance();
     if (recaptchaDivID.current != null && grecaptcha) {
       grecaptcha.reset(recaptchaDivID.current);
     }
@@ -48,7 +48,7 @@ export const RecaptchaProvider: React.FC<{
       return;
     }
 
-    const grecaptcha = (globalThis as any).window.grecaptcha;
+    const grecaptcha = getRecaptchaInstance();
     if (!grecaptcha) {
       console.error('reCAPTCHA library is not loaded.');
       return;
@@ -68,13 +68,22 @@ export const RecaptchaProvider: React.FC<{
 
   const executeRecaptcha = useCallback(
     (onToken: (token: string) => void) => {
-      if (!isEnabled || !isScriptLoaded) {
+      if (!enabled || !isScriptLoaded) {
         onToken('');
         console.debug('The system is configured to skip the reCAPTCHA.');
         return;
       }
 
-      const grecaptcha = (globalThis as any).window.grecaptcha;
+      const anonymSessionData = getJsonCookie<AnonymUserSessionData>(AnonymSessionDataCookieName, {});
+      const isRecaptchaRequired = anonymSessionData.isChallengeRequired ?? false;
+
+      if (!isRecaptchaRequired) {
+        onToken('');
+        console.debug('The system is configured to skip the reCAPTCHA for this request.');
+        return;
+      }
+
+      const grecaptcha = getRecaptchaInstance();
       if (!grecaptcha) {
         console.error('reCAPTCHA library is not loaded.');
         return;
@@ -86,11 +95,11 @@ export const RecaptchaProvider: React.FC<{
       onTokenCallback.current = onToken;
       grecaptcha.execute(recaptchaDivID.current);
     },
-    [isEnabled, isScriptLoaded],
+    [enabled, isScriptLoaded],
   );
 
   return (
-    <RecaptchaContext.Provider value={{ isLoaded: isScriptLoaded, isExecuting, executeRecaptcha, isEnabled }}>
+    <RecaptchaContext.Provider value={{ isLoaded: isScriptLoaded, isExecuting, executeRecaptcha, isEnabled: enabled }}>
       {children}
       {/* Render the reCAPTCHA widget here */}
       <div ref={recaptchaDiv} style={{ display: 'none' }}></div>
