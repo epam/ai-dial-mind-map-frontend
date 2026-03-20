@@ -1,3 +1,5 @@
+import typography from '@tailwindcss/typography';
+import tailwindScrollbarHide from 'tailwind-scrollbar-hide';
 import type { Config } from 'tailwindcss';
 
 import { CustomClassesSafeList } from './src/constants/custom-styles';
@@ -133,6 +135,6 @@ const config: Config = {
       visibility: ['group-hover'],
     },
   },
-  plugins: [require('@tailwindcss/typography'), require('tailwind-scrollbar-hide')],
+  plugins: [typography, tailwindScrollbarHide],
 };
 export default config;
