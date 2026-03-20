@@ -155,7 +155,6 @@ export function mergeBidirectionalEdges(
       }
 
       if (debug) {
-        // eslint-disable-next-line no-console
         console.debug(
           '[mergeBidirectionalEdges] merged pair',
           key,
