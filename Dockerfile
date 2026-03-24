@@ -37,7 +37,8 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=5000
 ENV HOSTNAME=0.0.0.0
 
-RUN apk add --no-cache libstdc++ libc6-compat \
+RUN apk update \
+    && apk add --no-cache libstdc++ libc6-compat zlib=1.3.2-r0 \
     && addgroup --system --gid 1001 nodejs \
     && adduser --system --uid 1001 nextjs
 
