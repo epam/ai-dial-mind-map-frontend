@@ -1,0 +1,17 @@
+# https://oss-review-toolkit.org/ort/docs/configuration/ort-yml
+
+resolutions:
+  vulnerabilities:
+    - id: "GHSA-wgrm-67xf-hhpq"
+      reason: "CANT_FIX_VULNERABILITY"
+      comment: >
+        pdfjs-dist stays on 3.x because @react-pdf-viewer/core@3.12.0 only supports ^2.16.105 || ^3.0.279.
+        Patched pdfjs releases addressing this advisory require 4.2.67+, which is outside that range until
+        react-pdf-viewer upgrades.
+
+    - id: "GHSA-(34x7-hfp2-rc4v|83g3-92jg-28cx|8qq5-rm4j-mr97|qffp-2rhf-9h96|9ppj-qmqm-q256|r6q2-hw4h-h46w)"
+      reason: "CANT_FIX_VULNERABILITY"
+      comment: >
+        Affected tar is only reachable through optional native canvas (pdfjs-dist / @mapbox/node-pre-gyp);
+        npm audit reports no fixed release for that chain. Frontend delivery does not rely on the native
+        canvas install path.
