@@ -1,0 +1,96 @@
+---
+excludes:
+  paths:
+    - pattern: 'package-lock.json'
+      reason: 'BUILD_TOOL_OF'
+  scopes:
+    - pattern: 'devDependencies'
+      reason: 'DEV_DEPENDENCY_OF'
+      comment: 'Packages for development only.'
+license_choices:
+  repository_license_choices:
+    - given: 'GPL-2.0-only OR MIT'
+      choice: 'MIT'
+    - given: 'GPL-3.0-or-later OR MIT'
+      choice: 'MIT'
+resolutions:
+  rule_violations:
+    - message: "No license information is available for dependency \
+        'NPM::union:0\\.5\\.0'\\."
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'The dependency has MIT license in github repo'
+    - message: "No license information is available for dependency \
+        'NPM::stack-trace:0\\.0\\.9'\\."
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'The dependency has MIT license in github repo'
+    - message: "No license information is available for dependency \
+        'NPM:@mapbox:jsonlint-lines-primitives:2\\.0\\.2'\\."
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'The dependency has MIT license in github repo'
+    - message: "No license information is available for dependency \
+        'NPM:@plotly:mapbox-gl:1\\.13\\.4'\\."
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'The dependency has BSD-3-Clause license in github repo'
+    - message:
+        "The license NOASSERTION is currently not covered by policy rules\\. \
+        The license was declared in package 'NPM:@plotly:mapbox-gl:1\\.13\\.4'\\."
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'The dependency has BSD-3-Clause license in github repo'
+    - message: "(?s).*No license information is available for dependency \
+        'NPM::ansi-color:0\\.2\\.1'\\..*"
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'No SPDX in registry; legacy package'
+    - message: "(?s).*No license information is available for dependency \
+        'NPM::process:0\\.10\\.1'\\..*"
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'MIT per upstream; often missing in npm metadata'
+    - message: "(?s).*No license information is available for dependency \
+        'NPM::process:0\\.11\\.10'\\..*"
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'MIT per upstream; often missing in npm metadata'
+    - message: "No license information is available for dependency \
+        'NPM::only:0\\.0\\.2'\\."
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'The dependency has MIT license in github repo'
+    - message: "The dependency 'NPM::node-forge:1\\.3\\.2' is licensed under \
+        the ScanCode 'copyleft' categorized license GPL-2\\.0-only\\."
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'The dependency has GPL-2.0 license in github repo'
+    - message: "No license information is available for dependency \
+        'NPM::rslog:1\\.2\\.3'\\."
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'The dependency has MIT license in github repo'
+    # @react-pdf-viewer/* — package.json declares license as a URL, not SPDX.
+    # ort-config rules (revision pinned in CI) emit distinct messages per rule:
+    # - NO_LICENSE_IN_DEPENDENCY: "No license information is available for dependency '...'."
+    # - UNMAPPED_DECLARED_LICENSE: "The declared license '<url>' could not be mapped ... found in package '...'."
+    # - UNHANDLED_LICENSE: "The license <url> is currently not covered by policy rules. ..."
+    # See: https://github.com/oss-review-toolkit/ort-config/blob/460867920eca3d2ca0e3ad1cf464a1b95233d492/evaluator.rules.kts
+    - message: "(?s).*No license information is available for dependency \
+        'NPM:@react-pdf-viewer:[a-z0-9-]+:3\\.12\\.0'\\..*"
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'License terms at https://react-pdf-viewer.dev/license (non-SPDX in registry metadata)'
+    - message: "(?s).*The declared license 'https://react-pdf-viewer\\.dev/license' could not be mapped to a valid \
+        license or parsed as an SPDX expression\\. The license was found in package \
+        'NPM:@react-pdf-viewer:[a-z0-9-]+:3\\.12\\.0'\\..*"
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'UNMAPPED_DECLARED_LICENSE — URL is not an SPDX expression; terms at published URL'
+    - message:
+        "(?s).*The license https://react-pdf-viewer\\.dev/license is currently not covered by policy rules\\. \
+        The license was declared in package 'NPM:@react-pdf-viewer:[a-z0-9-]+:3\\.12\\.0'\\..*"
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'UNHANDLED_LICENSE for non-SPDX license field'
+    - message: "(?s).*No license information is available for dependency \
+        'NPM:@react-pdf-viewer/[a-z0-9-]+:3\\.12\\.0'\\..*"
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'Alternate id form'
+    - message: "(?s).*The declared license 'https://react-pdf-viewer\\.dev/license' could not be mapped to a valid \
+        license or parsed as an SPDX expression\\. The license was found in package \
+        'NPM:@react-pdf-viewer/[a-z0-9-]+:3\\.12\\.0'\\..*"
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'UNMAPPED_DECLARED_LICENSE — alternate id form'
+    - message:
+        "(?s).*The license https://react-pdf-viewer\\.dev/license is currently not covered by policy rules\\. \
+        The license was declared in package 'NPM:@react-pdf-viewer/[a-z0-9-]+:3\\.12\\.0'\\..*"
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'UNHANDLED_LICENSE — alternate id form'
