@@ -1,6 +1,7 @@
-ARG ALPINE_VERSION=3.23
+ARG NODE_ALPINE_VERSION=3.23
+ARG RUNTIME_ALPINE_VERSION=3.23.6
 
-FROM node:24-alpine${ALPINE_VERSION} AS base
+FROM node:24-alpine${NODE_ALPINE_VERSION} AS base
 RUN corepack disable \
     && rm -f /usr/local/bin/yarn /usr/local/bin/yarnpkg
 
@@ -29,7 +30,7 @@ RUN if [ -f package-lock.json ]; then npm run build; \
     fi
 
 # Runtime image without npm/yarn
-FROM alpine:${ALPINE_VERSION} AS runner
+FROM alpine:${RUNTIME_ALPINE_VERSION} AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -38,6 +39,7 @@ ENV PORT=5000
 ENV HOSTNAME=0.0.0.0
 
 RUN apk update \
+    && apk upgrade --no-cache \
     && apk add --no-cache libstdc++ libc6-compat zlib=1.3.2-r0 \
     && addgroup --system --gid 1001 nodejs \
     && adduser --system --uid 1001 nextjs
