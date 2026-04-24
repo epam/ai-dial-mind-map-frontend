@@ -2,6 +2,7 @@ import isEqual from 'lodash-es/isEqual';
 import { memo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
+import rehypeSanitize from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
 import remarkSupersub from 'remark-supersub';
 
@@ -25,7 +26,7 @@ const MarkdownRenderer = ({ text, references, isShowResponseLoader, messageId }:
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm, remarkSupersub]}
-      rehypePlugins={[rehypeRaw]}
+      rehypePlugins={[rehypeRaw, rehypeSanitize]}
       components={{
         img: ImageRenderer,
         a: LinkRenderer,

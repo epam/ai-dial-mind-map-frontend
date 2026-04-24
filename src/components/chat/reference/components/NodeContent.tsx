@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import rehypeRaw from 'rehype-raw';
+import rehypeSanitize from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
 import remarkSupersub from 'remark-supersub';
 
@@ -29,7 +30,7 @@ export const NodeContent = ({
           isFullscreenReference ? 'text-base' : 'text-xs',
         )}
         remarkPlugins={[remarkGfm, remarkSupersub]}
-        rehypePlugins={[rehypeRaw]}
+        rehypePlugins={[rehypeRaw, rehypeSanitize]}
         components={{ a: LinkRenderer }}
       >
         {details}
