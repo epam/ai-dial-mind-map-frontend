@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { ReactNode } from 'react';
 
 import { DocsReference } from '@/types/graph';
 
@@ -7,13 +8,14 @@ import { MarkdownContent } from '../MarkdownContent';
 jest.mock('remark-gfm', () => jest.fn());
 jest.mock('remark-supersub', () => jest.fn());
 jest.mock('rehype-raw', () => jest.fn());
+jest.mock('rehype-sanitize', () => jest.fn());
 
 jest.mock('@/components/chat/chat/conversation/messages/markdown/MemoizedReactMarkdown', () => ({
-  MemoizedReactMarkdown: ({ children }: any) => <div data-testid="mock-markdown">{children}</div>,
+  MemoizedReactMarkdown: ({ children }: { children?: ReactNode }) => <div data-testid="mock-markdown">{children}</div>,
 }));
 
 jest.mock('@/components/chat/chat/conversation/messages/markdown/elements/LinkRenderer', () => ({
-  LinkRenderer: ({ href, children }: any) => <a href={href}>{children}</a>,
+  LinkRenderer: ({ href, children }: { href?: string; children?: ReactNode }) => <a href={href}>{children}</a>,
 }));
 
 describe('MarkdownContent', () => {
@@ -26,6 +28,8 @@ describe('MarkdownContent', () => {
     doc_type: 'text',
     doc_content_type: 'text/plain',
     content_type: 'text/markdown',
+    source_name: 'Example Source',
+    version: 1,
   };
 
   test('renders Markdown content with plugins and custom class', () => {
