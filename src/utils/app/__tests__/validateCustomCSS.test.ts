@@ -142,4 +142,46 @@ describe('validateCustomCSS', () => {
 
     expect(result.status).toBe(true);
   });
+
+  it('should allow markdown inline classes in custom styles', async () => {
+    const result = await validateCustomCSS(`
+      .chat-conversation__message {
+        .markdown-subscript {
+          font-size: inherit;
+          vertical-align: baseline;
+        }
+
+        .markdown-deleted {
+          text-decoration: none;
+        }
+      }
+    `);
+
+    expect(result.status).toBe(true);
+  });
+
+  it('should allow markdown inline classes as top-level public selectors', async () => {
+    const result = await validateCustomCSS(`
+      .markdown-subscript,
+      .markdown-deleted {
+        color: inherit;
+        font-size: inherit;
+      }
+    `);
+
+    expect(result.status).toBe(true);
+  });
+
+  it('should still reject unknown markdown-like classes', async () => {
+    const result = await validateCustomCSS(`
+      .chat-conversation__message {
+        .markdown-unknown {
+          color: inherit;
+        }
+      }
+    `);
+
+    expect(result.status).toBe(false);
+    expect(result.errors?.[0].message).toMatch(/markdown-unknown/);
+  });
 });

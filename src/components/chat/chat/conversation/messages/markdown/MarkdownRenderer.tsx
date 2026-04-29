@@ -11,6 +11,7 @@ import { Reference } from '@/types/graph';
 
 import { ImageRenderer } from './elements/ImageRenderer';
 import { LinkRenderer } from './elements/LinkRenderer';
+import { MarkdownDeletedRenderer, MarkdownSubscriptRenderer } from './elements/MarkdownInlineRenderers';
 import { ParagraphRenderer } from './elements/ParagraphRenderer';
 import { ReferenceRenderer } from './elements/ReferenceRenderer';
 
@@ -30,6 +31,8 @@ const MarkdownRenderer = ({ text, references, isShowResponseLoader, messageId }:
       components={{
         img: ImageRenderer,
         a: LinkRenderer,
+        del: MarkdownDeletedRenderer,
+        sub: MarkdownSubscriptRenderer,
         sup: props => <ReferenceRenderer {...props} references={references} messageId={messageId} />,
         p: props => (
           <ParagraphRenderer

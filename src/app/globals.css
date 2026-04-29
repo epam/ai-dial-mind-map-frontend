@@ -424,6 +424,10 @@ pre:has(div.codeblock) {
 
   .chat-conversation__message-actions {}
 
+  .markdown-subscript {}
+
+  .markdown-deleted {}
+
   /* Input and submit */
   .chat-footer__input {}
 
