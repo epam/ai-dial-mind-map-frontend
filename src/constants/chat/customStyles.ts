@@ -49,6 +49,16 @@ export const CustomStylesPlaceholder = `.chat-container {
         /* Wrapper for message actions like retry button and reactions buttons block */
         /* e.g., layout direction, spacing between nodes, alignment */
       }
+
+      .markdown-subscript {
+        /* Markdown subscript text inside a message */
+        /* e.g., font-size, color, vertical-align */
+      }
+
+      .markdown-deleted {
+        /* Markdown deleted/strikethrough text inside a message */
+        /* e.g., text-decoration, color, font-size */
+      }
     }
   }
 

@@ -14,8 +14,6 @@ export interface ValidationResult {
   errors?: ValidationError[];
 }
 
-const safeClassesSet = new Set(CustomClassesSafeList);
-
 // Helper to extract line number
 function getLine(node: ChildNode): number {
   return node.source?.start?.line ?? 1;
@@ -41,6 +39,7 @@ export async function validateCustomCSS(css: string): Promise<ValidationResult> 
   }
 
   const errors: ValidationError[] = [];
+  const safeClassesSet = new Set(CustomClassesSafeList);
 
   root.walkRules((rule: Rule) => {
     const selectors = rule.selectors || [];

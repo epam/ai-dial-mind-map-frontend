@@ -12,6 +12,8 @@ export const CustomClassesSafeList = [
   'chat-conversation__message-nodes',
   'chat-conversation__message-node',
   'chat-conversation__message-actions',
+  'markdown-deleted',
+  'markdown-subscript',
   'chat-footer',
   'chat-footer__input',
   'chat-footer__submit-btn',

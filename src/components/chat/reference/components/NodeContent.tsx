@@ -7,6 +7,10 @@ import remarkSupersub from 'remark-supersub';
 import { NodeReference } from '@/types/graph';
 
 import { LinkRenderer } from '../../chat/conversation/messages/markdown/elements/LinkRenderer';
+import {
+  MarkdownDeletedRenderer,
+  MarkdownSubscriptRenderer,
+} from '../../chat/conversation/messages/markdown/elements/MarkdownInlineRenderers';
 import { MemoizedReactMarkdown } from '../../chat/conversation/messages/markdown/MemoizedReactMarkdown';
 
 export const NodeContent = ({
@@ -31,7 +35,11 @@ export const NodeContent = ({
         )}
         remarkPlugins={[remarkGfm, remarkSupersub]}
         rehypePlugins={[rehypeRaw, rehypeSanitize]}
-        components={{ a: LinkRenderer }}
+        components={{
+          a: LinkRenderer,
+          del: MarkdownDeletedRenderer,
+          sub: MarkdownSubscriptRenderer,
+        }}
       >
         {details}
       </MemoizedReactMarkdown>

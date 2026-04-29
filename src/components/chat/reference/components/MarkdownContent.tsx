@@ -7,6 +7,10 @@ import remarkSupersub from 'remark-supersub';
 import { DocsReference } from '@/types/graph';
 
 import { LinkRenderer } from '../../chat/conversation/messages/markdown/elements/LinkRenderer';
+import {
+  MarkdownDeletedRenderer,
+  MarkdownSubscriptRenderer,
+} from '../../chat/conversation/messages/markdown/elements/MarkdownInlineRenderers';
 import { ParagraphRenderer } from '../../chat/conversation/messages/markdown/elements/ParagraphRenderer';
 import { MemoizedReactMarkdown } from '../../chat/conversation/messages/markdown/MemoizedReactMarkdown';
 
@@ -35,6 +39,8 @@ export const MarkdownContent = ({
         rehypePlugins={[rehypeRaw, rehypeSanitize]}
         components={{
           a: LinkRenderer,
+          del: MarkdownDeletedRenderer,
+          sub: MarkdownSubscriptRenderer,
           p: props => <ParagraphRenderer {...props} className=" whitespace-normal" isShowResponseLoader={false} />,
         }}
       >
