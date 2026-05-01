@@ -37,7 +37,7 @@ describe('cleanConversation', () => {
     expect(result.customViewState).toEqual({
       customElements: { edges: [], nodes: [] },
       focusNodeId: '',
-      visitedNodeIds: {},
+      visitedNodeIds: [],
     });
   });
 
@@ -107,7 +107,7 @@ describe('cleanConversation', () => {
     const customViewState = {
       customElements: { edges: [{ id: 'e1' } as any], nodes: [{ id: 'n1' } as any] },
       focusNodeId: 'n1',
-      visitedNodeIds: { n1: 'yes' },
+      visitedNodeIds: ['n1'],
     };
 
     const result = cleanConversation({

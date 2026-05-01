@@ -31,7 +31,7 @@ describe('playbackNextStepEpic', () => {
       conversationSelectors.selectPlaybackActions.mockReturnValue([] as any);
       playbackSelectors.selectStepNumber.mockReturnValue(0);
 
-      const action$ = hot('-a-', { a: PlaybackActions.playbackNextStep() });
+      const action$ = hot('-a-', { a: PlaybackActions.playbackNextStep({}) });
       const state$ = { value: {} } as any;
 
       const output$ = playbackNextStepEpic(action$, state$);
@@ -48,7 +48,7 @@ describe('playbackNextStepEpic', () => {
       conversationSelectors.selectPlaybackActions.mockReturnValue([{}, nextAction] as any);
       playbackSelectors.selectStepNumber.mockReturnValue(0);
 
-      const action$ = hot('-a-', { a: PlaybackActions.playbackNextStep() });
+      const action$ = hot('-a-', { a: PlaybackActions.playbackNextStep({}) });
       const state$ = { value: {} } as any;
 
       const output$ = playbackNextStepEpic(action$, state$);
@@ -71,7 +71,7 @@ describe('playbackNextStepEpic', () => {
       conversationSelectors.selectPlaybackActions.mockReturnValue([{}, nextAction] as any);
       playbackSelectors.selectStepNumber.mockReturnValue(0);
 
-      const action$ = hot('-a-', { a: PlaybackActions.playbackNextStep() });
+      const action$ = hot('-a-', { a: PlaybackActions.playbackNextStep({}) });
       const state$ = { value: {} } as any;
 
       const output$ = playbackNextStepEpic(action$, state$);
@@ -93,7 +93,7 @@ describe('playbackNextStepEpic', () => {
       conversationSelectors.selectPlaybackActions.mockReturnValue([{}, nextAction] as any);
       playbackSelectors.selectStepNumber.mockReturnValue(0);
 
-      const action$ = hot('-a-', { a: PlaybackActions.playbackNextStep() });
+      const action$ = hot('-a-', { a: PlaybackActions.playbackNextStep({}) });
       const state$ = { value: {} } as any;
 
       const output$ = playbackNextStepEpic(action$, state$);
@@ -115,7 +115,7 @@ describe('playbackNextStepEpic', () => {
       conversationSelectors.selectPlaybackActions.mockReturnValue([{}, nextAction] as any);
       playbackSelectors.selectStepNumber.mockReturnValue(0);
 
-      const action$ = hot('-a-', { a: PlaybackActions.playbackNextStep() });
+      const action$ = hot('-a-', { a: PlaybackActions.playbackNextStep({}) });
       const state$ = { value: {} } as any;
 
       const output$ = playbackNextStepEpic(action$, state$);
@@ -143,7 +143,7 @@ describe('playbackNextStepEpic', () => {
       conversationSelectors.selectPlaybackActions.mockReturnValue([{}, nextAction] as any);
       playbackSelectors.selectStepNumber.mockReturnValue(0);
 
-      const action$ = hot('-a-', { a: PlaybackActions.playbackNextStep() });
+      const action$ = hot('-a-', { a: PlaybackActions.playbackNextStep({}) });
       const state$ = { value: {} } as any;
 
       const output$ = playbackNextStepEpic(action$, state$);
@@ -151,7 +151,7 @@ describe('playbackNextStepEpic', () => {
       const expectedValues = {
         a: PlaybackActions.setStepNumber(1),
         b: MindmapActions.setDepth(2),
-        c: MindmapActions.setVisitedNodes(mindmap.visitedNodes),
+        c: MindmapActions.setVisitedNodes(['2', '1']),
         d: MindmapActions.setGraphElements(mindmap.elements),
         e: MindmapActions.setFocusNodeId(mindmap.focusNodeId),
       };

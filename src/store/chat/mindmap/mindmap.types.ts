@@ -8,7 +8,7 @@ export interface MindmapState {
   previousNodeId: string;
   focusNodeId: string;
   isReady: boolean;
-  visitedNodes: Record<string, string>;
+  visitedNodes: string[];
   depth: DepthType;
   updateSignal: number;
   isGraphFetching: boolean;

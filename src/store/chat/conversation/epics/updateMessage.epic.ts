@@ -8,8 +8,14 @@ import { NodesMIMEType } from '@/types/files';
 import { Edge, Element, GraphElement, Node } from '@/types/graph';
 import { ChatRootEpic } from '@/types/store';
 import { getDuplicateMessageId, getNodeResponseId } from '@/utils/app/conversation';
-import { replaceVisitedNode } from '@/utils/app/graph/common';
 import { isEdge } from '@/utils/app/graph/typeGuards';
+import {
+  getPreviousNodeIdFromHistory,
+  linearHistoryToMap,
+  normalizeNavigationHistory,
+  recordToLinearHistory,
+  replaceVisitedNodeInNavigationHistory,
+} from '@/utils/chat/navigationHistory';
 
 import { MindmapActions, MindmapSelectors } from '../../mindmap/mindmap.reducers';
 import { ConversationActions, ConversationSelectors } from '../conversation.reducers';
@@ -107,13 +113,16 @@ export const updateMessageEpic: ChatRootEpic = (action$, state$) =>
         isFocusNodeNeedToUpdate = true;
         customViewState.focusNodeId = customNode!.id;
 
-        customViewState.visitedNodeIds = replaceVisitedNode(cloneDeep(visitedNodes), focusNodeId, customNodeId!);
+        customViewState.visitedNodeIds = replaceVisitedNodeInNavigationHistory(
+          visitedNodes,
+          focusNodeId,
+          customNodeId!,
+        );
         customViewState.customElements.edges = customViewState.customElements.edges.filter(
           edge => !edge.data.id.includes(focusNodeId),
         );
 
-        const wasVisited =
-          Boolean(visitedNodes[customNode!.id]) || Object.values(visitedNodes).some(value => value === customNode!.id);
+        const wasVisited = normalizeNavigationHistory(visitedNodes, focusNodeId).includes(customNode!.id);
 
         if (wasVisited || isAiGenerated) {
           const lastUserMessage =
@@ -161,6 +170,25 @@ export const updateMessageEpic: ChatRootEpic = (action$, state$) =>
         }
       }
 
+      if (customNodeId) {
+        const graphNode = customViewElements.nodes.find(n => n.data.id === customNodeId)?.data as Node | undefined;
+        if (graphNode) {
+          const priorHist = normalizeNavigationHistory(visitedNodes, focusNodeId);
+          const previousNodeId = getPreviousNodeIdFromHistory(priorHist, focusNodeId);
+          let vIds = normalizeNavigationHistory(customViewState.visitedNodeIds, customViewState.focusNodeId);
+          if (
+            previousNodeId !== undefined &&
+            previousNodeId !== graphNode.id &&
+            !vIds.includes(graphNode.id)
+          ) {
+            const m = cloneDeep(linearHistoryToMap(vIds));
+            m[graphNode.id] = previousNodeId;
+            vIds = recordToLinearHistory(m, customViewState.focusNodeId);
+            customViewState.visitedNodeIds = vIds;
+          }
+        }
+      }
+
       const actions: Observable<UnknownAction>[] = [];
 
       actions.push(
@@ -176,22 +204,13 @@ export const updateMessageEpic: ChatRootEpic = (action$, state$) =>
         actions.push(of(MindmapActions.fetchGraph(customViewState)));
       }
 
-      const previousNodeId = visitedNodes[focusNodeId];
-      if (
-        customNode &&
-        previousNodeId !== (customNode as Node).id &&
-        !customViewState.visitedNodeIds[(customNode as Node).id]
-      ) {
-        customViewState.visitedNodeIds[(customNode as Node).id] = previousNodeId;
-      }
-
       if (isFocusNodeNeedToUpdate) {
         actions.push(of(MindmapActions.setFocusNodeId(customNode!.id)));
         actions.push(
           of(
-            MindmapActions.setVisitedNodes({
-              ...customViewState.visitedNodeIds,
-            }),
+            MindmapActions.setVisitedNodes(
+              normalizeNavigationHistory(customViewState.visitedNodeIds, customNode!.id),
+            ),
           ),
         );
       }

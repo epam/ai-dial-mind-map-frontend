@@ -490,7 +490,7 @@ const updateConversationEpic: ChatRootEpic = (action$, state$) =>
               mindmap: {
                 elements: cleanGraphElementsForPlayback(mindmapElements),
                 focusNodeId: '',
-                visitedNodes: {},
+                visitedNodes: [],
                 depth,
               },
             },

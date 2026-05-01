@@ -8,6 +8,11 @@ import { NEW_QUESTION_LABEL } from '@/constants/app';
 import { GraphConfig, GraphImgResourceKey, GraphLayoutType } from '@/types/customization';
 import { Edge, Element, GraphElement, Node, SystemNodeDataKeys } from '@/types/graph';
 import { isNode } from '@/utils/app/graph/typeGuards';
+import {
+  getPreviousNodeIdFromHistory,
+  normalizeNavigationHistory,
+  uniqueVisitedNodeIds,
+} from '@/utils/chat/navigationHistory';
 
 import { AnimationDurationMs, DefaultGraphDepth, InitLayoutOptions, MaxVisibleNodesCount } from '../options';
 import { adjustMessages } from '../utils/adjustMessages';
@@ -28,7 +33,7 @@ interface UseDebouncedGraphUpdateProps {
   cy: Core | null;
   elements: Element<GraphElement>[];
   focusNodeId: string;
-  visitedNodes: Record<string, string>;
+  visitedNodes: string[];
   dispatch: Dispatch<UnknownAction>;
   isInitialization: boolean;
   updateSignal: number;
@@ -87,7 +92,8 @@ export const useDebouncedGraphUpdate = ({
         if (!cy || elements.length === 0) return;
 
         cy.startBatch();
-        const previousNodeId = visitedNodes[focusNodeId];
+        const history = normalizeNavigationHistory(visitedNodes, focusNodeId);
+        const previousNodeId = getPreviousNodeIdFromHistory(history, focusNodeId);
 
         let subgraphElements = cloneDeep(elements);
         const { validElements, invalidEdges } = filterInvalidEdges(subgraphElements);
@@ -132,7 +138,7 @@ export const useDebouncedGraphUpdate = ({
 
         adjustCompoundNodes(cy, newNodes);
 
-        const visitedIds = Object.entries(visitedNodes).flatMap(([k, v]) => [k, v]);
+        const visitedIds = uniqueVisitedNodeIds(history);
         if (focusNode?.icon) {
           const currentFocusNode = cy.getElementById(focusNodeId);
           if (currentFocusNode.data('icon') !== focusNode.icon) {
@@ -144,7 +150,7 @@ export const useDebouncedGraphUpdate = ({
           cy,
           focusNodeId,
           visitedIds,
-          previousNodeId,
+          previousNodeId ?? '',
           graphConfigRef.current,
           fontFamilyRef.current,
         );

@@ -20,7 +20,7 @@ describe('changeFocusNodeEpic', () => {
   it('emits the correct Mindmap and Playback actions when payload is valid', () => {
     testScheduler.run(({ hot, expectObservable }) => {
       const elements = [{ id: '1', data: { label: 'Element 1', id: '1' } }];
-      const visitedNodes = { '1': '2' };
+      const visitedNodes: string[] = ['2', '1'];
       const focusNodeId = '1';
       const depth = 2 as const;
       const payload = {
@@ -32,7 +32,7 @@ describe('changeFocusNodeEpic', () => {
 
       const expectedMarble = '-(abcde)-';
       const expectedValues = {
-        a: MindmapActions.setVisitedNodes(visitedNodes),
+        a: MindmapActions.setVisitedNodes(['2', '1']),
         b: MindmapActions.setGraphElements(elements),
         c: MindmapActions.setFocusNodeId(focusNodeId),
         d: PlaybackActions.setPlaybackInputText(null),

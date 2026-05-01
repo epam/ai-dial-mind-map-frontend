@@ -1,6 +1,7 @@
 import { EMPTY, filter, from, switchMap } from 'rxjs';
 
 import { ChatRootEpic } from '@/types/store';
+import { normalizeNavigationHistory } from '@/utils/chat/navigationHistory';
 
 import { MindmapActions } from '../../mindmap/mindmap.reducers';
 import { PlaybackActions } from '../playback.reducer';
@@ -21,7 +22,9 @@ export const changeFocusNodeEpic: ChatRootEpic = action$ =>
       }
 
       return from([
-        MindmapActions.setVisitedNodes(nextVisitedNodes),
+        MindmapActions.setVisitedNodes(
+          normalizeNavigationHistory(nextVisitedNodes as unknown, nextFocusNodeId),
+        ),
         MindmapActions.setGraphElements(nextGraphState),
         MindmapActions.setFocusNodeId(nextFocusNodeId),
         PlaybackActions.setPlaybackInputText(null),

@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { ViewState } from '@/types/chat';
 import { DocsReference, Element, GraphElement, NodeReference } from '@/types/graph';
+import { normalizeNavigationHistory } from '@/utils/chat/navigationHistory';
 
 import * as MindmapSelectors from './mindmap.selectors';
 import { DepthType, MindmapState } from './mindmap.types';
@@ -14,7 +15,7 @@ export const MindmapInitialState: MindmapState = {
   previousNodeId: '',
   isReady: false,
   focusNodeId: '',
-  visitedNodes: {},
+  visitedNodes: [],
   depth: 2,
   updateSignal: 0,
   isGraphFetching: false,
@@ -41,13 +42,15 @@ export const mindmapSlice = createSlice({
         }
       }
 
-      if (Object.keys(payload.visitedNodes).length === 0) {
-        const rootNodeId = payload.elements[0]?.data.id;
-        state.visitedNodes = {
-          [rootNodeId]: rootNodeId,
-        };
+      const normalizedVisited = normalizeNavigationHistory(
+        payload.visitedNodes as unknown,
+        payload.focusNodeId || payload.elements[0]?.data.id || '',
+      );
+      if (normalizedVisited.length === 0 && payload.elements.length > 0) {
+        const rootNodeId = payload.elements[0].data.id;
+        state.visitedNodes = [rootNodeId];
       } else {
-        state.visitedNodes = payload.visitedNodes;
+        state.visitedNodes = normalizedVisited;
       }
 
       state.depth = payload.depth;
@@ -78,10 +81,7 @@ export const mindmapSlice = createSlice({
     setFocusNodeId: (state, { payload }: PayloadAction<string>) => {
       state.focusNodeId = payload;
     },
-    addVisitedNodeId: (state, { payload }: PayloadAction<{ prevNodeId: string; newNodeId: string }>) => {
-      state.visitedNodes[payload.newNodeId] = payload.prevNodeId;
-    },
-    setVisitedNodes: (state, { payload }: PayloadAction<Record<string, string>>) => {
+    setVisitedNodes: (state, { payload }: PayloadAction<string[]>) => {
       state.visitedNodes = payload;
     },
     updateElements: (
