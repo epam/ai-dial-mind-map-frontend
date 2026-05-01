@@ -1,6 +1,9 @@
 import { IconArrowsMaximize, IconChevronLeft, IconChevronRight, IconX } from '@tabler/icons-react';
 import classNames from 'classnames';
 
+import { AppearanceSelectors } from '@/store/chat/appearance/appearance.reducers';
+import { useChatSelector } from '@/store/chat/hooks';
+
 import { ArrowButton } from './ArrowButton';
 
 interface Props {
@@ -25,6 +28,8 @@ export const ReferenceHeader: React.FC<Props> = ({
   onNext,
   onToggleFullscreen,
 }) => {
+  const labels = useChatSelector(AppearanceSelectors.selectMergedChatLabels);
+
   return (
     <div
       className={classNames([
@@ -38,7 +43,7 @@ export const ReferenceHeader: React.FC<Props> = ({
           isFullscreen ? 'text-sm xl:text-base' : 'text-xs',
         ])}
       >
-        <span className="mr-1 shrink-0">Reference:</span>
+        <span className="mr-1 shrink-0">{labels.referenceHeaderPrefix}</span>
         <div className="truncate">{title}</div>
       </div>
 

@@ -1,6 +1,7 @@
 import { Icon, IconCornerDownRight, IconProps } from '@tabler/icons-react';
 import { ForwardRefExoticComponent, RefAttributes } from 'react';
 
+import { ChatLabelsSection } from '../components/ChatLabelsSection/ChatLabelsSection';
 import { ChatNodeStyleSection } from '../components/ChatNodeStyleSection/ChatNodeStyleSection';
 import { CustomStylesSection } from '../components/CustomStylesSection';
 import { EdgeStyleSection } from '../components/EdgeStyleSection';
@@ -98,6 +99,11 @@ export const formSections: FormSectionProps[] = [
     title: 'Mind map colors',
     component: <MindMapColorsSection />,
     wrapperClassName: 'overflow-hidden',
+  },
+  {
+    id: 'chatLabels',
+    title: 'Labels',
+    component: <ChatLabelsSection />,
   },
   {
     id: 'customStyles',

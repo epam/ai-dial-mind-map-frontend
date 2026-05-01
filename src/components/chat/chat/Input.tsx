@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { useCallback, useRef } from 'react';
 
 import Tooltip from '@/components/builder/common/Tooltip';
-import { ChatInputPlaceholder, NEW_QUESTION_LABEL } from '@/constants/app';
+import { NEW_QUESTION_LABEL } from '@/constants/app';
 import { useRecaptchaContext } from '@/hooks/recaptcha/RecaptchaProvider';
 import { AppearanceSelectors } from '@/store/chat/appearance/appearance.reducers';
 import { ApplicationSelectors } from '@/store/chat/application/application.reducer';
@@ -22,7 +22,8 @@ export const Input = ({ classes }: { classes?: string }) => {
   const isMindmapNotFound = useChatSelector(MindmapSelectors.selectIsNotFound);
   const isLastMessageError = useChatSelector(ConversationSelectors.selectIsLastMessageError);
   const conversation = useChatSelector(ConversationSelectors.selectConversation);
-  const placeholder = useChatSelector(AppearanceSelectors.selectChatConfig)?.placeholder ?? ChatInputPlaceholder;
+  const labels = useChatSelector(AppearanceSelectors.selectMergedChatLabels);
+  const placeholder = labels.inputPlaceholder;
   const isGraphFetching = useChatSelector(MindmapSelectors.selectIsGraphFetching);
 
   const deviceType = useChatSelector(ChatUISelectors.selectDeviceType);
@@ -175,7 +176,7 @@ export const Input = ({ classes }: { classes?: string }) => {
         {!isLastMessageError ? (
           <IconSend stroke={1.5} />
         ) : (
-          <Tooltip tooltip="Regenerate response" contentClassName="text-sm text-primary">
+          <Tooltip tooltip={labels.regenerateResponseTooltip} contentClassName="text-sm text-primary">
             <IconRefresh />
           </Tooltip>
         )}

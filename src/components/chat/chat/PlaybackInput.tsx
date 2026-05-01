@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import { useEffect, useRef } from 'react';
 
 import { BlinkingCursor } from '@/components/common/BlinkingCursor';
-import { ChatInputPlaceholder } from '@/constants/app';
 import { AppearanceSelectors } from '@/store/chat/appearance/appearance.reducers';
 import { useChatSelector } from '@/store/chat/hooks';
 import { ChatUISelectors, DeviceType } from '@/store/chat/ui/ui.reducers';
@@ -13,7 +12,8 @@ import { usePlayback } from './hooks/usePlayback';
 export const PlaybackInput = () => {
   const { onNextPlaybackStep, onPreviousPlaybackStep, value, isPreviousStepDisabled, isNextStepDisabled, showCursor } =
     usePlayback();
-  const placeholder = useChatSelector(AppearanceSelectors.selectChatConfig)?.placeholder ?? ChatInputPlaceholder;
+  const labels = useChatSelector(AppearanceSelectors.selectMergedChatLabels);
+  const placeholder = labels.inputPlaceholder;
 
   const deviceType = useChatSelector(ChatUISelectors.selectDeviceType);
   const isDesktop = deviceType === DeviceType.Desktop;

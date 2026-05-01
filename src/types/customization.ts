@@ -180,6 +180,15 @@ const CytoscapeLayoutSettingsScheme = z
   })
   .strict();
 
+const LevelSwitcherConfigSchema = z
+  .object({
+    depth1Label: z.string().optional(),
+    depth2Label: z.string().optional(),
+  })
+  .strict();
+
+export type LevelSwitcherConfig = z.infer<typeof LevelSwitcherConfigSchema>;
+
 const GraphConfigSchema = z.object({
   cytoscapeLayoutSettings: CytoscapeLayoutSettingsScheme.optional(),
   paletteSettings: PaletteSettingsSchema,
@@ -189,6 +198,7 @@ const GraphConfigSchema = z.object({
   useNodeIconAsBgImage: z.boolean().optional(),
   maxNodesLimit: z.number().optional(),
   layout: z.nativeEnum(GraphLayoutType).optional(),
+  levelSwitcher: LevelSwitcherConfigSchema.optional(),
 });
 
 const ChatNodeSchema = z.object({
@@ -209,6 +219,34 @@ const ChatImagesConfigSchema = z.object({
   [ChatImgResourceKey.ChatBgImg]: z.string().optional(),
 });
 
+const ChatLabelsSchema = z
+  .object({
+    inputPlaceholder: z.string().optional(),
+    regenerateResponseTooltip: z.string().optional(),
+    showMap: z.string().optional(),
+    hideMap: z.string().optional(),
+    reset: z.string().optional(),
+    resetHistory: z.string().optional(),
+    graphUnavailableTitle: z.string().optional(),
+    graphUnavailableDescription: z.string().optional(),
+    rootNodeNotSetTitle: z.string().optional(),
+    rootNodeNotSetDescription: z.string().optional(),
+    referenceHeaderPrefix: z.string().optional(),
+    feedbackFieldLabel: z.string().optional(),
+    feedbackPlaceholder: z.string().optional(),
+    feedbackModalHeading: z.string().optional(),
+    feedbackModalDescription: z.string().optional(),
+    feedbackModalCancel: z.string().optional(),
+    feedbackModalConfirm: z.string().optional(),
+    tryAi: z.string().optional(),
+    retry: z.string().optional(),
+    reactionLikeAriaLabel: z.string().optional(),
+    reactionDislikeAriaLabel: z.string().optional(),
+    graphDepth1Label: z.string().optional(),
+    graphDepth2Label: z.string().optional(),
+  })
+  .strict();
+
 const ChatConfigSchema = z
   .object({
     placeholder: z.string().optional(),
@@ -216,6 +254,7 @@ const ChatConfigSchema = z
     chatNode: ChatNodeSchema.strict().optional(),
     customStyles: z.string().optional(),
     images: ChatImagesConfigSchema.optional(),
+    labels: ChatLabelsSchema.optional(),
   })
   .strict();
 
@@ -260,6 +299,7 @@ export const ThemeConfigSchema = z
   .strict();
 
 export type ThemeConfig = z.infer<typeof ThemeConfigSchema>;
+export type ChatLabels = z.infer<typeof ChatLabelsSchema>;
 export type CytoscapeEdgeStyles = z.infer<typeof CytoscapeEdgeStylesSchema>;
 export type PaletteSettings = z.infer<typeof PaletteSettingsSchema>;
 export type BranchColors = z.infer<typeof BranchColorsSchema>;

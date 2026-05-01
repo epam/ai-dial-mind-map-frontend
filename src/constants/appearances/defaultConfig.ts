@@ -1,3 +1,4 @@
+import { DEFAULT_CHAT_LABELS } from '@/constants/chat/chatLabels';
 import {
   CytoscapeLayoutSettings,
   CytoscapeNodeTypesStyles,
@@ -64,7 +65,10 @@ export const defaultConfig: Record<string, ThemeConfig> = {
       'stroke-info': '#2764D9',
       'stroke-success': '#009D9F',
     },
-    chat: { placeholder: 'Type your question' },
+    chat: {
+      placeholder: DEFAULT_CHAT_LABELS.inputPlaceholder,
+      labels: { ...DEFAULT_CHAT_LABELS },
+    },
     graph: {
       layout: GraphLayoutType.EllipticRing,
       paletteSettings: {
@@ -144,7 +148,10 @@ export const defaultConfig: Record<string, ThemeConfig> = {
       'stroke-info': '#5C8DEA',
       'stroke-success': '#37BABC',
     },
-    chat: { placeholder: 'Type your question' },
+    chat: {
+      placeholder: DEFAULT_CHAT_LABELS.inputPlaceholder,
+      labels: { ...DEFAULT_CHAT_LABELS },
+    },
     graph: {
       layout: GraphLayoutType.EllipticRing,
       paletteSettings: {
@@ -224,7 +231,10 @@ export const defaultConfig: Record<string, ThemeConfig> = {
       'stroke-info': '#2764D9',
       'stroke-success': '#009D9F',
     },
-    chat: { placeholder: 'Type your question' },
+    chat: {
+      placeholder: DEFAULT_CHAT_LABELS.inputPlaceholder,
+      labels: { ...DEFAULT_CHAT_LABELS },
+    },
     graph: {
       layout: GraphLayoutType.EllipticRing,
       paletteSettings: {

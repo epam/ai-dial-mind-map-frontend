@@ -1,6 +1,7 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { ThemeConfig } from '@/types/customization';
+import { mergeChatLabels } from '@/utils/chat/mergeChatLabels';
 
 import { ChatRootState } from '..';
 
@@ -31,9 +32,12 @@ const selectThemeConfig = createSelector([rootSelector], state => state.themeCon
 
 const selectChatConfig = createSelector([rootSelector], state => state.themeConfig?.chat);
 
+const selectMergedChatLabels = createSelector([selectThemeConfig], themeConfig => mergeChatLabels(themeConfig));
+
 export const AppearanceActions = appearanceSlice.actions;
 
 export const AppearanceSelectors = {
   selectThemeConfig,
   selectChatConfig,
+  selectMergedChatLabels,
 };

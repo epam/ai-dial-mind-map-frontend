@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { useMemo } from 'react';
 
+import { AppearanceSelectors } from '@/store/chat/appearance/appearance.reducers';
 import { ConversationSelectors } from '@/store/chat/conversation/conversation.reducers';
 import { useChatDispatch, useChatSelector } from '@/store/chat/hooks';
 import { MindmapActions, MindmapSelectors } from '@/store/chat/mindmap/mindmap.reducers';
@@ -10,6 +11,9 @@ import { PlaybackSelectors } from '@/store/chat/playback/playback.selectors';
 export const LevelSwitcher = ({ classes, onChange }: { classes?: string; onChange?: (depth: DepthType) => void }) => {
   const dispatch = useChatDispatch();
   const depth = useChatSelector(MindmapSelectors.selectDepth);
+  const labels = useChatSelector(AppearanceSelectors.selectMergedChatLabels);
+  const depth1Label = labels.graphDepth1Label;
+  const depth2Label = labels.graphDepth2Label;
   const isPlayback = useChatSelector(PlaybackSelectors.selectIsPlayback);
   const relayoutInProgress = useChatSelector(MindmapSelectors.selectRelayoutInProgress);
   const isMessageStreaming = useChatSelector(ConversationSelectors.selectIsMessageStreaming);
@@ -40,7 +44,7 @@ export const LevelSwitcher = ({ classes, onChange }: { classes?: string; onChang
             }
           }}
         >
-          1-level
+          {depth1Label}
         </button>
         <button
           className={classNames([
@@ -58,7 +62,7 @@ export const LevelSwitcher = ({ classes, onChange }: { classes?: string; onChang
             }
           }}
         >
-          2-level
+          {depth2Label}
         </button>
       </div>
     </div>
