@@ -7,6 +7,7 @@ import { ThemeConfig } from '@/types/customization';
 import { extractOriginalStorageFontFileName, isStorageFontFileName } from '@/utils/app/file';
 
 import { FontHandler } from '../FontsSection/FontHandler';
+import { GraphNodesTypographySettingsTables } from './GraphNodesSettingsTable';
 
 const GraphFontUploadKey = 'graph-font';
 
@@ -121,16 +122,22 @@ export const GraphFontSubSection = () => {
   );
 
   return (
-    <FontHandler
-      fontFamily={fontFamily}
-      fontFileName={fontFileName}
-      uploadKey={GraphFontUploadKey}
-      onDeleteFile={deleteFileHandler}
-      onSelectFile={selectFileHandler}
-      onSuccessFileUpload={successFileUploadHandler}
-      onSelectorChange={selectorChangeHandler}
-      onInputChange={inputChangeHandler}
-      selectorPlaceholder="Auto"
-    />
+    <div className="flex flex-col gap-8">
+      <FontHandler
+        fontFamily={fontFamily}
+        fontFileName={fontFileName}
+        uploadKey={GraphFontUploadKey}
+        onDeleteFile={deleteFileHandler}
+        onSelectFile={selectFileHandler}
+        onSuccessFileUpload={successFileUploadHandler}
+        onSelectorChange={selectorChangeHandler}
+        onInputChange={inputChangeHandler}
+        selectorPlaceholder="Auto"
+      />
+      <div className="flex flex-col gap-3">
+        <span className="text-sm font-semibold text-primary">Node label typography</span>
+        <GraphNodesTypographySettingsTables />
+      </div>
+    </div>
   );
 };

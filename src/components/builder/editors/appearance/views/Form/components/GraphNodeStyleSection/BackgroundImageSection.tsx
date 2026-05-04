@@ -6,7 +6,7 @@ import { useBuilderDispatch, useBuilderSelector } from '@/store/builder/hooks';
 import { UISelectors } from '@/store/builder/ui/ui.reducers';
 import { ThemeConfig } from '@/types/customization';
 
-import { GraphNodesSettingsTables } from './GraphNodesSettingsTable';
+import { GraphNodesDimensionSettingsTables } from './GraphNodesSettingsTable';
 import { NodeImagesSubSection } from './NodeImagesSubSection';
 
 export const BackgroundImageSection = () => {
@@ -41,7 +41,7 @@ export const BackgroundImageSection = () => {
       {config?.graph.useNodeIconAsBgImage && (
         <>
           <NodeImagesSubSection />
-          <GraphNodesSettingsTables />
+          <GraphNodesDimensionSettingsTables />
         </>
       )}
     </div>
