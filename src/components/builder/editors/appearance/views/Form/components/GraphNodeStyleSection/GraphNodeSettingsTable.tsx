@@ -7,11 +7,14 @@ import { GraphNodeState, GraphNodeType, NodeStylesKey } from '@/types/customizat
 import { GraphNodeTypesToColumnNames, NodeStylesKeysToRowNames } from '../../data/constants';
 import { NumericInput } from '../common/NumericInput';
 
-export type GraphNodeSettingsTableData = Record<NodeStylesKey, { base?: number; [GraphNodeState.Hovered]?: number }>;
+export type GraphNodeSettingsTableData = Partial<
+  Record<NodeStylesKey, { base?: number; [GraphNodeState.Hovered]?: number }>
+>;
 
 export const GraphNodeSettingsTable = ({
   showRowLabels = false,
   type,
+  rowKeys,
   data,
   onChange,
   disabled,
@@ -20,6 +23,7 @@ export const GraphNodeSettingsTable = ({
   onChange: (type: GraphNodeType, field: string, value?: number, state?: GraphNodeState) => void;
   showRowLabels?: boolean;
   type: GraphNodeType;
+  rowKeys: NodeStylesKey[];
   data: GraphNodeSettingsTableData;
   disabled?: boolean;
   disabledTooltipText?: string;
@@ -43,11 +47,11 @@ export const GraphNodeSettingsTable = ({
       </div>
 
       <div>
-        {Object.keys(data).map(key => (
+        {rowKeys.map(key => (
           <div key={`${type}-${key}`} className="flex items-center gap-2 pt-2">
             {showRowLabels && (
               <div className="mr-4 w-[92px] whitespace-nowrap text-sm text-primary">
-                {NodeStylesKeysToRowNames[key as NodeStylesKey]}
+                {NodeStylesKeysToRowNames[key]}
               </div>
             )}
             <div className="flex-1">
@@ -59,9 +63,9 @@ export const GraphNodeSettingsTable = ({
               >
                 <NumericInput
                   id={`${type}-${key}-base`}
-                  icon={getIcon(key as NodeStylesKey)}
+                  icon={getIcon(key)}
                   onChange={value => onChange(type, key, value)}
-                  value={data[key as NodeStylesKey].base}
+                  value={data[key]?.base}
                   wrapperClassNames={classNames([disabled && 'opacity-50 pointer-events-none touch-none'])}
                   min={key === NodeStylesKey.TextMarginY ? -1000 : 0}
                 />
@@ -76,9 +80,9 @@ export const GraphNodeSettingsTable = ({
               >
                 <NumericInput
                   id={`${type}-${key}-hovered`}
-                  icon={getIcon(key as NodeStylesKey)}
+                  icon={getIcon(key)}
                   onChange={value => onChange(type, key, value, GraphNodeState.Hovered)}
-                  value={data[key as NodeStylesKey][GraphNodeState.Hovered]}
+                  value={data[key]?.[GraphNodeState.Hovered]}
                   wrapperClassNames={classNames([disabled && 'opacity-50 pointer-events-none touch-none'])}
                   min={key === NodeStylesKey.TextMarginY ? -1000 : 0}
                 />
