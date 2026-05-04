@@ -239,6 +239,7 @@ const ChatLabelsSchema = z
     feedbackModalCancel: z.string().optional(),
     feedbackModalConfirm: z.string().optional(),
     tryAi: z.string().optional(),
+    tryAiTooltipTemplate: z.string().optional(),
     retry: z.string().optional(),
     reactionLikeAriaLabel: z.string().optional(),
     reactionDislikeAriaLabel: z.string().optional(),

@@ -24,6 +24,7 @@ export const DEFAULT_CHAT_LABELS = {
   feedbackModalCancel: 'Cancel',
   feedbackModalConfirm: 'Confirm',
   tryAi: 'Try AI',
+  tryAiTooltipTemplate: 'Content of "{nodeLabel}"',
   retry: 'Retry',
   reactionLikeAriaLabel: 'Like',
   reactionDislikeAriaLabel: 'Dislike',

@@ -67,6 +67,10 @@ export const CHAT_LABEL_FORM_SECTIONS: ChatLabelFormSection[] = [
     title: 'Message actions',
     fields: [
       { key: 'tryAi', label: 'Try AI' },
+      {
+        key: 'tryAiTooltipTemplate',
+        label: 'Try AI hint (tooltip; use {nodeLabel} for the focused node title)',
+      },
       { key: 'retry', label: 'Retry' },
     ],
   },

@@ -115,7 +115,8 @@ export const MessageActions = ({
   );
 
   if (isNotAiGenerated && !isError) {
-    return renderContent(labels.tryAi, <RobotIcon width={16} height={16} />, `Content of "${focusNode?.label}"`);
+    const tryAiTooltipText = labels.tryAiTooltipTemplate.replaceAll('{nodeLabel}', focusNode?.label ?? '');
+    return renderContent(labels.tryAi, <RobotIcon width={16} height={16} />, tryAiTooltipText);
   }
 
   if (isAIGenerated || isError) {
