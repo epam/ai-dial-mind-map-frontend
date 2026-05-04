@@ -3,6 +3,10 @@ import { EMPTY, filter, from, map, switchMap } from 'rxjs';
 
 import { PlaybackActionType } from '@/types/chat';
 import { ChatRootEpic } from '@/types/store';
+import {
+  getRecordedPreviousFromPlaybackSnapshot,
+  normalizeNavigationHistory,
+} from '@/utils/chat/navigationHistory';
 
 import { ConversationSelectors } from '../../conversation/conversation.reducers';
 import { MindmapActions } from '../../mindmap/mindmap.reducers';
@@ -40,9 +44,19 @@ export const playbackPreviousStepEpic: ChatRootEpic = (action$, state$) =>
       if (previousAction.type === PlaybackActionType.Init) {
         return from([
           PlaybackActions.setPlaybackInputText(null),
-          MindmapActions.setVisitedNodes(previousAction.mindmap.visitedNodes),
+          MindmapActions.setVisitedNodes(
+            normalizeNavigationHistory(
+              previousAction.mindmap.visitedNodes,
+              previousAction.mindmap.focusNodeId ?? '',
+            ),
+          ),
           MindmapActions.setGraphElements(previousAction.mindmap.elements),
-          MindmapActions.setFocusNodeId(lastAction.mindmap.visitedNodes?.[lastAction.mindmap.focusNodeId]),
+          MindmapActions.setFocusNodeId(
+            getRecordedPreviousFromPlaybackSnapshot(
+              lastAction.mindmap.visitedNodes,
+              lastAction.mindmap.focusNodeId,
+            ) ?? '',
+          ),
           MindmapActions.setDepth(previousAction.mindmap.depth),
           PlaybackActions.setStepNumber(0),
           PlaybackActions.init({ ...conversation, messages: conversation.playback?.messagesStack.slice(0, 2) ?? [] }),
@@ -56,7 +70,10 @@ export const playbackPreviousStepEpic: ChatRootEpic = (action$, state$) =>
 
       const focusNodeId =
         actionBeforePrevious?.type === PlaybackActionType.Init
-          ? previousAction.mindmap.visitedNodes?.[previousAction.mindmap.focusNodeId]
+          ? getRecordedPreviousFromPlaybackSnapshot(
+              previousAction.mindmap.visitedNodes,
+              previousAction.mindmap.focusNodeId,
+            )
           : (actionBeforePrevious?.mindmap.focusNodeId ?? previousAction.mindmap.focusNodeId);
 
       const elements = actionBeforePrevious?.mindmap.elements ?? previousAction.mindmap.elements;
@@ -79,7 +96,12 @@ export const playbackPreviousStepEpic: ChatRootEpic = (action$, state$) =>
           }
 
           rollBackActions.push(
-            MindmapActions.setVisitedNodes(previousAction.mindmap.visitedNodes),
+            MindmapActions.setVisitedNodes(
+              normalizeNavigationHistory(
+                previousAction.mindmap.visitedNodes,
+                previousAction.mindmap.focusNodeId ?? '',
+              ),
+            ),
             MindmapActions.setGraphElements(previousAction.mindmap.elements),
             MindmapActions.setFocusNodeId(previousAction.mindmap.focusNodeId),
             MindmapActions.setDepth(previousAction.mindmap.depth),
@@ -95,9 +117,11 @@ export const playbackPreviousStepEpic: ChatRootEpic = (action$, state$) =>
         actions.push(PlaybackActions.revertConversation());
         actions.push(
           PlaybackActions.setPlaybackInputText(inputValue),
-          MindmapActions.setVisitedNodes(visitedNodes),
+          MindmapActions.setVisitedNodes(
+            normalizeNavigationHistory(visitedNodes, focusNodeId ?? previousAction.mindmap.focusNodeId ?? ''),
+          ),
           MindmapActions.setGraphElements(elements),
-          MindmapActions.setFocusNodeId(focusNodeId),
+          MindmapActions.setFocusNodeId(focusNodeId ?? ''),
           MindmapActions.setDepth(depth),
         );
 
@@ -106,9 +130,11 @@ export const playbackPreviousStepEpic: ChatRootEpic = (action$, state$) =>
 
       if (lastAction.type === PlaybackActionType.ChangeFocusNode) {
         actions.push(
-          MindmapActions.setVisitedNodes(visitedNodes),
+          MindmapActions.setVisitedNodes(
+            normalizeNavigationHistory(visitedNodes, focusNodeId ?? previousAction.mindmap.focusNodeId ?? ''),
+          ),
           MindmapActions.setGraphElements(elements),
-          MindmapActions.setFocusNodeId(focusNodeId),
+          MindmapActions.setFocusNodeId(focusNodeId ?? ''),
           MindmapActions.setDepth(depth),
         );
 
@@ -118,7 +144,12 @@ export const playbackPreviousStepEpic: ChatRootEpic = (action$, state$) =>
       if (lastAction.type === PlaybackActionType.ChangeDepth) {
         actions.push(
           MindmapActions.setDepth(previousAction.mindmap.depth),
-          MindmapActions.setVisitedNodes(previousAction.mindmap.visitedNodes),
+          MindmapActions.setVisitedNodes(
+            normalizeNavigationHistory(
+              previousAction.mindmap.visitedNodes,
+              previousAction.mindmap.focusNodeId ?? '',
+            ),
+          ),
           MindmapActions.setGraphElements(previousAction.mindmap.elements),
           MindmapActions.setFocusNodeId(previousAction.mindmap.focusNodeId),
           PlaybackActions.setPlaybackInputText(inputValue),

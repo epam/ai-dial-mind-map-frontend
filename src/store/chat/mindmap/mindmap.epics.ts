@@ -23,7 +23,13 @@ import { CompletionGraphResponse, Edge, Element, GraphElement, Node } from '@/ty
 import { HTTPMethod } from '@/types/http';
 import { ChatRootEpic } from '@/types/store';
 import { ToastType } from '@/types/toasts';
-import { getEdgeId, removeVisitedNode } from '@/utils/app/graph/common';
+import { getEdgeId } from '@/utils/app/graph/common';
+import {
+  computeNextNavigationHistory,
+  getPreviousNodeIdFromHistory,
+  navigationHistoryAfterFailedNode,
+  normalizeNavigationHistory,
+} from '@/utils/chat/navigationHistory';
 
 import { AppearanceSelectors } from '../appearance/appearance.reducers';
 import { ApplicationSelectors } from '../application/application.reducer';
@@ -41,7 +47,7 @@ const resetEpic: ChatRootEpic = action$ =>
       return concat(
         of(MindmapActions.setFocusNodeId('')),
         of(MindmapActions.setDepth(2)),
-        of(MindmapActions.setVisitedNodes({})),
+        of(MindmapActions.setVisitedNodes([])),
         of(MindmapActions.updateElements({ elements: [] })),
         of(MindmapActions.fetchGraph()),
       );
@@ -91,12 +97,15 @@ const handleNavigationEpic: ChatRootEpic = (action$, state$) =>
       conversation: ConversationSelectors.selectConversation(state$.value),
     })),
     switchMap(({ payload, focusNodeId, conversation }) => {
-      const visitedNodeIds = cloneDeep(conversation.customViewState.visitedNodeIds) ?? {};
-      visitedNodeIds[payload.clickedNodeId] = focusNodeId;
+      const priorHistory = normalizeNavigationHistory(
+        conversation.customViewState.visitedNodeIds as unknown,
+        focusNodeId,
+      );
+      const visitedNodeIds = computeNextNavigationHistory(priorHistory, focusNodeId, payload.clickedNodeId);
 
       const actionsToDispatch: Action[] = [
         MindmapActions.closeFullscreenReferences(),
-        MindmapActions.addVisitedNodeId({ newNodeId: payload.clickedNodeId, prevNodeId: focusNodeId }),
+        MindmapActions.setVisitedNodes(visitedNodeIds),
         MindmapActions.setFocusNodeId(payload.clickedNodeId),
         ConversationActions.updateConversation({
           values: {
@@ -159,12 +168,13 @@ const fetchGraphEpic: ChatRootEpic = (action$, state$) =>
           body.node = focusedNodeId;
         }
 
-        const visitedNodeIds = !!payload
+        const rawVisited = !!payload
           ? payload.visitedNodeIds
-          : Object.keys(visitedNodes).length === 0
+          : visitedNodes.length === 0
             ? customViewState.visitedNodeIds
             : visitedNodes;
-        const previousNodeId = visitedNodeIds[focusedNodeId] ?? null;
+        const historyForRequest = normalizeNavigationHistory(rawVisited as unknown, focusedNodeId);
+        const previousNodeId = getPreviousNodeIdFromHistory(historyForRequest, focusedNodeId) ?? null;
         if (previousNodeId && previousNodeId !== focusNodeId) {
           body['previous_node'] = previousNodeId;
         }
@@ -282,7 +292,7 @@ const fetchGraphEpic: ChatRootEpic = (action$, state$) =>
               of(
                 MindmapActions.fetchGraphFail({
                   nodeId: focusedNodeId,
-                  previousNodeId,
+                  previousNodeId: previousNodeId ?? '',
                   isNotFound: isMindmapNotFound,
                   isRootNodeNotFound,
                 }),
@@ -325,14 +335,17 @@ const fetchGraphFailEpic: ChatRootEpic = (action$, state$) =>
         return of(ChatUIActions.showErrorToast(errorMessage));
       }
 
-      const visitedNodeIds = cloneDeep(
-        Object.keys(visitedNodes).length === 0 ? customViewState.visitedNodeIds : visitedNodes,
-      );
-      let filteredVisitedNodes = {};
+      const rawVisited = visitedNodes.length === 0 ? customViewState.visitedNodeIds : visitedNodes;
+      let filteredVisitedNodes: string[] = [];
       let newFocusNodeId = '';
 
       if (sequentialFetchFailures < MaxGraphFetchRetries) {
-        filteredVisitedNodes = removeVisitedNode(visitedNodeIds, payload.nodeId);
+        filteredVisitedNodes = navigationHistoryAfterFailedNode(
+          normalizeNavigationHistory(rawVisited as unknown, payload.nodeId),
+          payload.nodeId,
+          payload.nodeId,
+          payload.previousNodeId,
+        );
         newFocusNodeId = payload.previousNodeId;
       }
 

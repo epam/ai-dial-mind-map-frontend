@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { useMemo } from 'react';
 
 import { ErrorMessage } from '@/components/builder/common/ErrorMessage';
 import { Space } from '@/components/common/Space/Space';
@@ -9,6 +10,11 @@ import { ChatUISelectors, DeviceType } from '@/store/chat/ui/ui.reducers';
 import { Message } from '@/types/chat';
 import { ChatNodeResourceKey, ChatNodeType, IconResourceKey } from '@/types/customization';
 import { ColoredNode } from '@/types/graph';
+import {
+  getPreviousNodeIdFromHistory,
+  normalizeNavigationHistory,
+  uniqueVisitedNodeIds,
+} from '@/utils/chat/navigationHistory';
 
 import MarkdownRenderer from './markdown/MarkdownRenderer';
 import { Node } from './Node';
@@ -23,11 +29,16 @@ interface Props {
 export const ChatMessageBody = ({ nodes, message, isMessageStreaming, isLastMessage }: Props) => {
   const visitedNodes = useChatSelector(MindmapSelectors.selectVisitedNodes);
   const focusNodeId = useChatSelector(MindmapSelectors.selectFocusNodeId);
-  const previousNodeId = visitedNodes[focusNodeId];
   const themeConfig = useChatSelector(AppearanceSelectors.selectThemeConfig);
   const chatNodeThemeConfig = themeConfig?.chat?.chatNode;
   const arrowBackIconName = themeConfig?.icons?.[IconResourceKey.ArrowBackIcon];
-  const visitedNodesIds = Object.entries(visitedNodes).flatMap(([key, value]) => [key, value]);
+  const { previousNodeId, visitedNodesIds } = useMemo(() => {
+    const history = normalizeNavigationHistory(visitedNodes, focusNodeId);
+    return {
+      previousNodeId: getPreviousNodeIdFromHistory(history, focusNodeId),
+      visitedNodesIds: uniqueVisitedNodeIds(history),
+    };
+  }, [visitedNodes, focusNodeId]);
 
   const deviceType = useChatSelector(ChatUISelectors.selectDeviceType);
   const isDesktop = deviceType === DeviceType.Desktop;

@@ -21,7 +21,7 @@ export const ConversationInitialState: ConversationState = {
     selectedAddons: [],
     customViewState: {
       focusNodeId: '',
-      visitedNodeIds: {},
+      visitedNodeIds: [],
       customElements: {
         edges: [],
         nodes: [],

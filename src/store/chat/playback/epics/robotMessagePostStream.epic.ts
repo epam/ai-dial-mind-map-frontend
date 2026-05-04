@@ -1,6 +1,7 @@
 import { EMPTY, filter, map, switchMap } from 'rxjs';
 
 import { ChatRootEpic } from '@/types/store';
+import { normalizeNavigationHistory } from '@/utils/chat/navigationHistory';
 
 import { ConversationSelectors } from '../../conversation/conversation.reducers';
 import { MindmapActions } from '../../mindmap/mindmap.reducers';
@@ -19,7 +20,12 @@ export const robotMessagePostStreamEpic: ChatRootEpic = (action$, state$) =>
         return EMPTY;
       }
       return [
-        MindmapActions.setVisitedNodes(currentAction.mindmap.visitedNodes),
+        MindmapActions.setVisitedNodes(
+          normalizeNavigationHistory(
+            currentAction.mindmap.visitedNodes,
+            currentAction.mindmap.focusNodeId ?? '',
+          ),
+        ),
         MindmapActions.setGraphElements(currentAction.mindmap.elements),
         MindmapActions.setFocusNodeId(currentAction.mindmap.focusNodeId),
         MindmapActions.setDepth(currentAction.mindmap.depth || 2),

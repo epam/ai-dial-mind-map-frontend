@@ -2,6 +2,8 @@ import { CaptchaToken, Entity } from './common';
 import { MIMEType } from './files';
 import { ColoredNode, Edge, Element, GraphElement, Node, Reference } from './graph';
 
+export type VisitedNodeIds = string[];
+
 export interface Attachment {
   index?: number;
   type: AttachmentType;
@@ -117,7 +119,7 @@ export interface PlaybackAction {
   mindmap: {
     elements: Element<GraphElement>[];
     focusNodeId: string;
-    visitedNodes: Record<string, string>;
+    visitedNodes: VisitedNodeIds;
     depth: 1 | 2;
   };
   chat?: {
@@ -128,7 +130,7 @@ export interface PlaybackAction {
 
 export interface ViewState {
   focusNodeId: string;
-  visitedNodeIds: Record<string, string>;
+  visitedNodeIds: VisitedNodeIds;
   customElements: CustomElements;
   playbackActions?: PlaybackAction[];
 }

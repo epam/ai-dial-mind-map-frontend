@@ -3,6 +3,7 @@ import { concat, EMPTY, filter, from, map, of, switchMap } from 'rxjs';
 import { NEW_QUESTION_LABEL } from '@/constants/app';
 import { AttachmentTitle } from '@/types/chat';
 import { ChatRootEpic } from '@/types/store';
+import { normalizeNavigationHistory } from '@/utils/chat/navigationHistory';
 
 import { ConversationSelectors } from '../../conversation/conversation.reducers';
 import { MindmapActions } from '../../mindmap/mindmap.reducers';
@@ -39,12 +40,11 @@ export const updateConversationEpic: ChatRootEpic = (action$, state$) =>
 
         const {
           focusNodeId: nextFocusNodeId,
-          visitedNodes: nextVisitedNodes,
           elements: nextGraphState,
           depth: nextDepth,
         } = playbackAction.mindmap;
 
-        if (!nextUserMessage || !nextBotMessage || !nextFocusNodeId || !nextVisitedNodes || !nextGraphState) {
+        if (!nextUserMessage || !nextBotMessage || !nextFocusNodeId || !nextGraphState) {
           return EMPTY;
         }
 
@@ -58,7 +58,12 @@ export const updateConversationEpic: ChatRootEpic = (action$, state$) =>
               ...playBackConversation,
               messages: [...playBackConversation.messages, nextUserMessage, nextBotMessage],
             }),
-            MindmapActions.setVisitedNodes(playbackAction.mindmap.visitedNodes || {}),
+            MindmapActions.setVisitedNodes(
+              normalizeNavigationHistory(
+                playbackAction.mindmap.visitedNodes ?? [],
+                previousFocusNodeId ?? nextFocusNodeId,
+              ),
+            ),
             MindmapActions.setGraphElements(previousGraphElements ?? nextGraphState),
             MindmapActions.setFocusNodeId(previousFocusNodeId ?? nextFocusNodeId),
             MindmapActions.setDepth(nextDepth || 2),
