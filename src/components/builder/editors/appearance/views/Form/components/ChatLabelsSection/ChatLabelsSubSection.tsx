@@ -6,7 +6,7 @@ import { useBuilderDispatch, useBuilderSelector } from '@/store/builder/hooks';
 import { UISelectors } from '@/store/builder/ui/ui.reducers';
 import type { ChatLabels, ThemeConfig } from '@/types/customization';
 
-import { CHAT_LABEL_FORM_SECTIONS } from '../../data/chatLabelFormConfig';
+import type { ChatLabelFormSection } from '../../data/chatLabelFormConfig';
 
 const inputClassName =
   'input-form peer mx-0 w-full max-w-[480px] text-sm hover:border-accent-primary focus:border-accent-primary';
@@ -21,7 +21,7 @@ const pruneLabels = (raw: Record<string, string | undefined>): ChatLabels | unde
   return Object.fromEntries(entries.map(([k, v]) => [k, (v as string).trim()])) as ChatLabels;
 };
 
-export const ChatLabelsSection = () => {
+export const ChatLabelsSubSection = ({ section }: { section: ChatLabelFormSection }) => {
   const dispatch = useBuilderDispatch();
   const theme = useBuilderSelector(UISelectors.selectTheme) || 'dark';
   const config = useBuilderSelector(AppearanceSelectors.selectThemeConfig);
@@ -62,26 +62,19 @@ export const ChatLabelsSection = () => {
   );
 
   return (
-    <div className="flex flex-col gap-8">
-      {CHAT_LABEL_FORM_SECTIONS.map(section => (
-        <div key={section.title} className="flex flex-col gap-3">
-          <h3 className="text-sm font-semibold text-primary">{section.title}</h3>
-          <div className="flex flex-col gap-4">
-            {section.fields.map(({ key, label }) => (
-              <div key={key} className="flex flex-col gap-1">
-                <label htmlFor={`chat-label-${key}`} className="w-fit text-xs text-secondary">
-                  {label}
-                </label>
-                <input
-                  id={`chat-label-${key}`}
-                  value={config?.chat?.labels?.[key] ?? ''}
-                  placeholder={DEFAULT_CHAT_LABELS[key]}
-                  onChange={e => persistKey(key, e.target.value)}
-                  className={inputClassName}
-                />
-              </div>
-            ))}
-          </div>
+    <div className="flex flex-col gap-5">
+      {section.fields.map(({ key, label }) => (
+        <div key={key} className="flex flex-col gap-1">
+          <label htmlFor={`chat-label-${section.id}-${key}`} className="w-fit text-xs text-secondary">
+            {label}
+          </label>
+          <input
+            id={`chat-label-${section.id}-${key}`}
+            value={config?.chat?.labels?.[key] ?? ''}
+            placeholder={DEFAULT_CHAT_LABELS[key]}
+            onChange={e => persistKey(key, e.target.value)}
+            className={inputClassName}
+          />
         </div>
       ))}
     </div>
