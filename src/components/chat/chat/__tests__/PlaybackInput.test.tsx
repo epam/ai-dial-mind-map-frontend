@@ -2,7 +2,9 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
 import { ChatInputPlaceholder } from '@/constants/app';
+import { AppearanceSelectors } from '@/store/chat/appearance/appearance.reducers';
 import { useChatSelector } from '@/store/chat/hooks';
+import { mergeChatLabels } from '@/utils/chat/mergeChatLabels';
 
 import { usePlayback } from '../hooks/usePlayback';
 import { PlaybackInput } from '../PlaybackInput';
@@ -20,8 +22,18 @@ describe('PlaybackInput', () => {
   const onPrev = jest.fn();
   const onNext = jest.fn();
 
+  const mockLabels = (override?: Partial<ReturnType<typeof mergeChatLabels>>) => {
+    mockedUseChatSelector.mockImplementation(selector => {
+      if (selector === AppearanceSelectors.selectMergedChatLabels) {
+        return { ...mergeChatLabels(undefined), ...override };
+      }
+      return undefined;
+    });
+  };
+
   beforeEach(() => {
     jest.resetAllMocks();
+    mockLabels();
   });
 
   it('renders value and disables next button when isNextStepDisabled is true', () => {
@@ -33,7 +45,7 @@ describe('PlaybackInput', () => {
       isNextStepDisabled: true,
       showCursor: true,
     });
-    mockedUseChatSelector.mockReturnValue({ placeholder: 'CUSTOM PH' });
+    mockLabels({ inputPlaceholder: 'CUSTOM PH' });
 
     render(<PlaybackInput />);
 
@@ -58,8 +70,7 @@ describe('PlaybackInput', () => {
       isNextStepDisabled: false,
       showCursor: false,
     });
-    // Return no config to force fallback
-    mockedUseChatSelector.mockReturnValue(undefined as any);
+    mockLabels();
 
     render(<PlaybackInput />);
 
@@ -84,7 +95,7 @@ describe('PlaybackInput', () => {
       isNextStepDisabled: false,
       showCursor: false,
     });
-    mockedUseChatSelector.mockReturnValue({ placeholder: 'PH' });
+    mockLabels({ inputPlaceholder: 'PH' });
 
     render(<PlaybackInput />);
 

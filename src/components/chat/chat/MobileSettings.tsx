@@ -12,6 +12,7 @@ import { IconSettings, IconTrash } from '@tabler/icons-react';
 import classNames from 'classnames';
 import { useState } from 'react';
 
+import { AppearanceSelectors } from '@/store/chat/appearance/appearance.reducers';
 import { ApplicationSelectors } from '@/store/chat/application/application.reducer';
 import { ConversationSelectors } from '@/store/chat/conversation/conversation.reducers';
 import { useChatDispatch, useChatSelector } from '@/store/chat/hooks';
@@ -21,6 +22,7 @@ import { LevelSwitcher } from '../LevelSwitcher';
 
 export const MobileSettings = () => {
   const dispatch = useChatDispatch();
+  const labels = useChatSelector(AppearanceSelectors.selectMergedChatLabels);
   const hasAppProperties = useChatSelector(ApplicationSelectors.selectHasAppProperties);
   const conversation = useChatSelector(ConversationSelectors.selectConversation);
   const [isOpen, setIsOpen] = useState(false);
@@ -79,7 +81,7 @@ export const MobileSettings = () => {
                   conversation.messages.length > 2 && 'group-hover:text-accent-primary',
                 ])}
               />
-              Reset history
+              {labels.resetHistory}
             </button>
           </div>
         )}

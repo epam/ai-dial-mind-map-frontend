@@ -6,6 +6,7 @@ import { ReactNode, useCallback, useMemo } from 'react';
 import { Space } from '@/components/common/Space/Space';
 import { useRecaptchaContext } from '@/hooks/recaptcha/RecaptchaProvider';
 import RobotIcon from '@/icons/robot.svg';
+import { AppearanceSelectors } from '@/store/chat/appearance/appearance.reducers';
 import { ConversationActions, ConversationSelectors } from '@/store/chat/conversation/conversation.reducers';
 import { useChatDispatch, useChatSelector } from '@/store/chat/hooks';
 import { MindmapActions, MindmapSelectors } from '@/store/chat/mindmap/mindmap.reducers';
@@ -27,6 +28,7 @@ export const MessageActions = ({
   like?: LikeState;
 }) => {
   const dispatch = useChatDispatch();
+  const labels = useChatSelector(AppearanceSelectors.selectMergedChatLabels);
   const chatDisclaimer = useChatSelector(ChatUISelectors.selectChatDisclaimer);
   const focusNodeId = useChatSelector(MindmapSelectors.selectFocusNodeId);
   const visitedNodes = useChatSelector(MindmapSelectors.selectVisitedNodes);
@@ -113,10 +115,11 @@ export const MessageActions = ({
   );
 
   if (isNotAiGenerated && !isError) {
-    return renderContent('Try AI', <RobotIcon width={16} height={16} />, `Content of "${focusNode?.label}"`);
+    const tryAiTooltipText = labels.tryAiTooltipTemplate.replaceAll('{nodeLabel}', focusNode?.label ?? '');
+    return renderContent(labels.tryAi, <RobotIcon width={16} height={16} />, tryAiTooltipText);
   }
 
   if (isAIGenerated || isError) {
-    return renderContent('Retry', <IconRefresh size={16} />, chatDisclaimer);
+    return renderContent(labels.retry, <IconRefresh size={16} />, chatDisclaimer);
   }
 };

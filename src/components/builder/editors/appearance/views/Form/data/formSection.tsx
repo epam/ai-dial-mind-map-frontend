@@ -1,6 +1,7 @@
 import { Icon, IconCornerDownRight, IconProps } from '@tabler/icons-react';
 import { ForwardRefExoticComponent, RefAttributes } from 'react';
 
+import { ChatLabelsSubSection } from '../components/ChatLabelsSection/ChatLabelsSubSection';
 import { ChatNodeStyleSection } from '../components/ChatNodeStyleSection/ChatNodeStyleSection';
 import { CustomStylesSection } from '../components/CustomStylesSection';
 import { EdgeStyleSection } from '../components/EdgeStyleSection';
@@ -14,6 +15,7 @@ import { MainSettingsSection } from '../components/MainSettingsSection/ChatSetti
 import { MindMapColorsSection } from '../components/MidmMapColorsSection';
 import { ReferenceColors } from '../components/ReferenceColors';
 import { SemanticColorsSection } from '../components/SemanticColorsSection';
+import { CHAT_LABEL_FORM_SECTIONS } from './chatLabelFormConfig';
 
 interface FormSectionProps {
   wrapperClassName?: string;
@@ -98,6 +100,17 @@ export const formSections: FormSectionProps[] = [
     title: 'Mind map colors',
     component: <MindMapColorsSection />,
     wrapperClassName: 'overflow-hidden',
+  },
+  {
+    id: 'chatLabels',
+    title: 'Labels',
+    wrapperClassName: 'overflow-hidden',
+    subSections: CHAT_LABEL_FORM_SECTIONS.map(section => ({
+      id: section.id,
+      title: section.title,
+      component: <ChatLabelsSubSection section={section} />,
+      Icon: IconCornerDownRight,
+    })),
   },
   {
     id: 'customStyles',

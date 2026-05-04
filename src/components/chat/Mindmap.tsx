@@ -35,6 +35,7 @@ export const Mindmap = () => {
   const isNotFound = useChatSelector(MindmapSelectors.selectIsNotFound);
   const isRootNodeNotFound = useChatSelector(MindmapSelectors.selectIsRootNodeNotFound);
   const themeConfig = useChatSelector(AppearanceSelectors.selectThemeConfig);
+  const chatLabels = useChatSelector(AppearanceSelectors.selectMergedChatLabels);
   const isProdEnv = useChatSelector(SettingsSelectors.selectIsProdEnv);
 
   const viewRef = useRef<HTMLDivElement | null>(null);
@@ -58,12 +59,12 @@ export const Mindmap = () => {
   const isGraphReady = hasAppReference && !!themeConfig?.graph && isFontReady;
 
   const errorTitle = useMemo(() => {
-    return isRootNodeNotFound ? 'Root node not set.' : 'Mindmap is not available.';
-  }, [isRootNodeNotFound]);
+    return isRootNodeNotFound ? chatLabels.rootNodeNotSetTitle : chatLabels.graphUnavailableTitle;
+  }, [isRootNodeNotFound, chatLabels.graphUnavailableTitle, chatLabels.rootNodeNotSetTitle]);
 
   const errorDescription = useMemo(() => {
-    return isRootNodeNotFound ? 'Please configure a root node for your mindmap.' : 'Please generate the graph.';
-  }, [isRootNodeNotFound]);
+    return isRootNodeNotFound ? chatLabels.rootNodeNotSetDescription : chatLabels.graphUnavailableDescription;
+  }, [isRootNodeNotFound, chatLabels.graphUnavailableDescription, chatLabels.rootNodeNotSetDescription]);
 
   const handleFocusNode = useCallback(
     (node: Node) => {

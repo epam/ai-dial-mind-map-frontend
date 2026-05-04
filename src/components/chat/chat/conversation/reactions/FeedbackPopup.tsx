@@ -3,6 +3,8 @@ import { useCallback, useState } from 'react';
 
 import Modal from '@/components/common/Modal';
 import { FEEDBACK_MESSAGE_LIMIT } from '@/constants/app';
+import { AppearanceSelectors } from '@/store/chat/appearance/appearance.reducers';
+import { useChatSelector } from '@/store/chat/hooks';
 import { ModalState } from '@/types/modal';
 
 export const FeedbackPopup = ({
@@ -14,6 +16,7 @@ export const FeedbackPopup = ({
   onClose: () => void;
   onSubmit: (text: string) => void;
 }) => {
+  const labels = useChatSelector(AppearanceSelectors.selectMergedChatLabels);
   const [message, setMessage] = useState('');
 
   const handleSubmit = useCallback(() => {
@@ -32,22 +35,20 @@ export const FeedbackPopup = ({
       containerClassName="mindmap-popup w-full max-w-[500px] rounded-[10px] p-6"
       state={open ? ModalState.OPENED : ModalState.CLOSED}
       onClose={onClose}
-      heading="Response feedback"
+      heading={labels.feedbackModalHeading}
       headingClassName="mindmap-popup__header font-semibold text-primary"
       dismissProps={{ outsidePress: true }}
     >
       <div className="mindmap-popup__content flex flex-col gap-4">
-        <p className="mindmap-popup__description text-secondary">
-          Since the response didn’t meet your expectations, please share your feedback so we can improve.
-        </p>
+        <p className="mindmap-popup__description text-secondary">{labels.feedbackModalDescription}</p>
 
         <div className="mindmap-popup__field flex flex-col gap-1">
-          <div className="mindmap-popup__field-label text-xs text-secondary">Response feedback</div>
+          <div className="mindmap-popup__field-label text-xs text-secondary">{labels.feedbackFieldLabel}</div>
 
           <DialTextarea
             disableTooltip
             textareaId="mindmap-dislike-feedback-text"
-            placeholder="Enter response feedback"
+            placeholder={labels.feedbackPlaceholder}
             value={message}
             onChange={handleChange}
             className="mindmap-popup__field-input min-h-20 resize-y"
@@ -57,13 +58,13 @@ export const FeedbackPopup = ({
         <div className="mindmap-popup__actions flex justify-end gap-4">
           <DialButton
             variant={ButtonVariant.Secondary}
-            label="Cancel"
+            label={labels.feedbackModalCancel}
             className="h-10 rounded-[10px]"
             onClick={onClose}
           />
           <DialButton
             variant={ButtonVariant.Primary}
-            label="Confirm"
+            label={labels.feedbackModalConfirm}
             className="h-10 rounded-[10px]"
             onClick={handleSubmit}
           />

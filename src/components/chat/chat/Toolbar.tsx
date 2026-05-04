@@ -1,6 +1,7 @@
 import { IconSitemap, IconSitemapOff, IconTrash } from '@tabler/icons-react';
 import classNames from 'classnames';
 
+import { AppearanceSelectors } from '@/store/chat/appearance/appearance.reducers';
 import { ConversationSelectors } from '@/store/chat/conversation/conversation.reducers';
 import { useChatDispatch, useChatSelector } from '@/store/chat/hooks';
 import { PlaybackSelectors } from '@/store/chat/playback/playback.selectors';
@@ -8,6 +9,7 @@ import { ChatUIActions, ChatUISelectors } from '@/store/chat/ui/ui.reducers';
 
 export const Toolbar = () => {
   const dispatch = useChatDispatch();
+  const labels = useChatSelector(AppearanceSelectors.selectMergedChatLabels);
   const isMapHidden = useChatSelector(ChatUISelectors.selectIsMapHidden);
   const conversation = useChatSelector(ConversationSelectors.selectConversation);
   const isPlayback = useChatSelector(PlaybackSelectors.selectIsPlayback);
@@ -24,7 +26,7 @@ export const Toolbar = () => {
               size={18}
               className="text-secondary transition-colors duration-200 group-hover:text-accent-primary"
             />
-            <div>Show map</div>
+            <div>{labels.showMap}</div>
           </>
         ) : (
           <>
@@ -32,7 +34,7 @@ export const Toolbar = () => {
               size={18}
               className="text-secondary transition-colors duration-200 group-hover:text-accent-primary"
             />
-            <div>Hide map</div>
+            <div>{labels.hideMap}</div>
           </>
         )}
       </button>
@@ -48,7 +50,7 @@ export const Toolbar = () => {
             conversation.messages.length > 2 && 'group-hover:text-accent-primary',
           ])}
         />
-        <div>Reset</div>
+        <div>{labels.reset}</div>
       </button>
     </div>
   );

@@ -1,8 +1,9 @@
 import { IconThumbDown, IconThumbUp } from '@tabler/icons-react';
 import { useCallback, useState } from 'react';
 
+import { AppearanceSelectors } from '@/store/chat/appearance/appearance.reducers';
 import { ConversationActions } from '@/store/chat/conversation/conversation.reducers';
-import { useChatDispatch } from '@/store/chat/hooks';
+import { useChatDispatch, useChatSelector } from '@/store/chat/hooks';
 import { LikeState } from '@/types/chat';
 
 import { FeedbackPopup } from './FeedbackPopup';
@@ -18,6 +19,7 @@ export const Reactions = ({
   like?: LikeState;
 }) => {
   const dispatch = useChatDispatch();
+  const labels = useChatSelector(AppearanceSelectors.selectMergedChatLabels);
 
   const handleReaction = useCallback(
     (rate: LikeState, comment?: string) => {
@@ -69,7 +71,7 @@ export const Reactions = ({
     <div className="reactions flex items-center gap-1">
       {showLike && (
         <ReactionButton
-          ariaLabel="Like"
+          ariaLabel={labels.reactionLikeAriaLabel}
           onClick={submitLike}
           active={like === LikeState.Liked}
           className="reactions__button--like"
@@ -80,7 +82,7 @@ export const Reactions = ({
 
       {showDislike && (
         <ReactionButton
-          ariaLabel="Dislike"
+          ariaLabel={labels.reactionDislikeAriaLabel}
           onClick={handleDislike}
           active={like === LikeState.Disliked}
           className="reactions__button--dislike"
