@@ -50,7 +50,7 @@ export const cleanConversation = (conversation: Partial<Conversation>): Conversa
         nodes: [],
       },
       focusNodeId: '',
-      visitedNodeIds: {},
+      visitedNodeIds: [],
     },
     playback: conversation.playback,
   };

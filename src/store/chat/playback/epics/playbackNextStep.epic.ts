@@ -3,6 +3,7 @@ import { EMPTY, filter, from, map, switchMap } from 'rxjs';
 
 import { PlaybackActionType } from '@/types/chat';
 import { ChatRootEpic } from '@/types/store';
+import { normalizeNavigationHistory } from '@/utils/chat/navigationHistory';
 
 import { ConversationSelectors } from '../../conversation/conversation.reducers';
 import { MindmapActions } from '../../mindmap/mindmap.reducers';
@@ -93,7 +94,9 @@ export const playbackNextStepEpic: ChatRootEpic = (action$, state$) =>
       if (nextAction.type === PlaybackActionType.ChangeDepth) {
         actions.push(
           MindmapActions.setDepth(nextAction.mindmap.depth),
-          MindmapActions.setVisitedNodes(nextAction.mindmap.visitedNodes),
+          MindmapActions.setVisitedNodes(
+            normalizeNavigationHistory(nextAction.mindmap.visitedNodes, nextAction.mindmap.focusNodeId ?? ''),
+          ),
           MindmapActions.setGraphElements(nextAction.mindmap.elements),
           MindmapActions.setFocusNodeId(nextAction.mindmap.focusNodeId),
         );

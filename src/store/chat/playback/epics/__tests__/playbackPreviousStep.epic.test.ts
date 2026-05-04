@@ -43,7 +43,7 @@ describe('playbackPreviousStepEpic', () => {
         a: PlaybackActions.setStepNumber(1),
         b: PlaybackActions.revertConversation(),
         c: PlaybackActions.setPlaybackInputText(''),
-        d: MindmapActions.setVisitedNodes(visitedNodes),
+        d: MindmapActions.setVisitedNodes(['mappedFocus']),
         e: MindmapActions.setGraphElements(prevAction.mindmap.elements),
         f: MindmapActions.setFocusNodeId('mappedFocus'),
         g: MindmapActions.setDepth(prevAction.mindmap.depth),
@@ -118,7 +118,7 @@ describe('playbackPreviousStepEpic', () => {
         a: PlaybackActions.setStepNumber(0),
         b: PlaybackActions.revertConversation(),
         c: PlaybackActions.setPlaybackInputText(''),
-        d: MindmapActions.setVisitedNodes(prevAction.mindmap.visitedNodes),
+        d: MindmapActions.setVisitedNodes(['p1']),
         e: MindmapActions.setGraphElements(prevAction.mindmap.elements),
         f: MindmapActions.setFocusNodeId(prevAction.mindmap.focusNodeId),
         g: MindmapActions.setDepth(prevAction.mindmap.depth),
@@ -147,7 +147,7 @@ describe('playbackPreviousStepEpic', () => {
 
       expectObservable(output$).toBe('-(acdef)-', {
         a: PlaybackActions.setStepNumber(0),
-        c: MindmapActions.setVisitedNodes(previousAction.mindmap.visitedNodes),
+        c: MindmapActions.setVisitedNodes(['2', '1']),
         d: MindmapActions.setGraphElements(previousAction.mindmap.elements),
         e: MindmapActions.setFocusNodeId(previousAction.mindmap.focusNodeId),
         f: MindmapActions.setDepth(previousAction.mindmap.depth),
@@ -177,7 +177,7 @@ describe('playbackPreviousStepEpic', () => {
       expectObservable(output$).toBe('-(abcdef)-', {
         a: PlaybackActions.setStepNumber(0),
         b: MindmapActions.setDepth(previousAction.mindmap.depth),
-        c: MindmapActions.setVisitedNodes(previousAction.mindmap.visitedNodes),
+        c: MindmapActions.setVisitedNodes(['2', '1']),
         d: MindmapActions.setGraphElements(previousAction.mindmap.elements),
         e: MindmapActions.setFocusNodeId(previousAction.mindmap.focusNodeId),
         f: PlaybackActions.setPlaybackInputText(''),

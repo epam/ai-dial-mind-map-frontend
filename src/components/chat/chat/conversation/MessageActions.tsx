@@ -1,7 +1,6 @@
 import { DialEllipsisTooltip } from '@epam/ai-dial-ui-kit';
 import { IconRefresh } from '@tabler/icons-react';
 import classNames from 'classnames';
-import cloneDeep from 'lodash-es/cloneDeep';
 import { ReactNode, useCallback, useMemo } from 'react';
 
 import { Space } from '@/components/common/Space/Space';
@@ -14,7 +13,7 @@ import { MindmapActions, MindmapSelectors } from '@/store/chat/mindmap/mindmap.r
 import { ChatUISelectors } from '@/store/chat/ui/ui.reducers';
 import { AttachmentTitle, LikeState, Role } from '@/types/chat';
 import { Node } from '@/types/graph';
-import { replaceVisitedNode } from '@/utils/app/graph/common';
+import { replaceVisitedNodeInNavigationHistory } from '@/utils/chat/navigationHistory';
 import { uuidv4 } from '@/utils/common/uuid';
 
 import { Reactions } from './reactions/Reactions';
@@ -62,7 +61,7 @@ export const MessageActions = ({
       const { messages } = conversation;
       dispatch(MindmapActions.setFocusNodeId(id));
 
-      const adjustedVisited = replaceVisitedNode(cloneDeep(visitedNodes), focusNodeId, id);
+      const adjustedVisited = replaceVisitedNodeInNavigationHistory(visitedNodes, focusNodeId, id);
       dispatch(MindmapActions.setVisitedNodes(adjustedVisited));
 
       dispatch(

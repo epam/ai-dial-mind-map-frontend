@@ -14,6 +14,11 @@ import { PlaybackSelectors } from '@/store/chat/playback/playback.selectors';
 import { ChatUIActions, ChatUISelectors, DeviceType } from '@/store/chat/ui/ui.reducers';
 import { GraphConfig, GraphImgResourceKey, GraphLayoutType, GraphNodeType } from '@/types/customization';
 import { Element, GraphElement, Node, SystemNodeDataKeys } from '@/types/graph';
+import {
+  getPreviousNodeIdFromHistory,
+  normalizeNavigationHistory,
+  uniqueVisitedNodeIds,
+} from '@/utils/chat/navigationHistory';
 
 import { FitGraph } from '../FitGraph';
 import { LevelSwitcher } from '../LevelSwitcher';
@@ -43,7 +48,7 @@ interface Props {
   elements: Element<GraphElement>[];
   focusNodeId: string;
   isReady: boolean;
-  visitedNodes: Record<string, string>;
+  visitedNodes: string[];
   updateSignal: number;
   isChatHidden: boolean;
   graphConfig: GraphConfig;
@@ -125,7 +130,8 @@ const InnerGraph = ({
 
   useEffect(() => {
     if (cyRef.current && isReady) {
-      const previousNodeId = visitedNodes[focusNodeId];
+      const history = normalizeNavigationHistory(visitedNodes, focusNodeId);
+      const previousNodeId = getPreviousNodeIdFromHistory(history, focusNodeId);
       neonStartedRef.current = false;
       let subgraphElements = cloneDeep(elements);
       const { validElements, invalidEdges } = filterInvalidEdges(subgraphElements);
@@ -309,12 +315,12 @@ const InnerGraph = ({
 
       setCy(cy);
 
-      const visitedNodesIds = Object.entries(visitedNodes).flatMap(([key, value]) => [key, value]);
+      const visitedNodesIds = uniqueVisitedNodeIds(history);
       const nodeColorMap = adjustElementsStyles(
         cy,
         focusNodeId,
         visitedNodesIds,
-        previousNodeId,
+        previousNodeId ?? '',
         graphConfig,
         fontFamily,
       );
