@@ -134,10 +134,7 @@ export const GraphFontSubSection = () => {
         onInputChange={inputChangeHandler}
         selectorPlaceholder="Auto"
       />
-      <div className="flex flex-col gap-3">
-        <span className="text-sm font-semibold text-primary">Node label typography</span>
-        <GraphNodesTypographySettingsTables />
-      </div>
+      <GraphNodesTypographySettingsTables />
     </div>
   );
 };
