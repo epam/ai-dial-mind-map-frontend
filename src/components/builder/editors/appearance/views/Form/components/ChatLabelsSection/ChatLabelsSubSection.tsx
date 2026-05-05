@@ -1,5 +1,7 @@
-import { useCallback } from 'react';
+import debounce from 'lodash-es/debounce';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { INPUT_DEBOUNCE } from '@/constants/app';
 import { type ChatLabelKey,DEFAULT_CHAT_LABELS } from '@/constants/chat/chatLabels';
 import { AppearanceActions, AppearanceSelectors } from '@/store/builder/appearance/appearance.reducers';
 import { useBuilderDispatch, useBuilderSelector } from '@/store/builder/hooks';
@@ -21,10 +23,20 @@ const pruneLabels = (raw: Record<string, string | undefined>): ChatLabels | unde
   return Object.fromEntries(entries.map(([k, v]) => [k, (v as string).trim()])) as ChatLabels;
 };
 
+const EDITOR_DEBOUNCE = INPUT_DEBOUNCE * 2;
+
 export const ChatLabelsSubSection = ({ section }: { section: ChatLabelFormSection }) => {
   const dispatch = useBuilderDispatch();
   const theme = useBuilderSelector(UISelectors.selectTheme) || 'dark';
   const config = useBuilderSelector(AppearanceSelectors.selectThemeConfig);
+
+  const [localValues, setLocalValues] = useState<Record<string, string>>(
+    () => Object.fromEntries(section.fields.map(({ key }) => [key, config?.chat?.labels?.[key] ?? ''])),
+  );
+
+  useEffect(() => {
+    setLocalValues(Object.fromEntries(section.fields.map(({ key }) => [key, config?.chat?.labels?.[key] ?? ''])));
+  }, [config?.chat?.labels, section.fields]);
 
   const persistKey = useCallback(
     (key: ChatLabelKey, raw: string) => {
@@ -61,6 +73,8 @@ export const ChatLabelsSubSection = ({ section }: { section: ChatLabelFormSectio
     [config, dispatch, theme],
   );
 
+  const debouncedPersist = useMemo(() => debounce(persistKey, EDITOR_DEBOUNCE), [persistKey]);
+
   return (
     <div className="flex flex-col gap-5">
       {section.fields.map(({ key, label }) => (
@@ -70,9 +84,16 @@ export const ChatLabelsSubSection = ({ section }: { section: ChatLabelFormSectio
           </label>
           <input
             id={`chat-label-${section.id}-${key}`}
-            value={config?.chat?.labels?.[key] ?? ''}
+            value={localValues[key] ?? ''}
             placeholder={DEFAULT_CHAT_LABELS[key]}
-            onChange={e => persistKey(key, e.target.value)}
+            onChange={e => {
+              const val = e.target.value;
+              setLocalValues(prev => ({ ...prev, [key]: val }));
+              debouncedPersist(key, val);
+            }}
+            onBlur={() => {
+              debouncedPersist.flush();
+            }}
             className={inputClassName}
           />
         </div>
