@@ -1,7 +1,7 @@
 import debounce from 'lodash-es/debounce';
 import { useMemo } from 'react';
 
-const INPUT_DEBOUNCE = 500;
+import { INPUT_DEBOUNCE } from '@/constants/app';
 
 interface Props {
   fontFamily?: string;
