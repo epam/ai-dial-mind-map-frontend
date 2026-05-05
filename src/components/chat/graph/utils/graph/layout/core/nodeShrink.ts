@@ -93,14 +93,17 @@ export function computeNodeLevelShrinkScale(params: {
     return false;
   };
 
-  // Binary search for largest safe shrink
+  // Binary search for the smallest collision-free scale in [minScale, hi].
+  // hi may start above 1: after elliptic + radial packing, label bboxes can grow
+  // so that only s > 1 (push clusters outward from center) clears the root moat.
   const maxIters = 40;
   const tol = 1e-4;
   const minScale = 1e-3;
+  const maxExpandScale = 96;
   let lo = minScale;
   let hi = 1;
   if (hasCollision(hi)) {
-    for (let k = 0; k < 8 && hasCollision(hi); k++) {
+    for (let k = 0; k < 32 && hasCollision(hi) && hi < maxExpandScale; k++) {
       hi *= 1.1;
     }
   }
@@ -112,7 +115,7 @@ export function computeNodeLevelShrinkScale(params: {
       hi = mid;
     }
   }
-  return Math.min(1, Math.max(minScale, hi));
+  return Math.max(minScale, hi);
 }
 
 function rectsOverlap(a: RectTL, b: RectTL) {
