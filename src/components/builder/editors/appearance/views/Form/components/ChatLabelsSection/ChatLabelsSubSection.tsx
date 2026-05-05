@@ -2,7 +2,7 @@ import debounce from 'lodash-es/debounce';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { INPUT_DEBOUNCE } from '@/constants/app';
-import { type ChatLabelKey,DEFAULT_CHAT_LABELS } from '@/constants/chat/chatLabels';
+import { type ChatLabelKey, DEFAULT_CHAT_LABELS } from '@/constants/chat/chatLabels';
 import { AppearanceActions, AppearanceSelectors } from '@/store/builder/appearance/appearance.reducers';
 import { useBuilderDispatch, useBuilderSelector } from '@/store/builder/hooks';
 import { UISelectors } from '@/store/builder/ui/ui.reducers';
@@ -30,8 +30,8 @@ export const ChatLabelsSubSection = ({ section }: { section: ChatLabelFormSectio
   const theme = useBuilderSelector(UISelectors.selectTheme) || 'dark';
   const config = useBuilderSelector(AppearanceSelectors.selectThemeConfig);
 
-  const [localValues, setLocalValues] = useState<Record<string, string>>(
-    () => Object.fromEntries(section.fields.map(({ key }) => [key, config?.chat?.labels?.[key] ?? ''])),
+  const [localValues, setLocalValues] = useState<Record<string, string>>(() =>
+    Object.fromEntries(section.fields.map(({ key }) => [key, config?.chat?.labels?.[key] ?? ''])),
   );
 
   useEffect(() => {
