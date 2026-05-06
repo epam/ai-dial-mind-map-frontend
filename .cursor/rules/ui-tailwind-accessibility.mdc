@@ -1,0 +1,29 @@
+---
+description: Tailwind class conventions, EPAM DIAL UI usage, and sensible UI defaults for components.
+alwaysApply: false
+globs:
+  - "src/components/**/*.{ts,tsx}"
+  - "src/app/**/*.css"
+  - "tailwind.config.*"
+---
+
+# UI, Tailwind, and components
+
+## Tailwind
+
+- Obey ESLint **`tailwindcss/classnames-order`** and **`enforces-shorthand`**—the build fails if classes are out of order or non-shorthand where shorthand applies.
+- Prefer **`classnames`** / **`tailwind-merge`** patterns already used in components like modals and layout.
+
+## Libraries
+
+- Use **`@epam/ai-dial-ui-kit`** and related DIAL packages consistently with neighboring imports—do not duplicate design tokens or components the kit already provides.
+- Icons often come from **`@tabler/icons-react`**—match existing icon choice and sizing.
+
+## Accessibility and UX
+
+- Preserve keyboard focus behavior where **`@floating-ui/react`** or similar patterns are used (see existing modal/dialog code).
+- Maintain visible loading and empty states consistent with sibling tables, graphs, and chat panels.
+
+## Assets and global styles
+
+- Global styles live under **`src/app`** (`globals.css` and route-group imports)—avoid scattering global CSS from random feature folders unless that is the established pattern nearby.

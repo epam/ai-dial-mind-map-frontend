@@ -1,0 +1,31 @@
+---
+description: Review-only mode—CRITICAL to NIT findings; do not change code unless the user requests fixes.
+alwaysApply: false
+---
+
+# Code review agent
+
+## Mode
+
+- **Review only** until the user explicitly asks for fixes or a patch.
+- Do not silently apply edits in a review session.
+
+## Output format
+
+Structure feedback from **CRITICAL** (blocks merge / correctness / security) downward to **NIT** (style, optional polish). For each item: location (file path and symbol or line range if known), what is wrong, why it matters, and a concrete suggestion.
+
+## What to inspect
+
+- Correctness and edge cases for React state, Redux epics, and async flows.
+- **Server/client boundaries** and secrets handling in `src/app/api/**` and `src/utils/server/**`.
+- **Tests**: missing coverage for new behavior; flaky patterns; improper mocks for `lodash-es` / Next.
+- **Lint / types**: anything that would fail `npm run lint` or strict TypeScript.
+- **UI / a11y**: focus traps, keyboard paths, loading states.
+
+## How to invoke (Cursor)
+
+Start a **new chat**, attach **`@.cursor/rules/code-review-agent.mdc`**, and include the **diff or file paths** under review.
+
+## How to invoke (OpenAI Codex)
+
+Start a **new session**, invoke the **`$code-review`** skill, and supply diff or paths. If the client cannot load `.mdc` files, paste the contents of this rule or point the agent to read this file from disk.

@@ -1,0 +1,35 @@
+---
+description: ECC-inspired quality bar—immutability, scope, errors, boundaries, and a short pre-ship checklist for this repo.
+alwaysApply: true
+---
+
+# Coding style and quality (scoped)
+
+## Immutability and Redux
+
+- Treat Redux state updates as **immutable**; use Toolkit helpers and patterns already used in reducers and epics.
+- Side effects belong in **epics** or clearly scoped hooks—not scattered `setTimeout` / fetches inside reducers.
+
+## File and change size
+
+- Prefer **small, reviewable** changes. If a file is growing large, extract helpers or subcomponents consistent with neighboring modules.
+- Do not mix unrelated refactors with feature work in the same change set.
+
+## Errors and UX
+
+- Surface user-visible failures with existing toast / error patterns (`src/types/error.ts`, constants, chat UI patterns).
+- Do not swallow errors silently; log or propagate in line with nearby server routes and `src/utils/server/**` patterns.
+
+## Boundaries
+
+- **Server vs client**: respect `'use client'` boundaries; keep server-only code (secrets, session, upstream fetches) in server components, route handlers, and `src/utils/server/**`.
+- **API routes**: follow established handler layout under `src/app/api/**` (e.g. `getHandler`, `postHandler` patterns where present).
+- **Env**: read configuration via `process.env` in established ways; never commit secrets.
+
+## Checklist before you call a task done
+
+1. **Imports**: sorted per ESLint `simple-import-sort`.
+2. **Lint**: `npm run lint` clean for touched files.
+3. **Types**: `tsc` happy via Next/IDE; no new unnecessary `any`.
+4. **Tests**: add or update Jest / Testing Library tests when behavior changes meaningfully (`npm run test`).
+5. **UI**: Tailwind class order and shorthand rules satisfied (`tailwindcss/classnames-order`, `enforces-shorthand`).

@@ -1,0 +1,31 @@
+---
+description: Next.js App Router, React 19, and Redux Toolkit + epics boundaries for src/app and src/store.
+alwaysApply: false
+globs:
+  - "src/app/**/*.{ts,tsx}"
+  - "src/store/**/*.{ts,tsx}"
+  - "src/middleware.ts"
+---
+
+# Next.js, React, and Redux architecture
+
+## App Router (`src/app`)
+
+- Prefer **server components** by default; add **`'use client'`** only when hooks, browser APIs, or client state require it.
+- **Layouts and pages**: follow existing metadata exports, font loading, and session (`next-auth`) patterns in `src/app/(chat)` and related route groups.
+- **Route handlers**: live under `src/app/api/**/route.ts` and handler modules—mirror import style and error handling of sibling routes.
+
+## React components (`src/components`)
+
+- Compose UI with existing **common** components (modals, toasts, layout) before adding new primitives.
+- Co-locate hooks under `hooks/` folders where the repo already does so.
+
+## Redux (`src/store`)
+
+- Use **Redux Toolkit** slices/reducers and **redux-observable** epics consistent with neighboring features (`*.epics.ts`, `*.reducers.ts`, selectors).
+- Keep epic files focused; prefer shared utilities in `src/utils/**` or existing store helpers.
+- Selectors: follow memoization and naming patterns in adjacent selector files.
+
+## Middleware
+
+- **`src/middleware.ts`** is sensitive—changes affect all routes; keep behavior aligned with auth and security patterns already in the file.

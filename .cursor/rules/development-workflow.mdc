@@ -1,0 +1,24 @@
+---
+description: Branch expectations, CI, and how this repo expects changes to land.
+alwaysApply: true
+---
+
+# Development workflow
+
+## Git and CI
+
+- Pull requests target **`development`** or **`release-*`** branches (see `.github/workflows/pr.yml`).
+- CI reuses **`epam/ai-dial-ci`** shared workflow `node_pr.yml`—keep changes compatible with standard Node lint/test steps used there.
+
+## Local verification (npm)
+
+Use **`npm`** with this repository (`package-lock.json` present). Typical sequence before pushing:
+
+1. `npm run lint`
+2. `npm run test` (or `npm run test:ci` in automation-style runs)
+3. `npm run format:ci` when markdown or formatting is involved
+4. `npm run build` for risky routing, server, or dependency changes
+
+## Scope discipline
+
+- One logical change per branch when possible; avoid drive-by formatting of unrelated files.
