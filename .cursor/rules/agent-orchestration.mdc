@@ -1,0 +1,26 @@
+---
+description: How the agent should plan, reuse repo patterns, and invoke skills for multi-step work.
+alwaysApply: true
+---
+
+# Agent orchestration
+
+## Default workflow
+
+1. **Locate** the feature area under `src/` (app routes, components, store epics, utils). Read neighboring files before writing.
+2. **Plan** briefly: files to touch, tests to add, and commands you will run to validate.
+3. **Implement** with minimal scope; match imports, hooks, and Redux patterns already present.
+4. **Verify** with project scripts (`npm run lint`, `npm run test`, and `npm run build` when changes are broad).
+
+## Skills (local harness)
+
+Use the repository’s `.cursor/skills/**/SKILL.md` as playbooks:
+
+- **`match-repo-style`**: when touching unfamiliar folders—mirror style first.
+- **`feature-delivery`**: end-to-end feature work across UI, state, and tests.
+- **`quality-gates`**: before opening a PR or handing work off—lint, test, format check.
+- **`code-review`**: review-only pass with CRITICAL→NIT; no fixes unless the user asks.
+
+## Attachments (Cursor)
+
+For large refactors or cross-cutting rules, attach relevant `.cursor/rules/*.mdc` files or the paths under `src/` you are mirroring so the model sees concrete examples.

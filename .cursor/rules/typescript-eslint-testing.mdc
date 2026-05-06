@@ -1,0 +1,38 @@
+---
+description: TypeScript strictness, ESLint flat config, and Jest commands for src/**/*.ts(x).
+alwaysApply: false
+globs:
+  - "src/**/*.{ts,tsx}"
+  - "**/*.{test,spec}.{ts,tsx}"
+  - "jest.config.js"
+  - "jest.setup.ts"
+  - "eslint.config.mjs"
+---
+
+# TypeScript, ESLint, and tests
+
+## TypeScript (`tsconfig.json`)
+
+- **`strict`: true**, `noEmit`, `moduleResolution: "bundler"`, JSX `preserve` for Next.
+- Path alias: `@/*` → `./src/*`—prefer `@/components/...`, `@/store/...`, etc.
+
+## ESLint (`eslint.config.mjs`)
+
+- Flat config with **Next core web vitals**, **TypeScript recommended**, **React recommended**, **Tailwind recommended**.
+- **Required**: `simple-import-sort/imports` and `exports` (**error**); Tailwind **`classnames-order`** and **`enforces-shorthand`** (**error**).
+- Run **`npm run lint`**; auto-fix where safe with **`npm run lint:fix`**.
+
+## Jest (`jest.config.js`, `jest.setup.ts`)
+
+- **jest-environment-jsdom**; module name mapper maps `^@/(.*)$` to `<rootDir>/src/$1`.
+- **`lodash-es`** is transformed via `transformIgnorePatterns` and `lodash-es/(.*)` → `lodash/$1` mapper—keep tests consistent with this when mocking.
+- Coverage is collected from `src/**/*.{ts,tsx}` (excluding `index.ts`, `d.ts`, `__tests__` paths per config).
+
+### Commands
+
+- **`npm run test`** — full test run (coverage settings apply per config).
+- **`npm run test:watch`** — local TDD.
+- **`npm run test:ci`** — CI-oriented run from `package.json`.
+- **`npm run test:coverage`** — explicit coverage report.
+
+Place tests in **`__tests__`** next to the code or as **`*.test.ts(x)`**, following neighboring modules.

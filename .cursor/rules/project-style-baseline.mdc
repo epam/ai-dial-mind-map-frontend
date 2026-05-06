@@ -1,0 +1,26 @@
+---
+description: Baseline style for this Next.js mind map frontend—mirror neighbors and match stack conventions.
+alwaysApply: true
+---
+
+# Project style baseline (dial-mind-map-frontend)
+
+## Mirror neighboring files
+
+Before adding or changing code, read **one to three** adjacent files in the same directory (or the nearest sibling feature folder). Match:
+
+- Import grouping and ordering enforced by `simple-import-sort` (external packages, blank line, `@/` alias, blank line, relative imports).
+- **TypeScript**: `strict` mode; prefer explicit types on exported APIs; avoid `any` (ESLint warns on `@typescript-eslint/no-explicit-any`).
+- **React**: function components; hooks naming (`use*`); keep JSX readable; `react/react-in-jsx-scope` is off (Next.js).
+- **Paths**: use the `@/*` alias mapped to `./src/*` (see `tsconfig.json`), not long `../../../` chains when an alias fits.
+- **Naming**: descriptive file names; colocate tests as `__tests__` next to the unit or as `*.test.ts(x)` per existing patterns.
+- **Formatting**: Prettier for `ts`, `tsx`, `md`; run `npm run format` or `npm run format:ci` before finishing larger edits.
+
+## Stack snapshot
+
+- **Framework**: Next.js 15 App Router (`src/app`), React 19, TypeScript 5.
+- **State**: Redux Toolkit + **redux-observable** epics under `src/store/**`.
+- **UI**: Tailwind CSS, EPAM AI DIAL UI kit and related packages, Testing Library for components.
+- **Graph / builder**: Cytoscape and related modules where graph code lives—follow existing abstractions in `src/components/**/graph/**`.
+
+When unsure, prefer the pattern already used in the folder you are editing over introducing a new style.
