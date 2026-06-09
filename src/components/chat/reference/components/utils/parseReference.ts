@@ -1,4 +1,5 @@
 import { DocsReference, NodeReference, Reference } from '@/types/graph';
+import { SourceType } from '@/types/sources';
 
 export interface ParsedChunkId {
   chunkId: string;
@@ -66,4 +67,16 @@ export const isNodeReference = (reference?: DocsReference | NodeReference): refe
     return false;
   }
   return 'id' in reference && !('doc_id' in reference);
+};
+
+export const getReferenceUrl = (reference: DocsReference): string | undefined => {
+  if (reference.doc_type === SourceType.LINK) {
+    return reference.doc_url;
+  }
+
+  if (reference.doc_type === SourceType.FILE) {
+    return reference.public_url;
+  }
+
+  return undefined;
 };
