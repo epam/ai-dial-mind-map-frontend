@@ -9,14 +9,13 @@ import { MindmapActions } from '@/store/chat/mindmap/mindmap.reducers';
 import { ReferenceActions } from '@/store/chat/reference/reference.reducers';
 import { ChatNodeType } from '@/types/customization';
 import { DocsReference, NodeReference } from '@/types/graph';
-import { SourceType } from '@/types/sources';
 
 import { Node } from '../../chat/conversation/messages/Node';
 import { ImageContent } from '../components/ImageContent';
 import { MarkdownContent } from '../components/MarkdownContent';
 import { NodeContent } from '../components/NodeContent';
 import { PdfContent } from '../components/PdfContent';
-import { isDocsReference, isNodeReference } from '../components/utils/parseReference';
+import { getReferenceUrl, isDocsReference, isNodeReference } from '../components/utils/parseReference';
 
 const makeSettings = (
   onAfterChange: (i: number) => void,
@@ -121,10 +120,11 @@ export const useReferenceSlider = ({
         currentReference.source_name ||
         currentReference.doc_name.split('/').at(-1) ||
         currentReference.doc_name.split('/').at(-2);
-      if (currentReference.doc_type === SourceType.LINK) {
+      const referenceUrl = getReferenceUrl(currentReference);
+      if (referenceUrl) {
         return (
           <a
-            href={currentReference.doc_url}
+            href={referenceUrl}
             target="_blank"
             rel="noopener noreferrer text-accent-primary"
             className="truncate text-accent-primary"

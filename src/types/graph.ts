@@ -16,6 +16,7 @@ export interface DocsReference {
   doc_type: string;
   doc_content_type: string;
   doc_url: string;
+  public_url?: string;
   content: string;
   content_type: string;
   version: number;
