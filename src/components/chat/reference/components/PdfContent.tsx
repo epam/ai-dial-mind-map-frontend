@@ -17,6 +17,8 @@ import { useChatSelector } from '@/store/chat/hooks';
 import { ChatUISelectors } from '@/store/chat/ui/ui.reducers';
 import { DocsReference } from '@/types/graph';
 
+import { getReferenceUrl } from './utils/parseReference';
+
 GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
 interface PdfContentProps {
@@ -31,7 +33,9 @@ enum SelectionMode {
 
 export const PdfContent: React.FC<PdfContentProps> = ({ reference, initialPage = 1 }) => {
   const name = useChatSelector(ApplicationSelectors.selectAppName) ?? '';
-  const pdfUrl = `/api/mindmaps/${encodeURIComponent(name)}/documents/${reference.doc_id}/versions/${reference.version}/file`;
+  const pdfUrl =
+    getReferenceUrl(reference) ??
+    `/api/mindmaps/${encodeURIComponent(name)}/documents/${reference.doc_id}/versions/${reference.version}/file`;
 
   const theme = useChatSelector(ChatUISelectors.selectThemeName);
 
