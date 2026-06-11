@@ -83,7 +83,7 @@ export const PdfContent: React.FC<PdfContentProps> = ({ reference, initialPage =
           scrollMode={ScrollMode.Vertical}
           plugins={[defaultLayout]}
           defaultScale={SpecialZoomLevel.PageWidth}
-          transformGetDocumentParams={(params) => ({ ...params, isEvalSupported: false })}
+          transformGetDocumentParams={(params) => ({ ...params, isEvalSupported: false, withCredentials: true })}
         />
       </Worker>
     </div>
