@@ -58,7 +58,7 @@
     "node-fetch": "^3.3.2",
     "pino": "^9.4.0",
     "pino-pretty": "^11.2.2",
-    "postcss": "^8.5.10",
+    "postcss": "^8.5.18",
     "postcss-nested": "^7.0.2",
     "re-resizable": "^6.11.2",
     "react": "19.1.1",
