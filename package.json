@@ -53,12 +53,12 @@
     "fuse.js": "^7.0.0",
     "lodash-es": "^4.18.1",
     "mime-types": "^2.1.35",
-    "next": "15.5.18",
+    "next": "15.5.22",
     "next-auth": "^4.24.13",
     "node-fetch": "^3.3.2",
     "pino": "^9.4.0",
     "pino-pretty": "^11.2.2",
-    "postcss": "^8.5.10",
+    "postcss": "^8.5.12",
     "postcss-nested": "^7.0.2",
     "re-resizable": "^6.11.2",
     "react": "19.1.1",
@@ -129,7 +129,9 @@
     "@types/react": "19.1.12",
     "@types/react-dom": "19.1.9",
     "diff": "5.2.1",
-    "flatted": ">=3.4.2"
+    "flatted": ">=3.4.2",
+    "sharp": "^0.35.0",
+    "postcss": "^8.5.12"
   },
   "optionalDependencies": {
     "@next/swc-linux-x64-gnu": "*",
