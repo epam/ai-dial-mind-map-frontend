@@ -111,15 +111,28 @@ const ChatPage = () => {
   const isOffline = useChatSelector(ChatUISelectors.selectIsOffline);
   const isServerUnavailable = useChatSelector(ChatUISelectors.selectIsServerUnavailable);
 
+  // Connector lifecycle is tied to mount/unmount only: creating and destroying it on every
+  // dependency change (e.g. a session refresh mid-conversation) would tear it down without
+  // recreating it, since re-init below only runs once (guarded by isInitialized).
+  useEffect(() => {
+    const host = dialIframeAllowedHosts?.length ? dialIframeAllowedHosts : dialHost;
+
+    if (!chatVisualizerConnector.current && host && mindmapIframeTitle) {
+      chatVisualizerConnector.current = new ChatVisualizerConnector(host, mindmapIframeTitle, data => {
+        setData(data);
+      });
+    }
+
+    return () => {
+      chatVisualizerConnector.current?.destroy();
+      chatVisualizerConnector.current = null;
+      dispatch(ConversationActions.stopStreaming());
+    };
+  }, [dispatch, setData, dialHost, dialIframeAllowedHosts, mindmapIframeTitle]);
+
   useEffect(() => {
     if (!isInitialized.current) {
       const host = dialIframeAllowedHosts?.length ? dialIframeAllowedHosts : dialHost;
-
-      if (!chatVisualizerConnector.current && host && mindmapIframeTitle) {
-        chatVisualizerConnector.current = new ChatVisualizerConnector(host, mindmapIframeTitle, data => {
-          setData(data);
-        });
-      }
 
       if (host && mindmapIframeTitle) {
         chatVisualizerConnector.current?.sendReady();
@@ -141,15 +154,9 @@ const ChatPage = () => {
     if (theme) {
       dispatch(ChatUIActions.setThemeName(theme));
     }
-
-    return () => {
-      chatVisualizerConnector.current?.destroy();
-      chatVisualizerConnector.current = null;
-    };
   }, [
     dispatch,
     theme,
-    setData,
     applicationId,
     conversationId,
     dialHost,
