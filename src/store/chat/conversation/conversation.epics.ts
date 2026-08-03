@@ -281,12 +281,25 @@ const streamMessageEpic: ChatRootEpic = (action$, state$) =>
             );
           }
 
-          return of(
-            ConversationActions.streamMessageFail({
-              conversation: payload.conversation,
-              message: errorsMessages.generalClient,
-            }),
-          );
+          {
+            const graphElements = MindmapSelectors.selectFallbackElements(state$.value);
+            const focusNodeId = MindmapSelectors.selectPreviousFocusNodeId(state$.value);
+            const actions: Observable<UnknownAction>[] = [
+              of(
+                ConversationActions.streamMessageFail({
+                  conversation: payload.conversation,
+                  message: errorsMessages.generalClient,
+                }),
+              ),
+            ];
+            if (graphElements.length > 0) {
+              actions.push(of(MindmapActions.setGraphElements(graphElements)));
+            }
+            if (focusNodeId) {
+              actions.push(of(MindmapActions.setFocusNodeId(focusNodeId)));
+            }
+            return concat(...actions);
+          }
         }),
       );
     }),

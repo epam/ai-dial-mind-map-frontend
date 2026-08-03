@@ -132,6 +132,9 @@ export const conversationSlice = createSlice({
     createAbortController: state => {
       state.conversationSignal = new AbortController();
     },
+    stopStreaming: state => {
+      state.conversationSignal.abort();
+    },
     streamMessageFail: (
       state,
       action: PayloadAction<{
