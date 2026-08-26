@@ -18,6 +18,7 @@ import { SourceProcessingTimeLimitMs } from '@/constants/app';
 import { HTTPMethod } from '@/types/http';
 import { Source, SourceStatus } from '@/types/sources';
 import { BuilderRootEpic } from '@/types/store';
+import { encodeAppNamePath } from '@/utils/app/application';
 import { parseSSEStream } from '@/utils/app/streams';
 
 import { ApplicationSelectors } from '../../application/application.reducer';
@@ -49,7 +50,7 @@ export const createSourceEpic: BuilderRootEpic = (action$, state$) =>
       return concat(
         of(...optimisticActions),
         from(
-          fetch(`/api/mindmaps/${encodeURIComponent(appName)}/documents`, {
+          fetch(`/api/mindmaps/${encodeAppNamePath(appName)}/documents`, {
             method: HTTPMethod.POST,
             signal: controller.signal,
             body: formData,
