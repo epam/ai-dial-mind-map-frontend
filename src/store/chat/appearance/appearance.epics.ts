@@ -22,6 +22,7 @@ import { updatePersistentFontPreloader } from '@/components/common/PersistentFon
 import { CustomStylesTagId } from '@/constants/app';
 import { ThemeConfig } from '@/types/customization';
 import { ChatRootEpic } from '@/types/store';
+import { encodeAppNamePath } from '@/utils/app/application';
 import { isWebFontLoaded } from '@/utils/app/fonts';
 import { getAppearanceFileUrl } from '@/utils/app/themes';
 import { isAbortError, isNetworkError } from '@/utils/common/error';
@@ -153,7 +154,7 @@ const fetchThemeConfigEpic: ChatRootEpic = (action$, state$) =>
       const name = ApplicationSelectors.selectApplicationName(state$.value);
       const theme = ChatUISelectors.selectThemeName(state$.value);
 
-      return fromFetch(`/api/mindmaps/${encodeURIComponent(name)}/appearances/themes/${theme}`, {
+      return fromFetch(`/api/mindmaps/${encodeAppNamePath(name)}/appearances/themes/${theme}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
