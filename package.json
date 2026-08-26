@@ -24,6 +24,7 @@
     "@hookform/resolvers": "^3.10.0",
     "@lottiefiles/dotlottie-react": "^0.16.4",
     "@monaco-editor/react": "^4.7.0",
+    "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/auto-instrumentations-node": "^0.76.0",
     "@opentelemetry/exporter-jaeger": "^2.0.0",
     "@opentelemetry/resources": "^2.0.0",
