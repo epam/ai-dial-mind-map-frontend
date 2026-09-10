@@ -1,5 +1,4 @@
-import { Icon, IconCornerDownRight, IconProps } from '@tabler/icons-react';
-import { ForwardRefExoticComponent, RefAttributes } from 'react';
+import { IconCornerDownRight, TablerIcon } from '@tabler/icons-react';
 
 import { ChatLabelsSubSection } from '../components/ChatLabelsSection/ChatLabelsSubSection';
 import { ChatNodeStyleSection } from '../components/ChatNodeStyleSection/ChatNodeStyleSection';
@@ -23,7 +22,7 @@ interface FormSectionProps {
   title?: string;
   className?: string;
   id: string;
-  Icon?: ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>;
+  Icon?: TablerIcon;
   subSections?: FormSectionProps[];
 }
 

@@ -22,6 +22,7 @@ import { splitAndFilter } from '@/utils/common/list';
 import { mapThemeConfigToStyles } from '@/utils/common/themeUtils';
 import { fetchApplication } from '@/utils/server/fetchApplication';
 import { fetchChatThemeConfig } from '@/utils/server/fetchThemeConfig';
+import { logger } from '@/utils/server/logger';
 
 export const metadata: Metadata = {
   title: 'Chat',
@@ -59,6 +60,18 @@ export default async function RootLayout({
   const validApplication = application && 'reference' in application ? application : undefined;
   let themeConfig = null;
   let etag = null;
+
+  if (appFetchError) {
+    logger.warn(
+      { appCookieId: appCookie.id, appCookieTheme: appCookie.theme, error: appFetchError },
+      'Failed to resolve application for mindmap chat layout',
+    );
+  } else if (!validApplication) {
+    logger.warn(
+      { appCookieId: appCookie.id, appCookieTheme: appCookie.theme, application },
+      'Resolved application is not a valid Application for mindmap chat layout',
+    );
+  }
 
   if (validApplication) {
     const [themeConfigRes, etagRes] = await fetchChatThemeConfig(appCookie.theme, validApplication);

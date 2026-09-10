@@ -21,6 +21,7 @@ import { EtagHeaderName } from '@/constants/http';
 import { ThemeConfig } from '@/types/customization';
 import { HTTPMethod } from '@/types/http';
 import { BuilderRootEpic } from '@/types/store';
+import { encodeAppNamePath } from '@/utils/app/application';
 import { extractPrefixStorageFontFileName } from '@/utils/app/file';
 import { isAbortError, isNetworkError } from '@/utils/common/error';
 
@@ -43,7 +44,7 @@ export const resetThemeConfigEpic: BuilderRootEpic = (action$, state$) =>
       const appName = ApplicationSelectors.selectApplicationName(state$.value);
 
       return handleRequest({
-        url: `/api/mindmaps/${encodeURIComponent(appName)}/appearances/themes/${payload.theme}/reset`,
+        url: `/api/mindmaps/${encodeAppNamePath(appName)}/appearances/themes/${payload.theme}/reset`,
         options: { method: HTTPMethod.POST },
         state$,
         responseProcessor: resp =>
@@ -83,7 +84,7 @@ const subscribeOnThemeEpic: BuilderRootEpic = (action$, state$) =>
       const controller = new AbortController();
 
       return from(
-        fetch(`/api/mindmaps/${encodeURIComponent(appName)}/appearances/themes/${theme}/events`, {
+        fetch(`/api/mindmaps/${encodeAppNamePath(appName)}/appearances/themes/${theme}/events`, {
           method: 'GET',
           signal: controller.signal,
           headers: {
@@ -197,7 +198,7 @@ export const uploadResourceEpic: BuilderRootEpic = (action$, state$) =>
       ];
 
       return handleRequest({
-        url: `/api/mindmaps/${encodeURIComponent(appName)}/appearances/themes/${theme}/storage/${encodeURIComponent(payload.fileName)}`,
+        url: `/api/mindmaps/${encodeAppNamePath(appName)}/appearances/themes/${theme}/storage/${encodeURIComponent(payload.fileName)}`,
         options: {
           method: HTTPMethod.POST,
           body: formData,
@@ -243,7 +244,7 @@ export const uploadFontEpic: BuilderRootEpic = (action$, state$) =>
         );
 
       return handleRequest({
-        url: `/api/mindmaps/${encodeURIComponent(appName)}/appearances/themes/${theme}/storage/fonts/${encodeURIComponent(payload.fileName)}`,
+        url: `/api/mindmaps/${encodeAppNamePath(appName)}/appearances/themes/${theme}/storage/fonts/${encodeURIComponent(payload.fileName)}`,
         options: {
           method: HTTPMethod.POST,
           body: formData,

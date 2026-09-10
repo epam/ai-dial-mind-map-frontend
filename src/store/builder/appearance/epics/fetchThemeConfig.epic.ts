@@ -3,6 +3,7 @@ import { concatMap, filter, from, of } from 'rxjs';
 import { ThemeConfig } from '@/types/customization';
 import { HTTPMethod } from '@/types/http';
 import { BuilderRootEpic } from '@/types/store';
+import { encodeAppNamePath } from '@/utils/app/application';
 
 import { ApplicationSelectors } from '../../application/application.reducer';
 import { UIActions } from '../../ui/ui.reducers';
@@ -23,7 +24,7 @@ export const fetchThemeConfigEpic: BuilderRootEpic = (action$, state$) =>
         );
 
       return handleRequest({
-        url: `/api/mindmaps/${encodeURIComponent(name)}/appearances/themes/${payload.theme}`,
+        url: `/api/mindmaps/${encodeAppNamePath(name)}/appearances/themes/${payload.theme}`,
         options: { method: HTTPMethod.GET },
         state$,
         responseProcessor,

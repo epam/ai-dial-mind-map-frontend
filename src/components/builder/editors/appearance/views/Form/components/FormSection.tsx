@@ -1,11 +1,11 @@
-import { Icon, IconProps } from '@tabler/icons-react';
+import { TablerIcon } from '@tabler/icons-react';
 import classNames from 'classnames';
-import { ForwardRefExoticComponent, ReactNode, RefAttributes } from 'react';
+import { ReactNode } from 'react';
 
 interface FormSectionProps {
   withBorder?: boolean;
   children?: ReactNode;
-  Icon?: ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>;
+  Icon?: TablerIcon;
   title?: string;
   titleClassName?: string;
   className?: string;

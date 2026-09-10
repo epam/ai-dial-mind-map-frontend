@@ -281,12 +281,37 @@ const streamMessageEpic: ChatRootEpic = (action$, state$) =>
             );
           }
 
-          return of(
-            ConversationActions.streamMessageFail({
-              conversation: payload.conversation,
-              message: errorsMessages.generalClient,
-            }),
-          );
+          {
+            // A late failure (e.g. post-stream subgraph processing) can arrive after the
+            // answer's content already streamed successfully. Marking such a message as
+            // failed would surface Retry/error UI over an otherwise complete, valid answer,
+            // so only apply the failure/fallback-focus handling when no content came through.
+            if (message.content) {
+              return of(
+                ConversationActions.updateConversation({
+                  values: { isMessageStreaming: false },
+                }),
+              );
+            }
+
+            const graphElements = MindmapSelectors.selectFallbackElements(state$.value);
+            const focusNodeId = MindmapSelectors.selectPreviousFocusNodeId(state$.value);
+            const actions: Observable<UnknownAction>[] = [
+              of(
+                ConversationActions.streamMessageFail({
+                  conversation: payload.conversation,
+                  message: errorsMessages.generalClient,
+                }),
+              ),
+            ];
+            if (graphElements.length > 0) {
+              actions.push(of(MindmapActions.setGraphElements(graphElements)));
+            }
+            if (focusNodeId) {
+              actions.push(of(MindmapActions.setFocusNodeId(focusNodeId)));
+            }
+            return concat(...actions);
+          }
         }),
       );
     }),

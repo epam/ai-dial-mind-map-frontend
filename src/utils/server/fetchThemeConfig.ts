@@ -22,12 +22,21 @@ export const fetchChatThemeConfig = async (
 
     const auth = await getAuthParamsFromServer();
 
+    if (auth.error) {
+      logger.warn(
+        { error: auth.error, name, theme },
+        `Auth error before fetching theme ${theme} for mindmap ${name}`,
+      );
+    }
+
     const url = `${process.env.DIAL_API_HOST}/v1/deployments/${name}/route/v1/appearances/themes/${encodeURIComponent(theme)}`;
 
     const headers = getApiHeaders({
       authParams: auth,
       contentType: 'application/json',
     });
+
+    const authMode = auth.apiKey ? 'apiKey' : auth.token ? 'token' : 'none';
 
     const res = await fetch(url, {
       method: HTTPMethod.GET,
@@ -46,7 +55,17 @@ export const fetchChatThemeConfig = async (
     if (!res.ok) {
       const errorText = await res.text().catch(() => '');
       logger.warn(
-        { status: res.status, statusText: res.statusText, url, body: errorText?.slice(0, 1000) },
+        {
+          status: res.status,
+          statusText: res.statusText,
+          url,
+          method: HTTPMethod.GET,
+          authMode,
+          appName: app?.name,
+          appApplication: app?.application,
+          responseHeaders: Object.fromEntries(res.headers.entries()),
+          body: errorText?.slice(0, 1000),
+        },
         `Error fetching theme ${theme} for mindmap ${name}`,
       );
 

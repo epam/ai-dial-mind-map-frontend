@@ -7,6 +7,7 @@ import { CustomFields, Message } from '@/types/chat';
 import { DialAIError } from '@/types/error';
 
 import { getApiHeaders } from './get-headers';
+import { logError } from './logger';
 
 interface DialAIErrorResponse extends Response {
   error?: {
@@ -125,7 +126,7 @@ export const OpenAIStream = async ({
               idSend = true;
             }
 
-            if (json.choices?.[0].delta) {
+            if (json.choices?.[0]?.delta) {
               if (json.choices[0].finish_reason === 'content_filter') {
                 throw new DialAIError(errorsMessages.contentFiltering, '', '', 'content_filter');
               }
@@ -133,6 +134,7 @@ export const OpenAIStream = async ({
               appendChunk(controller, json.choices[0].delta);
             }
           } catch (e) {
+            logError(e, { chatId, deploymentId, rawEvent: event.data }, 'Error parsing SSE chunk');
             controller.error(e);
           }
         }

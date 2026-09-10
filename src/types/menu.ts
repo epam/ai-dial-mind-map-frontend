@@ -1,6 +1,6 @@
 import { Placement } from '@floating-ui/react';
-import { Icon, IconProps } from '@tabler/icons-react';
-import { FC, ForwardRefExoticComponent, type JSX, MouseEventHandler, ReactNode, RefAttributes } from 'react';
+import { IconProps, TablerIcon } from '@tabler/icons-react';
+import { FC, type JSX, MouseEventHandler, ReactNode } from 'react';
 
 export interface CustomTriggerMenuRendererProps extends MenuItemRendererProps {
   Renderer: (props: MenuItemRendererProps) => JSX.Element;
@@ -13,7 +13,7 @@ export interface DisplayMenuItemProps {
   name: string;
   additionalNameNode?: ReactNode;
   disabled?: boolean;
-  Icon?: ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>;
+  Icon?: TablerIcon;
   iconClassName?: string;
   dataQa: string;
   onClick?: onClickMenuItemHandler;
