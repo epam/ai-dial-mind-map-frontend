@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @import '@epam/ai-dial-ui-kit/styles.css';
+@import '@epam/ai-dial-react-pdf-highlighter/styles.css';
 
 :root {
   --background: #ffffff;

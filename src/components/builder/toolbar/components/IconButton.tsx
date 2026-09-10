@@ -1,11 +1,11 @@
-import { Icon, IconProps } from '@tabler/icons-react';
+import { TablerIcon } from '@tabler/icons-react';
 import classNames from 'classnames';
-import React, { FC, ForwardRefExoticComponent, MouseEventHandler, RefAttributes } from 'react';
+import React, { FC, MouseEventHandler } from 'react';
 
 import Tooltip from '../../common/Tooltip';
 
 export interface IconButtonProps {
-  Icon: ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>;
+  Icon: TablerIcon;
   tooltip: string;
   disabled?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;

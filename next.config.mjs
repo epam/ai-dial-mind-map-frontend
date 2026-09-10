@@ -1,3 +1,9 @@
+import { fileURLToPath } from 'node:url';
+
+const pdfJsWebpackCompatibilityLoader = fileURLToPath(
+  new URL('./webpack/pdfJsWebpackCompatibilityLoader.cjs', import.meta.url),
+);
+
 /** @type {import('next').NextConfig} */
 const nextConfig = () => {
   return {
@@ -5,9 +11,17 @@ const nextConfig = () => {
     experimental: {
       instrumentationHook: true,
     },
-    webpack(config, { isServer }) {
+    webpack(config, { dev, isServer }) {
       if (isServer) {
         config.resolve.alias.canvas = false;
+      }
+
+      if (dev && !isServer) {
+        config.module.rules.push({
+          test: /pdfjs-dist[\\/]build[\\/]pdf\.mjs$/,
+          enforce: 'pre',
+          use: pdfJsWebpackCompatibilityLoader,
+        });
       }
 
       config.experiments = {

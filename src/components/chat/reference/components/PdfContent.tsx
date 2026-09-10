@@ -1,91 +1,51 @@
 'use client';
 
-import '@react-pdf-viewer/core/lib/styles/index.css';
-import '@react-pdf-viewer/default-layout/lib/styles/index.css';
-import '@react-pdf-viewer/selection-mode/lib/styles/index.css';
-import 'pdfjs-dist/build/pdf.worker.min.js';
+import dynamic from 'next/dynamic';
 
-import { ScrollMode, SpecialZoomLevel, Viewer, Worker } from '@react-pdf-viewer/core';
-import { defaultLayoutPlugin, ToolbarProps, ToolbarSlot } from '@react-pdf-viewer/default-layout';
-import { GlobalWorkerOptions } from 'pdfjs-dist';
-import { useState } from 'react';
-
-import { Space } from '@/components/common/Space/Space';
-import { Spinner } from '@/components/common/Spinner';
 import { ApplicationSelectors } from '@/store/chat/application/application.reducer';
 import { useChatSelector } from '@/store/chat/hooks';
-import { ChatUISelectors } from '@/store/chat/ui/ui.reducers';
 import { DocsReference } from '@/types/graph';
 
 import { getReferenceUrl } from './utils/parseReference';
 
-GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+const DocumentPreview = dynamic(
+  () => import('@epam/ai-dial-react-pdf-highlighter').then(module => module.DocumentPreview),
+  { ssr: false },
+);
 
 interface PdfContentProps {
   reference: DocsReference;
   initialPage?: number;
 }
 
-enum SelectionMode {
-  Hand = 'Hand',
-  Text = 'Text',
-}
+const loadPdf = async (url: string) => {
+  const response = await fetch(url, { credentials: 'include' });
 
-export const PdfContent: React.FC<PdfContentProps> = ({ reference, initialPage = 1 }) => {
+  if (!response.ok) {
+    throw new Error(`Failed to load PDF: ${response.status}`);
+  }
+
+  return response.blob();
+};
+
+export const PdfContent: React.FC<PdfContentProps> = ({ reference, initialPage = 0 }) => {
   const name = useChatSelector(ApplicationSelectors.selectAppName) ?? '';
   const pdfUrl =
     getReferenceUrl(reference) ??
     `/api/mindmaps/${encodeURIComponent(name)}/documents/${reference.doc_id}/versions/${reference.version}/file`;
 
-  const theme = useChatSelector(ChatUISelectors.selectThemeName);
-
-  const renderToolbar = (Toolbar: (props: ToolbarProps) => React.ReactElement) => (
-    <Toolbar>
-      {(slots: ToolbarSlot) => {
-        const { ZoomOut, Zoom, ZoomIn, SwitchSelectionMode } = slots;
-        return (
-          <Space size="middle" className="bg-layer-0 px-2" align="center" fullWidth={true} justify="center">
-            <ZoomOut />
-            <Zoom />
-            <ZoomIn />
-            <Space>
-              <SwitchSelectionMode mode={SelectionMode.Hand} />
-              <SwitchSelectionMode mode={SelectionMode.Text} />
-            </Space>
-          </Space>
-        );
-      }}
-    </Toolbar>
-  );
-
-  const defaultLayout = defaultLayoutPlugin({ renderToolbar });
-
-  const [isLoaded, setIsLoaded] = useState(false);
-
   return (
-    <div className="relative size-full">
-      {!isLoaded && (
-        <div className="absolute inset-0 flex size-full items-center justify-center bg-layer-1">
-          <Spinner />
-        </div>
-      )}
-
-      <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-        <Viewer
-          fileUrl={pdfUrl}
-          theme={theme}
-          initialPage={initialPage}
-          onDocumentLoad={() => {
-            setIsLoaded(true);
-            window.dispatchEvent(new Event('resize'));
-          }}
-          renderLoader={() => <Spinner />}
-          scrollMode={ScrollMode.Vertical}
-          plugins={[defaultLayout]}
-          defaultScale={SpecialZoomLevel.PageWidth}
-          transformGetDocumentParams={(params) => ({ ...params, isEvalSupported: false, withCredentials: true })}
-        />
-      </Worker>
+    <div className="relative size-full min-h-0 overflow-hidden">
+      <DocumentPreview
+        fileUrl={pdfUrl}
+        loadFileCb={loadPdf}
+        highlights={[]}
+        selectedPageNumber={initialPage + 1}
+        showOccurrences={false}
+        containerClassName="gap-2 px-4 py-3"
+        pdfViewerClassName="rounded-md border border-secondary"
+        onViewerReady={() => window.dispatchEvent(new Event('resize'))}
+      />
     </div>
   );
 };
