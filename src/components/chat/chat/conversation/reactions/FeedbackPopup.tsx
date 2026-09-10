@@ -46,8 +46,7 @@ export const FeedbackPopup = ({
           <div className="mindmap-popup__field-label text-xs text-secondary">{labels.feedbackFieldLabel}</div>
 
           <DialTextarea
-            disableTooltip
-            textareaId="mindmap-dislike-feedback-text"
+            id="mindmap-dislike-feedback-text"
             placeholder={labels.feedbackPlaceholder}
             value={message}
             onChange={handleChange}

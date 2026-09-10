@@ -1,4 +1,4 @@
-import { DialAlert } from '@epam/ai-dial-ui-kit';
+import { DialNotification } from '@epam/ai-dial-ui-kit';
 import { useLocalStorageState } from 'ahooks';
 import classNames from 'classnames';
 import React from 'react';
@@ -18,7 +18,8 @@ export const FormView: React.FC = () => {
     <div className="relative mx-3 mb-3 flex h-full flex-col overflow-y-auto rounded bg-layer-3 pt-1 shadow-mindmap">
       {isAlertVisible && (
         <div className="flex w-full justify-start p-6">
-          <DialAlert
+          <DialNotification
+            closable
             onClose={onCloseAlert}
             message="The settings will be applied for the theme currently selected in DIAL."
           />
