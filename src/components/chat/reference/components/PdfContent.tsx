@@ -42,7 +42,7 @@ export const PdfContent: React.FC<PdfContentProps> = ({ reference, initialPage =
         highlights={[]}
         selectedPageNumber={initialPage + 1}
         showOccurrences={false}
-        containerClassName="gap-2 px-4 py-3"
+        containerClassName="gap-2 bg-layer-1 px-4 py-3"
         pdfViewerClassName="rounded-md border border-secondary"
         onViewerReady={() => window.dispatchEvent(new Event('resize'))}
       />
