@@ -47,7 +47,7 @@ describe('PdfContent', () => {
         highlights: [],
         selectedPageNumber: 3,
         showOccurrences: false,
-        containerClassName: 'gap-2 px-4 py-3',
+        containerClassName: "gap-2 bg-layer-1 px-4 py-3 [&_[aria-haspopup='listbox']]:w-20",
         pdfViewerClassName: 'rounded-md border border-secondary',
       }),
     );
