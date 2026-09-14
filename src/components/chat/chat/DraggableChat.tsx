@@ -1,9 +1,9 @@
 import './DraggableChat.style.css';
 
+import { animated, AnimatedProps, useSpring } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 import classNames from 'classnames';
 import { CSSProperties, RefObject, useEffect, useState } from 'react';
-import { animated, AnimatedProps, useSpring } from 'react-spring';
 
 import { useChatDispatch, useChatSelector } from '@/store/chat/hooks';
 import { ChatUIActions, ChatUISelectors, DeviceType } from '@/store/chat/ui/ui.reducers';

@@ -47,7 +47,7 @@ const rateMessageHandler = async (req: NextRequest, authParams: AuthParams) => {
 
     return NextResponse.json({}, { status: 200 });
   } catch (error) {
-    logger.error('Failed to rate message:', error);
+    logger.error(error, 'Failed to rate message:');
 
     if (error instanceof DialAIError) {
       return NextResponse.json(

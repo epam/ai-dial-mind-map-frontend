@@ -23,7 +23,7 @@ export const getModelsHandler = async (req: NextRequest, authParams: AuthParams)
 
     if (!response.ok) {
       const errRespText = await response.text();
-      logger.warn(errRespText, `Failed to fetch models from ${url}`);
+      logger.warn({ response: errRespText }, `Failed to fetch models from ${url}`);
       if (response.status === 401) {
         return new NextResponse(errorsMessages.unauthorized, { status: 401 });
       }

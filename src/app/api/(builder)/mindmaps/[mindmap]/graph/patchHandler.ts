@@ -46,7 +46,7 @@ export const patchGraphHandler = async (
       headers,
     });
   } catch (error) {
-    logger.error('get bucket handler: ', error);
+    logger.error(error, 'get bucket handler: ');
     if (error instanceof DialAIError) {
       return NextResponse.json(
         { error: error.message ?? errorsMessages.generalServer },
