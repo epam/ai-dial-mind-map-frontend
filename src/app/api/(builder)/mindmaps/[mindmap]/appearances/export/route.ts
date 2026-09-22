@@ -52,7 +52,7 @@ async function handleGet(
       headers: resHeaders,
     });
   } catch (error) {
-    logger.error(`Error exporting appearances for mindmap ${mindmap}:`, error);
+    logger.error({ error }, `Error exporting appearances for mindmap ${mindmap}`);
     return new NextResponse('Internal Server Error', { status: 500 });
   }
 }

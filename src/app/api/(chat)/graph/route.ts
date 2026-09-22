@@ -32,7 +32,7 @@ const getGraphHandler = async (req: NextRequest, authParams: AuthParams) => {
 
     if (!response.ok) {
       const errRespText = await response.text();
-      logger.warn(errRespText, `Error happened during fetching mindmap`);
+      logger.warn({ response: errRespText }, `Error happened during fetching mindmap`);
       return new NextResponse(errRespText, { status: response.status });
     }
 

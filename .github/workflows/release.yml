@@ -2,7 +2,7 @@ name: Release Workflow
 
 on:
   push:
-    branches: [ development, release-* ]
+    branches: [development, release-*]
   workflow_dispatch:
     inputs:
       promote:
@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   release:
-    uses: epam/ai-dial-ci/.github/workflows/node_release.yml@4.9.0
+    uses: epam/ai-dial-ci/.github/workflows/node_release.yml@4.11.0
     with:
       promote: ${{ github.event_name == 'workflow_dispatch' && inputs.promote }}
       publish-enabled: false
