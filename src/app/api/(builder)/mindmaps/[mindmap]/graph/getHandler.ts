@@ -28,7 +28,7 @@ export const getGraphHandler = async (
 
     if (!response.ok) {
       const errRespText = await response.text();
-      logger.warn(errRespText, `Error happened during fetching mindmap ${mindmapId}`);
+      logger.warn({ response: errRespText }, `Error happened during fetching mindmap ${mindmapId}`);
       if (response.status === 401) {
         return new NextResponse(errorsMessages.unauthorized, { status: 401 });
       }

@@ -30,7 +30,7 @@ const getBucketHandler = async (req: NextRequest, authParams: AuthParams) => {
 
     return NextResponse.json(json, { status: 200 });
   } catch (error) {
-    logger.error('get bucket handler: ', error);
+    logger.error(error, 'get bucket handler: ');
     if (error instanceof DialAIError) {
       return NextResponse.json(
         { error: error.message ?? errorsMessages.generalServer },
