@@ -58,7 +58,7 @@
     "next": "15.5.24",
     "next-auth": "^4.24.15",
     "node-fetch": "^3.3.2",
-    "pdfjs-dist": "^5.4.149",
+    "pdfjs-dist": "^6.2.108",
     "pino": "^9.4.0",
     "pino-pretty": "^11.2.2",
     "postcss": "^8.5.12",
