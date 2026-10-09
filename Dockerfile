@@ -39,8 +39,10 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=5000
 ENV HOSTNAME=0.0.0.0
 
-RUN apk upgrade --no-cache musl libcrypto3 libssl3 \
-    && apk add --no-cache libstdc++ libc6-compat zlib \
+# zlib is preinstalled in the Alpine base, so `apk add` alone keeps the vulnerable
+# 1.3.2-r0 (CVE-2026-85091); upgrade it explicitly to the patched 1.3.2-r1.
+RUN apk upgrade --no-cache musl libcrypto3 libssl3 zlib \
+    && apk add --no-cache libstdc++ libc6-compat \
     && addgroup --system --gid 1001 nodejs \
     && adduser --system --uid 1001 nextjs
 
