@@ -3,10 +3,7 @@ import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
 import { ImageModal } from './ImageModal';
 
-export type ImageRendererProps = {
-  src?: string;
-  alt?: string;
-};
+export type ImageRendererProps = Pick<React.ComponentProps<'img'>, 'src' | 'alt'>;
 
 export const ImageRenderer = ({ src, alt }: ImageRendererProps) => {
   const [isModalOpen, setModalOpen] = useState(false);

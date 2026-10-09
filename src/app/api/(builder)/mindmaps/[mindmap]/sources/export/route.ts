@@ -60,7 +60,7 @@ async function handleGet(
 
     return new NextResponse(body, { status: proxyRes.status, headers: resHeaders });
   } catch (e) {
-    logger.error(`Error exporting mindmap ${mindmap}:`, e);
+    logger.error({ error: e }, `Error exporting mindmap ${mindmap}`);
     return new NextResponse('Internal Server Error', { status: 500 });
   }
 }
