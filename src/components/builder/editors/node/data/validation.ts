@@ -4,7 +4,7 @@ import { NodeStatus } from '@/types/graph';
 
 import type { FormValues } from '../hooks/useNodeEditorForm';
 
-export const validationSchema = Yup.object<FormValues>().shape({
+export const validationSchema: Yup.ObjectSchema<FormValues> = Yup.object().shape({
   label: Yup.string().required('Label is required'),
   icon: Yup.string().optional(),
   details: Yup.string().optional(),
@@ -19,4 +19,4 @@ export const validationSchema = Yup.object<FormValues>().shape({
     )
     .ensure()
     .required(),
-}) as Yup.ObjectSchema<FormValues>;
+});

@@ -31,7 +31,7 @@ export function decryptNode(encrypted: string, secret: string): string | null {
     const decrypted = Buffer.concat([decipher.update(data), decipher.final()]);
     return decrypted.toString('utf8');
   } catch (err) {
-    logger.warn('Node decryption failed:', err);
+    logger.warn(err, 'Node decryption failed:');
     return null;
   }
 }

@@ -241,7 +241,7 @@ export const callbacks: Partial<CallbacksOptions<Profile & { job_title?: string 
   session: async options => {
     const isValidToken = await validateToken(options.token);
     if (isValidToken.error) {
-      logger.warn('Invalid token:', options.token);
+      logger.warn({ token: options.token }, 'Invalid token:');
       options.token.error = isValidToken.error;
     }
 
