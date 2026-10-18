@@ -45,7 +45,7 @@ const ModelOption = (props: OptionProps<Model & { singleLine?: boolean }>) => {
         <div
           className={classNames('flex', {
             'flex-col': !data.singleLine,
-            'gap-2 justify-center items-center': data.singleLine,
+            'items-center justify-center gap-2': data.singleLine,
           })}
         >
           <span className="text-sm">{data.display_name}</span>
@@ -65,7 +65,7 @@ const ModelSingleValue = (props: SingleValueProps<Model> & { singleLine?: boolea
         <div
           className={classNames('flex', {
             'flex-col': !singleLine,
-            'gap-2 justify-center items-center': singleLine,
+            'items-center justify-center gap-2': singleLine,
           })}
         >
           <span className="text-sm">{data.display_name}</span>

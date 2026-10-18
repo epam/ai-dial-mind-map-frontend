@@ -53,7 +53,7 @@ export const ChatMessageBody = ({ nodes, message, isMessageStreaming, isLastMess
     <div className={classNames('flex min-w-0 flex-1 flex-col', isDesktop ? 'gap-4' : 'gap-3')}>
       <div
         className={classNames(
-          'max-w-full prose dark:prose-invert prose-a:text-accent-primary prose-a:no-underline hover:prose-a:underline',
+          'prose max-w-full dark:prose-invert prose-a:text-accent-primary prose-a:no-underline prose-a:hover:underline',
           isDesktop ? 'text-base' : 'text-sm',
           isMdUp ? 'leading-[1.7]' : 'leading-normal',
         )}

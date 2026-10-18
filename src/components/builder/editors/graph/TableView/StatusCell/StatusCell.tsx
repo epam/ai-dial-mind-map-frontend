@@ -36,7 +36,7 @@ const StatusCell = ({ status }: { status?: NodeStatus }) => {
 
   return (
     <div
-      className={classNames('flex gap-1 items-center rounded-[3px] px-[6px] h-6 w-fit border', bgColor, borderColor)}
+      className={classNames('flex h-6 w-fit items-center gap-1 rounded-[3px] border px-[6px]', bgColor, borderColor)}
     >
       {icon}
       <span className="text-xs">{NodeStatusDict[status]}</span>

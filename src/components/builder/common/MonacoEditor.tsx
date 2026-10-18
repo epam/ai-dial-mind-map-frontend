@@ -51,7 +51,9 @@ export const MonacoEditor = memo(function MonacoEditor(props: MonacoEditorProps)
     <div
       style={wrapperStyles}
       className={classNames('flex flex-col', {
-        ['!fixed left-0 top-0 z-40 h-[100vh] w-[100vw]']: isFullScreen,
+        // `h-screen` is redefined in globals.css, the plain viewport size is intended here
+        // eslint-disable-next-line tailwindcss/enforces-canonical-classname
+        ['fixed! top-0 left-0 z-40 h-[100vh] w-[100vw]']: isFullScreen,
         ['rounded border border-secondary bg-layer-1']: props.allowFullScreen,
       })}
     >
@@ -73,7 +75,7 @@ export const MonacoEditor = memo(function MonacoEditor(props: MonacoEditorProps)
       )}
 
       <div
-        className={classNames('min-h-0 min-w-0 max-w-full shrink grow', {
+        className={classNames('min-h-0 max-w-full min-w-0 shrink grow', {
           ['p-2']: props.allowFullScreen,
         })}
       >

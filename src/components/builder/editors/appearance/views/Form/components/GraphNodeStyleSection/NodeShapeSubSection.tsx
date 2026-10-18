@@ -52,7 +52,7 @@ export const NodeShapeSubSection = () => {
     <div className="flex flex-col gap-2">
       <span className="text-xs text-secondary">Shape</span>
       <div
-        className={classNames('flex flex-wrap gap-5 transition-max-height duration-500 ease-in-out overflow-hidden', {
+        className={classNames('transition-max-height flex flex-wrap gap-5 overflow-hidden duration-500 ease-in-out', {
           'max-h-[56px]': !showAll,
           'max-h-[2000px]': showAll,
         })}
@@ -63,7 +63,7 @@ export const NodeShapeSubSection = () => {
             onClick={() => handleChange(value)}
             className={classNames([
               'flex cursor-pointer items-center gap-3 rounded-xl border border-primary p-3 hover:border-accent-primary',
-              value === shape && '!border-accent-primary',
+              value === shape && 'border-accent-primary!',
             ])}
           >
             <Icon style={{ color: 'var(--stroke-primary)' }} />

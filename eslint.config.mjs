@@ -23,8 +23,8 @@ export default defineConfig([
         "next/core-web-vitals",
         "plugin:@typescript-eslint/recommended",
         "plugin:react/recommended",
-        "plugin:tailwindcss/recommended",
     ),
+    tailwindcss.configs.recommended,
     {
         plugins: {
             "@typescript-eslint": typescriptEslint,
@@ -40,6 +40,9 @@ export default defineConfig([
         settings: {
             react: {
                 version: "detect",
+            },
+            tailwindcss: {
+                cssConfigPath: "./src/app/globals.css",
             },
         },
 

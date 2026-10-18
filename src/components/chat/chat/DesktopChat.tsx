@@ -15,7 +15,7 @@ export const DesktopChat = () => {
   const isDesktop = deviceType === DeviceType.Desktop;
 
   const containerClasses = classNames(
-    'border-primary bg-layer-1 rounded-[10px] border-2 h-full flex flex-col relative chat-container',
+    'chat-container relative flex h-full flex-col rounded-[10px] border-2 border-primary bg-layer-1',
     isDesktop && !isMapHidden && 'w-1/3',
     isDesktop && isMapHidden && 'w-full',
     !isDesktop && 'w-full',

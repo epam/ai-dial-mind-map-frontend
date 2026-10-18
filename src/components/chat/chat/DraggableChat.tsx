@@ -103,14 +103,14 @@ export const DraggableChat = ({ parentRef }: { parentRef: RefObject<HTMLDivEleme
   return (
     <animated.div
       className={classNames([
-        'draggable-chat border-primary bg-layer-1 rounded-[10px] border-2 h-full flex flex-col pt-4 absolute w-full bottom-0 z-50 chat-container',
+        'draggable-chat chat-container absolute bottom-0 z-50 flex size-full flex-col rounded-[10px] border-2 border-primary bg-layer-1 pt-4',
         chatBgImageClasses,
       ])}
       style={getStyles()}
       data-testid="draggable-chat"
     >
       <div {...bind()} className="absolute top-[-7px] h-7 w-full touch-none">
-        <div className="absolute left-1/2 top-[13px] h-1 w-[60px] -translate-x-1/2 touch-none rounded-[11px] bg-layer-4 hover:cursor-pointer"></div>
+        <div className="absolute top-[13px] left-1/2 h-1 w-[60px] -translate-x-1/2 touch-none rounded-[11px] bg-layer-4 hover:cursor-pointer"></div>
       </div>
       <ChatContent />
     </animated.div>

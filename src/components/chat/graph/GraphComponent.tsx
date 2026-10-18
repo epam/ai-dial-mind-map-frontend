@@ -419,7 +419,7 @@ const InnerGraph = ({
       <div ref={cyRef} className="min-h-0 flex-1 overflow-hidden" />
 
       {deviceType !== DeviceType.Mobile && (
-        <div className={classNames('shrink-0 flex gap-3', !isDesktop && 'mb-3')}>
+        <div className={classNames('flex shrink-0 gap-3', !isDesktop && 'mb-3')}>
           <LevelSwitcher />
           <FitGraph onClick={fitGraphClickHandler} />
         </div>

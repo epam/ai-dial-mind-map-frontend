@@ -75,9 +75,9 @@ export const Mindmap = () => {
   );
 
   const containerClasses = classNames(
-    'relative h-full w-full flex gap-2',
+    'relative flex size-full gap-2',
     isDesktop ? (chatIsOnLeft ? 'flex-row-reverse' : 'flex-row') : 'flex-col',
-    isMapHidden && 'justify-center items-center',
+    isMapHidden && 'items-center justify-center',
   );
 
   const heightClass = useMemo(() => {
@@ -105,7 +105,7 @@ export const Mindmap = () => {
     !isMapHidden && 'relative',
     !isDesktop && 'w-full',
     isMapHidden ? 'invisible absolute w-full' : null,
-    isDesktop && !isMapHidden && 'flex-1 w-2/3',
+    isDesktop && !isMapHidden && 'w-2/3 flex-1',
     heightClass,
     maxHeightClass,
   );

@@ -17,7 +17,7 @@ export function LoadingText({ text, intervalMs = 300 }: LoadingTextProps) {
   }, [intervalMs]);
 
   return (
-    <span className="italic text-secondary">
+    <span className="text-secondary italic">
       {text}
       <span aria-hidden="true">{dots}</span>
     </span>

@@ -14,7 +14,7 @@ export const ReactionButton = ({ ariaLabel, onClick, active, className, children
     aria-label={ariaLabel}
     onClick={onClick}
     className={classNames(
-      'reactions__button flex items-center justify-center size-6 rounded-md transition-colors',
+      'reactions__button flex size-6 items-center justify-center rounded-md transition-colors',
       active ? 'reactions__button--active text-accent-primary' : 'text-secondary hover:text-accent-primary',
       className,
     )}

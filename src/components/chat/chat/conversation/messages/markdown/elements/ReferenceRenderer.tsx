@@ -88,11 +88,11 @@ export const ReferenceRenderer = ({
 
   const badgeClassName = classNames(
     'reference-badge',
-    'whitespace-nowrap max-w-full truncate',
+    'max-w-full truncate whitespace-nowrap',
     'inline-block cursor-pointer rounded-full px-2 align-middle',
     !wrapped && (isDesktop ? 'ml-2' : 'ml-1'),
     'relative top-[-2px]',
-    isDesktop ? 'text-xxs leading-[2]' : 'text-[9px] leading-[1.8]',
+    isDesktop ? 'text-xxs leading-loose' : 'text-[9px] leading-[1.8]',
     isActiveFullscreenReference && 'selected',
   );
 

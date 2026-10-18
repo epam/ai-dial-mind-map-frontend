@@ -45,7 +45,7 @@ export const Message = ({ children, type, id, focused }: PropsWithChildren<Props
           />
         ) : (
           <PersonIcon
-            className={classNames(iconSizeClass, focused && 'text-accent-primary fill-current')}
+            className={classNames(iconSizeClass, focused && 'fill-current text-accent-primary')}
             width={28}
             height={28}
           />
@@ -87,9 +87,9 @@ export const Message = ({ children, type, id, focused }: PropsWithChildren<Props
   };
 
   const containerClasses = classNames(
-    'flex pr-4 border-l-2 chat-conversation__message',
-    isDesktop ? 'gap-5 pl-7 py-3' : 'gap-3 pl-3 py-2',
-    focused ? 'bg-layer-3 border-accent-primary chat-conversation__message--active' : 'border-transparent',
+    'chat-conversation__message flex border-l-2 pr-4',
+    isDesktop ? 'gap-5 py-3 pl-7' : 'gap-3 py-2 pl-3',
+    focused ? 'chat-conversation__message--active border-accent-primary bg-layer-3' : 'border-transparent',
     'text-base',
   );
 

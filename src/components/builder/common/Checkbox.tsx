@@ -35,7 +35,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ checked = false, indeterminate = fa
       />
       <div
         className={classNames(
-          'w-4 h-4 flex items-center justify-center border rounded-sm transition-all',
+          'flex size-4 items-center justify-center rounded-xs border transition-all',
           checked || indeterminate ? 'border-accent-primary' : 'border-primary',
         )}
         role="checkbox"

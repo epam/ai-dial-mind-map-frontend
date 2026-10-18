@@ -16,8 +16,8 @@ export const SourceActions = ({ isValid, editableIndex, handleAddSource, handleS
   return (
     <div
       className={classNames(
-        'flex gap-3 bg-layer-3 px-6 py-[9px] sticky bottom-0',
-        bottomBorder && 'border-b border-tertiary border-b-0',
+        'sticky bottom-0 flex gap-3 bg-layer-3 px-6 py-[9px]',
+        bottomBorder && 'border-b-0 border-tertiary',
       )}
     >
       <button
@@ -25,7 +25,7 @@ export const SourceActions = ({ isValid, editableIndex, handleAddSource, handleS
         onClick={() => handleAddSource({ link: '' })}
         disabled={!isValid || editableIndex !== null}
         className={classNames(
-          'text-sm text-accent-primary flex gap-2 items-center',
+          'flex items-center gap-2 text-sm text-accent-primary',
           (!isValid || editableIndex !== null) && 'text-controls-disable',
         )}
       >
@@ -35,8 +35,8 @@ export const SourceActions = ({ isValid, editableIndex, handleAddSource, handleS
 
       <label
         className={classNames(
-          'text-sm text-accent-primary flex gap-2 items-center pl-3 border-l border-primary hover:cursor-pointer',
-          (!isValid || editableIndex !== null) && 'text-controls-disable pointer-events-none',
+          'flex items-center gap-2 border-l border-primary pl-3 text-sm text-accent-primary hover:cursor-pointer',
+          (!isValid || editableIndex !== null) && 'pointer-events-none text-controls-disable',
         )}
       >
         <input

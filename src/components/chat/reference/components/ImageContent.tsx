@@ -78,7 +78,7 @@ export const ImageContent = ({
                   }
                 : {}
             }
-            className={classNames('w-full object-contain min-h-[200px]', 'max-h-full')}
+            className={classNames('min-h-[200px] w-full object-contain', 'max-h-full')}
           />
         </TransformComponent>
       </TransformWrapper>

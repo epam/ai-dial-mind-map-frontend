@@ -36,7 +36,7 @@ export const ReferenceFullscreenView: React.FC<Props> = ({ references }) => {
   return (
     <div
       className={classNames(
-        'absolute size-full left-0 top-0 z-40 rounded-lg border-2 border-primary bg-layer-0 flex flex-col reference-view',
+        'reference-view absolute top-0 left-0 z-40 flex size-full flex-col rounded-lg border-2 border-primary bg-layer-0',
       )}
     >
       <div className="flex-none border-b border-secondary">
