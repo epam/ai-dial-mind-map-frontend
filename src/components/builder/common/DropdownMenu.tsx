@@ -45,7 +45,7 @@ import {
 import { hasParentWithAttribute } from '@/utils/app/modals';
 
 const menuItemClassNames = classNames(
-  'flex max-w-[300px] cursor-pointer items-center gap-3 focus-visible:border-none focus-visible:outline-none',
+  'flex max-w-[300px] cursor-pointer items-center gap-3 focus-visible:border-none focus-visible:outline-hidden',
 );
 
 const MenuContext = createContext<{
@@ -277,7 +277,7 @@ export const MenuComponent = forwardRef<HTMLDivElement, MenuProps & HTMLProps<HT
                 >
                   <div
                     className={classNames(
-                      'z-50 overflow-auto rounded bg-layer-0 text-primary shadow focus-visible:outline-none',
+                      'z-50 overflow-auto rounded bg-layer-0 text-primary shadow focus-visible:outline-hidden',
                       listClassName,
                     )}
                     data-qa="dropdown-menu"
@@ -326,7 +326,7 @@ export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps & ButtonHTML
           className={classNames(
             menuItemClassNames,
             'h-[34px] w-full px-3',
-            disabled && '!cursor-not-allowed',
+            disabled && 'cursor-not-allowed!',
             className,
           )}
           tabIndex={isActive ? 0 : -1}

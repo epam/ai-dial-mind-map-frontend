@@ -69,14 +69,14 @@ export const FontHandler = ({
     <div className="flex flex-col gap-4">
       <div className="flex">
         <button
-          className={classNames('px-2 pb-2 relative', activeTab === 'google' && 'text-accent-primary')}
+          className={classNames('relative px-2 pb-2', activeTab === 'google' && 'text-accent-primary')}
           onClick={() => setActiveTab('google')}
         >
           Google Fonts
           {activeTab === 'google' && <span className="absolute inset-x-0 bottom-0 h-px bg-accent-primary" />}
         </button>
         <button
-          className={classNames('px-2 pb-2 relative', activeTab === 'upload' && 'text-accent-primary')}
+          className={classNames('relative px-2 pb-2', activeTab === 'upload' && 'text-accent-primary')}
           onClick={() => setActiveTab('upload')}
         >
           Upload

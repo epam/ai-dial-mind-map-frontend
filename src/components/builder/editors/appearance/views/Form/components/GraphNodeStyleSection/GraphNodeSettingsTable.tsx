@@ -39,7 +39,7 @@ export const GraphNodeSettingsTable = ({
         </div>
         <div className="flex">
           {showRowLabels && <div className="w-[116px]" />}
-          <div className="flex w-[328px] items-center gap-2 rounded-b bg-layer-2 p-2 px-3 text-sm italic text-primary">
+          <div className="flex w-[328px] items-center gap-2 rounded-b bg-layer-2 p-2 px-3 text-sm text-primary italic">
             <span className="flex-1">Default</span>
             <span className="flex-1">Hover</span>
           </div>
@@ -50,7 +50,7 @@ export const GraphNodeSettingsTable = ({
         {rowKeys.map(key => (
           <div key={`${type}-${key}`} className="flex items-center gap-2 pt-2">
             {showRowLabels && (
-              <div className="mr-4 w-[92px] whitespace-nowrap text-sm text-primary">
+              <div className="mr-4 w-[92px] text-sm whitespace-nowrap text-primary">
                 {NodeStylesKeysToRowNames[key]}
               </div>
             )}
@@ -66,7 +66,7 @@ export const GraphNodeSettingsTable = ({
                   icon={getIcon(key)}
                   onChange={value => onChange(type, key, value)}
                   value={data[key]?.base}
-                  wrapperClassNames={classNames([disabled && 'opacity-50 pointer-events-none touch-none'])}
+                  wrapperClassNames={classNames([disabled && 'pointer-events-none touch-none opacity-50'])}
                   min={key === NodeStylesKey.TextMarginY ? -1000 : 0}
                 />
               </Tooltip>
@@ -83,7 +83,7 @@ export const GraphNodeSettingsTable = ({
                   icon={getIcon(key)}
                   onChange={value => onChange(type, key, value, GraphNodeState.Hovered)}
                   value={data[key]?.[GraphNodeState.Hovered]}
-                  wrapperClassNames={classNames([disabled && 'opacity-50 pointer-events-none touch-none'])}
+                  wrapperClassNames={classNames([disabled && 'pointer-events-none touch-none opacity-50'])}
                   min={key === NodeStylesKey.TextMarginY ? -1000 : 0}
                 />
               </Tooltip>

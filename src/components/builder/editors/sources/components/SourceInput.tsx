@@ -68,7 +68,7 @@ export const SourceInput: React.FC<SourceInputProps> = ({
       if (isEdited) return null;
 
       if (!field.status || field.status === SourceStatus.INPROGRESS || inProgressUrls.includes(field.url)) {
-        return <Loader size={16} containerClassName="absolute left-1 !w-fit" loaderClassName="!text-primary" />;
+        return <Loader size={16} containerClassName="absolute left-1 w-fit!" loaderClassName="text-primary!" />;
       }
 
       if (field.status === SourceStatus.FAILED) {
@@ -156,7 +156,7 @@ export const SourceInput: React.FC<SourceInputProps> = ({
         <div
           className={classNames(
             'absolute right-2 flex items-center gap-2',
-            !isEdited && 'opacity-0 group-hover:opacity-100 transition-opacity',
+            !isEdited && 'opacity-0 transition-opacity group-hover:opacity-100',
           )}
         >
           {isEdited ? (

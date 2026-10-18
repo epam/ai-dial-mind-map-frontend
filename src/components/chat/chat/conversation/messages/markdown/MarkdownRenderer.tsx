@@ -37,7 +37,7 @@ const MarkdownRenderer = ({ text, references, isShowResponseLoader, messageId }:
         p: props => (
           <ParagraphRenderer
             {...props}
-            className="whitespace-normal break-words"
+            className="wrap-break-word whitespace-normal"
             isShowResponseLoader={isShowResponseLoader}
           />
         ),

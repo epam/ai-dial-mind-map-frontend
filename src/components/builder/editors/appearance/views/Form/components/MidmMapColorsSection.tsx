@@ -182,7 +182,7 @@ export const MindMapColorsSection: React.FC = () => {
             className={classNames([
               'sticky inset-y-0 right-0 z-10',
               'flex items-center justify-center',
-              'bg-layer-3 px-2 h-[34px]',
+              'h-[34px] bg-layer-3 px-2',
               'text-secondary',
               branches.length <= 1 ? 'cursor-not-allowed' : 'cursor-pointer hover:text-accent-primary',
             ])}

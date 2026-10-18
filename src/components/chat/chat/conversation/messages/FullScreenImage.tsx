@@ -6,7 +6,7 @@ interface Props {
 export const FullScreenImage = ({ src, onClose }: Props) => {
   return (
     <div
-      className="fixed left-0 top-0 z-[1000] flex size-full cursor-pointer items-center justify-center bg-blackout"
+      className="fixed top-0 left-0 z-1000 flex size-full cursor-pointer items-center justify-center bg-blackout"
       onClick={onClose}
       data-testid="fullscreen-image-container"
     >

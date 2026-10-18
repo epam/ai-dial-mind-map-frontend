@@ -98,13 +98,13 @@ export const GenNodeModal = () => {
         >
           <input
             ref={inputRef}
-            className="input-form input-invalid peer m-0 w-[540px] bg-layer-0 pl-3 pr-[38px] text-sm"
+            className="input-form input-invalid peer m-0 w-[540px] bg-layer-0 pr-[38px] pl-3 text-sm"
             placeholder="Type your question to generate a node..."
             autoFocus
           />
           <button
             type="submit"
-            className="group absolute right-3 top-3 transition-colors duration-200 hover:cursor-pointer hover:text-accent-primary"
+            className="group absolute top-3 right-3 transition-colors duration-200 hover:cursor-pointer hover:text-accent-primary"
           >
             <IconSend size={18} />
           </button>

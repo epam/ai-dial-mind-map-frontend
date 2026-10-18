@@ -121,18 +121,18 @@ export const IconUploader = ({
         ])}
       >
         <div
-          className={classNames('absolute inset-0 z-20 flex items-center justify-center bg-black bg-opacity-30', {
+          className={classNames('absolute inset-0 z-20 flex items-center justify-center bg-black/30', {
             hidden: !uploadStatus.inProgress,
           })}
         >
-          <IconLoader className="text-white animate-spin" size={24} />
+          <IconLoader className="animate-spin text-white" size={24} />
         </div>
 
         <img
           src={previewUrl || undefined}
           alt="Icon preview"
           className={classNames('object-contain transition-opacity', {
-            'opacity-50 pointer-events-none': uploadStatus.inProgress,
+            'pointer-events-none opacity-50': uploadStatus.inProgress,
           })}
           style={{ display: previewUrl ? 'block' : 'none' }}
         />
@@ -142,7 +142,7 @@ export const IconUploader = ({
         <span className="text-xs text-secondary">{label}</span>
         <label className="input-form peer mx-0 block w-[264px] px-3 text-sm hover:border-accent-primary focus:border-accent-primary">
           <div className={classNames(['flex justify-between gap-2', !name && 'text-secondary'])}>
-            <div className="overflow-hidden text-ellipsis text-nowrap">{name || placeholder}</div>
+            <div className="overflow-hidden text-nowrap text-ellipsis">{name || placeholder}</div>
             <div className="flex items-center gap-2">
               {!uploadStatus.inProgress && (
                 <span className="cursor-pointer text-accent-primary">{name ? 'Change' : 'Add'}</span>

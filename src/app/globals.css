@@ -1,8 +1,139 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@import '@epam/ai-dial-ui-kit/styles.css';
-@import '@epam/ai-dial-react-pdf-highlighter/styles.css';
+/*
+  `vendor` holds third-party stylesheets prebuilt with Tailwind CSS v3. They must stay below
+  `utilities`: their unlayered `*, ::before, ::after { --tw-*: ... }` resets would otherwise
+  override the variables set by Tailwind v4 utilities (shadow, ring, translate, etc.).
+*/
+@layer theme, base, vendor, components, utilities;
+
+@import 'tailwindcss';
+@import '@epam/ai-dial-ui-kit/styles.css' layer(vendor);
+@import '@epam/ai-dial-react-pdf-highlighter/styles.css' layer(vendor);
+
+/* Typography plugin overrides are not expressible in CSS yet */
+@config '../../tailwind.config.mjs';
+@plugin '@tailwindcss/typography';
+@plugin 'tailwind-scrollbar-hide';
+
+@source inline('border-solid border-dashed border-dotted');
+
+/*
+  Transform classes present in both v3 (vendor) and v4 (app) CSS are applied twice: v3 composes
+  them into `transform`, v4 sets the standalone `translate`/`rotate` properties. Keep the v4 side
+  (always generated via `@source inline`) and drop the matching part from the v3 `transform`.
+*/
+@source inline('-translate-x-1/2 rotate-180');
+
+@layer vendor {
+  .-translate-x-1\/2 {
+    transform: rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
+      scaleY(var(--tw-scale-y));
+  }
+
+  .rotate-180 {
+    --tw-rotate: 0deg;
+  }
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --breakpoint-xxs: 320px;
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 560px;
+  /* Defaults redeclared in px (v3 values): mixed px/rem breakpoints break the variant order */
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  --breakpoint-3xl: 1770px;
+  --breakpoint-4xl: 2120px;
+  --breakpoint-5xl: 2560px;
+
+  --radius: 3px;
+
+  --shadow-mindmap: 0px 0px 15px 0px #090d131a;
+
+  --text-xxs: 10px;
+
+  --animate-spin-steps: spin 0.75s steps(8, end) infinite;
+}
+
+/* `inline` keeps the runtime theme variables resolvable at the element (e.g. `.sidebar-left` overrides) */
+@theme inline {
+  --shadow: 0 0 4px 0 var(--bg-blackout, #090d13b3);
+
+  --font-theme: var(--theme-font, var(--font-montserrat));
+  --font-codeblock: var(--codeblock-font, var(--theme-font));
+
+  --background-color-layer-0: var(--bg-layer-0, #000000);
+  --background-color-layer-1: var(--bg-layer-1, #090d13);
+  --background-color-layer-2: var(--bg-layer-2, #141a23);
+  --background-color-layer-3: var(--bg-layer-3, #222932);
+  --background-color-layer-4: var(--bg-layer-4, #333942);
+  --background-color-blackout: var(--bg-blackout, #090d13b3);
+  --background-color-error: var(--bg-error, #402027);
+  --background-color-warning: var(--bg-warning, #3f3d25);
+  --background-color-info: var(--bg-info, #1c2c47);
+  --background-color-success: var(--bg-success, #1d3841);
+  --background-color-accent-primary: var(--bg-accent-primary, #5c8dea);
+  --background-color-accent-secondary: var(--bg-accent-secondary, #37babc);
+  --background-color-accent-tertiary: var(--bg-accent-tertiary, #a972ff);
+  --background-color-accent-primary-alpha: var(--bg-accent-primary-alpha, #5c8dea2b);
+  --background-color-accent-secondary-alpha: var(--bg-accent-secondary-alpha, #37babc26);
+  --background-color-accent-tertiary-alpha: var(--bg-accent-tertiary-alpha, #a972ff2b);
+  --background-color-overlay: var(--bg-overlay, #090d13b3);
+  --background-color-controls-accent: var(--controls-bg-accent, #5c8dea);
+  --background-color-controls-permanent: var(--controls-text-permanent, #fcfcfc);
+  --background-color-controls-accent-hover: var(--controls-bg-accent-hover, #4878d2);
+  --background-color-controls-disable: var(--controls-bg-disable, #7f8792);
+  --background-color-model-icon: var(--bg-model-icon, #ffffff00);
+
+  --border-color-primary: var(--stroke-primary, #333942);
+  --border-color-secondary: var(--stroke-secondary, #222932);
+  --border-color-tertiary: var(--stroke-tertiary, #090d13);
+  --border-color-error: var(--stroke-error, #f76464);
+  --border-color-warning: var(--stroke-warning, #f4ce46);
+  --border-color-info: var(--stroke-info, #5c8dea);
+  --border-color-success: var(--stroke-success, #37babc);
+  --border-color-hover: var(--stroke-hover, #f3f4f6);
+  --border-color-accent-primary: var(--stroke-accent-primary, #5c8dea);
+  --border-color-accent-secondary: var(--stroke-accent-secondary, #37babc);
+  --border-color-accent-tertiary: var(--stroke-accent-tertiary, #a972ff);
+
+  --stroke-color-primary: var(--stroke-primary, #333942);
+  --stroke-color-secondary: var(--stroke-secondary, #222932);
+  --stroke-color-tertiary: var(--stroke-tertiary, #090d13);
+  --stroke-color-error: var(--stroke-error, #f76464);
+  --stroke-color-warning: var(--stroke-warning, #f4ce46);
+  --stroke-color-info: var(--stroke-info, #5c8dea);
+  --stroke-color-success: var(--stroke-success, #37babc);
+  --stroke-color-hover: var(--stroke-hover, #f3f4f6);
+  --stroke-color-accent-primary: var(--stroke-accent-primary, #5c8dea);
+  --stroke-color-accent-secondary: var(--stroke-accent-secondary, #37babc);
+  --stroke-color-accent-tertiary: var(--stroke-accent-tertiary, #a972ff);
+
+  --text-color-primary: var(--text-primary, #f3f4f6);
+  --text-color-secondary: var(--text-secondary, #7f8792);
+  --text-color-error: var(--text-error, #f76464);
+  --text-color-warning: var(--text-warning, #f4ce46);
+  --text-color-info: var(--text-info, #5c8dea);
+  --text-color-success: var(--text-success, #37babc);
+  --text-color-accent-primary: var(--text-accent-primary, #5c8dea);
+  --text-color-accent-secondary: var(--text-accent-secondary, #37babc);
+  --text-color-accent-tertiary: var(--text-accent-tertiary, #a972ff);
+  --text-color-controls-permanent: var(--controls-text-permanent, #fcfcfc);
+  --text-color-controls-disable: var(--controls-text-disable, #333942);
+}
+
+/* Former `fontFamily.DEFAULT`, applied to `<body>` in the root layouts */
+@utility font {
+  font-family: var(--theme-font, var(--font-montserrat));
+}
+
+/* Tailwind's own `--stroke-*` namespace would clash with the runtime `--stroke-*` theme variables */
+@utility stroke-* {
+  stroke: --value(--stroke-color-*);
+}
 
 :root {
   --background: #ffffff;
@@ -20,12 +151,6 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
 }
 
 @layer base {
@@ -59,7 +184,7 @@ body {
   }
 
   :hover {
-    scrollbar-color: theme('backgroundColor.layer-4') theme('colors.transparent');
+    scrollbar-color: --theme(--background-color-layer-4) transparent;
   }
 
   /* TODO: fix calendar color for different themes */
@@ -97,7 +222,7 @@ pre:has(div.codeblock) {
   }
 
   .input-form {
-    @apply m-0.5 w-full rounded border border-primary bg-transparent px-3 py-2 placeholder:text-secondary hover:border-accent-primary focus:border-accent-primary focus:outline-none;
+    @apply m-0.5 w-full rounded border border-primary bg-transparent px-3 py-2 placeholder:text-secondary hover:border-accent-primary focus:border-accent-primary focus:outline-hidden;
   }
 
   .submitted {}
@@ -109,7 +234,7 @@ pre:has(div.codeblock) {
 
 @layer components {
   .input {
-    @apply m-0.5 w-full rounded border border-primary bg-transparent px-3 py-2 placeholder:text-secondary hover:border-accent-primary focus:border-accent-primary focus:outline-none;
+    @apply m-0.5 w-full rounded border border-primary bg-transparent px-3 py-2 placeholder:text-secondary hover:border-accent-primary focus:border-accent-primary focus:outline-hidden;
   }
 
   .input.touched.invalid,
@@ -128,7 +253,7 @@ pre:has(div.codeblock) {
 
 @layer components {
   .button {
-    @apply rounded border border-transparent px-3 py-2.5 outline-none;
+    @apply rounded border border-transparent px-3 py-2.5 outline-hidden;
   }
 
   .button:disabled {
@@ -175,7 +300,7 @@ pre:has(div.codeblock) {
   }
 
   .button.button-icon {
-    @apply flex items-center justify-center rounded border border-transparent p-[5px] outline-none text-secondary;
+    @apply flex items-center justify-center rounded border border-transparent p-[5px] outline-hidden text-secondary;
   }
 
   .button.button-icon:disabled {
@@ -201,7 +326,7 @@ pre:has(div.codeblock) {
 
 @layer components {
   .checkbox {
-    @apply relative m-0 mr-2 inline h-4 w-4 shrink-0 appearance-none rounded-sm border border-primary text-accent-primary checked:border-accent-primary indeterminate:border-accent-primary hover:border-accent-primary focus-visible:outline-none;
+    @apply relative m-0 mr-2 inline h-4 w-4 shrink-0 appearance-none rounded-xs border border-primary text-accent-primary checked:border-accent-primary indeterminate:border-accent-primary hover:border-accent-primary focus-visible:outline-hidden;
   }
 }
 

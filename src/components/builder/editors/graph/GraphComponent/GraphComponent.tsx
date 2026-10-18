@@ -834,11 +834,11 @@ const GraphComponent = ({
     <div className="relative size-full">
       <div ref={cyHtmlTagRef} className="size-full" />
       {pinnedStatistics && (
-        <div className="absolute right-3 top-0 z-10">
+        <div className="absolute top-0 right-3 z-10">
           <Statistics setPinnedStatistics={setPinnedStatistics} pinnedStatistics={pinnedStatistics} />
         </div>
       )}
-      <Space size={2} className="absolute bottom-3 right-3">
+      <Space size={2} className="absolute right-3 bottom-3">
         {!pinnedStatistics && (
           <Tooltip
             tooltip={<Statistics setPinnedStatistics={setPinnedStatistics} pinnedStatistics={pinnedStatistics} />}

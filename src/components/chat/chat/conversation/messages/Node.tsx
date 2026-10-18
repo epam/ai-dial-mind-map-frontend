@@ -37,7 +37,7 @@ const getSizeClasses = (size: 'small' | 'default', isDesktop: boolean) => {
       return classNames(
         'py-[6px]',
         isDesktop ? 'px-3 text-sm' : 'px-2 text-xs',
-        'hover:outline hover:outline-[2.5px] hover:outline-offset-[-1px]',
+        'hover:outline-[2.5px] hover:-outline-offset-1 hover:outline-solid',
       );
   }
 };

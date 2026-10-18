@@ -26,7 +26,7 @@ export const DropOverlay: React.FC<Props> = ({
       : null;
 
   return (
-    <div className="absolute inset-0 z-50 flex size-full items-center justify-center bg-overlay backdrop-blur-sm">
+    <div className="absolute inset-0 z-50 flex size-full items-center justify-center bg-overlay backdrop-blur-xs">
       <div className="flex flex-col items-center gap-3">
         <div className="flex size-[100px] items-center justify-center rounded-lg text-primary">
           <IconFileTextFilled className="size-[100px] text-accent-primary" />

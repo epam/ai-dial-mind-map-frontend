@@ -172,7 +172,7 @@ const NodeEditor = () => {
   return (
     <div className="absolute flex size-full flex-1 flex-col gap-4 overflow-hidden rounded bg-layer-3 text-left shadow-mindmap">
       <div className="px-5 pt-5 text-base font-semibold">{isMessageStreaming ? 'Generating node...' : 'Details'}</div>
-      <div className="absolute right-2 top-2 flex gap-2">
+      <div className="absolute top-2 right-2 flex gap-2">
         <div className="text-secondary hover:cursor-pointer hover:text-primary">
           <ContextMenu
             TriggerIcon={IconDots}
@@ -213,14 +213,14 @@ const NodeEditor = () => {
               onBlur={e => handleBlur('label', e.target.value)}
             />
             {errors.label && (
-              <span className="text-xxs text-error peer-invalid:peer-[.submitted]:mb-1">{errors.label.message}</span>
+              <span className="text-xxs text-error peer-[.submitted]:peer-invalid:mb-1">{errors.label.message}</span>
             )}
           </div>
         </Space>
         <Space size="middle" className="px-5" align="start">
           <label
             htmlFor="node-questions"
-            className="mb-1 mt-2 flex min-w-20 items-start border-t border-transparent text-sm"
+            className="mt-2 mb-1 flex min-w-20 items-start border-t border-transparent text-sm"
           >
             Questions
           </label>
@@ -249,7 +249,7 @@ const NodeEditor = () => {
                   <IconTrashX
                     size={16}
                     className={classNames(
-                      'absolute right-2 top-3 cursor-pointer transition-opacity',
+                      'absolute top-3 right-2 cursor-pointer transition-opacity',
                       'opacity-0 group-hover:opacity-100',
                       'hover:text-accent-primary',
                     )}
@@ -265,7 +265,7 @@ const NodeEditor = () => {
                 className={classNames(
                   'input-form w-full text-sm',
                   'border border-transparent',
-                  'focus:border-accent-primary hover:border-primary',
+                  'hover:border-primary focus:border-accent-primary',
                   newQuestionText && 'text-primary',
                   questionsErrors.new && 'border-error',
                 )}
@@ -315,7 +315,7 @@ const NodeEditor = () => {
             )}
           />
           {errors.details && (
-            <span className="text-xxs text-error peer-invalid:peer-[.submitted]:mb-1">{errors.details.message}</span>
+            <span className="text-xxs text-error peer-[.submitted]:peer-invalid:mb-1">{errors.details.message}</span>
           )}
         </div>
         <Space size="middle" className="px-5">
@@ -343,7 +343,7 @@ const NodeEditor = () => {
             }}
           />
           {errors.status && (
-            <span className="text-xxs text-error peer-invalid:peer-[.submitted]:mb-1">{errors.status.message}</span>
+            <span className="text-xxs text-error peer-[.submitted]:peer-invalid:mb-1">{errors.status.message}</span>
           )}
         </Space>
         <Space size="middle" className="px-5">
@@ -386,7 +386,7 @@ const NodeEditor = () => {
             }}
           />
           {errors.status && (
-            <span className="text-xxs text-error peer-invalid:peer-[.submitted]:mb-1">{errors.status.message}</span>
+            <span className="text-xxs text-error peer-[.submitted]:peer-invalid:mb-1">{errors.status.message}</span>
           )}
         </Space>
         <Space size="middle" className="px-5">
@@ -411,15 +411,15 @@ const NodeEditor = () => {
           <span>Highlight node with neon</span>
         </Space>
         <Space className="border-t border-t-tertiary px-5 pt-2" direction="vertical" align="start" fullWidth>
-          <span className="text-xs uppercase text-secondary">Connections</span>
+          <span className="text-xs text-secondary uppercase">Connections</span>
           <Space size="middle" align="start" fullWidth className="w-full">
-            <label htmlFor="node-inbound-connections" className="mb-1 mt-[10px] flex min-w-20 items-start text-sm">
+            <label htmlFor="node-inbound-connections" className="mt-[10px] mb-1 flex min-w-20 items-start text-sm">
               Inbound
             </label>
             <ConnectionsSelector type={EdgeDirectionType.Inbound} />
           </Space>
           <Space size="middle" align="start" fullWidth className="w-full">
-            <label htmlFor="node-outbound-connections" className="mb-1 mt-[10px] flex min-w-20 items-start text-sm">
+            <label htmlFor="node-outbound-connections" className="mt-[10px] mb-1 flex min-w-20 items-start text-sm">
               Outbound
             </label>
             <ConnectionsSelector type={EdgeDirectionType.Outbound} />

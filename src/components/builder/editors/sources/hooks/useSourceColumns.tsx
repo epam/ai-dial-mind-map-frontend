@@ -96,7 +96,7 @@ export const useSourceColumns = ({
           name: 'Reindex',
           Icon: IconRefresh,
           className: 'text-sm',
-          iconClassName: '!text-error',
+          iconClassName: 'text-error!',
           onClick: () =>
             original.type === SourceType.LINK
               ? handleRefreshLink(index)
@@ -316,7 +316,7 @@ export const useSourceColumns = ({
               {original.status !== SourceStatus.REMOVED ? (
                 info.getValue() || '-'
               ) : (
-                <span className="italic text-secondary">deleted</span>
+                <span className="text-secondary italic">deleted</span>
               )}
             </div>
           );

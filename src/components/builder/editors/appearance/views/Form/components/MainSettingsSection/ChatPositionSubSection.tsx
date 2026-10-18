@@ -57,7 +57,7 @@ export const ChatPositionSubSection = () => {
           <div
             key={id}
             className={classNames([
-              'border rounded-xl p-4 flex flex-col gap-3 cursor-pointer hover:border-accent-primary',
+              'flex cursor-pointer flex-col gap-3 rounded-xl border p-4 hover:border-accent-primary',
               side === value ? 'border-accent-primary' : 'border-primary',
             ])}
             onClick={() => handleChange(value)}
@@ -78,7 +78,7 @@ export const ChatPositionSubSection = () => {
               </div>
               <label htmlFor={id}>{label}</label>
             </div>
-            <ChatPreview panelPosition={value} className="aspect-[340/190] w-full" {...previewProps} />
+            <ChatPreview panelPosition={value} className="aspect-340/190 w-full" {...previewProps} />
           </div>
         ))}
       </div>

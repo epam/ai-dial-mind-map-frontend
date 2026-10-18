@@ -107,7 +107,7 @@ export const GraphEditor = () => {
   );
 
   return (
-    <div className={classNames(['flex flex-row h-full relative', currentView === 'table' && '!h-[calc(100%-82px)]'])}>
+    <div className={classNames(['relative flex h-full flex-row', currentView === 'table' && 'h-[calc(100%-82px)]!'])}>
       {isGraphReady ? (
         <>
           {isNodeEditorOpen && !!focusNode && (
@@ -126,9 +126,9 @@ export const GraphEditor = () => {
           )}
           <div
             className={classNames([
-              'flex-1 h-full w-full',
-              currentView === 'table' && 'overflow-auto shadow-mindmap mx-3 rounded',
-              isMessageStreaming && 'opacity-50 pointer-events-none',
+              'size-full flex-1',
+              currentView === 'table' && 'mx-3 overflow-auto rounded shadow-mindmap',
+              isMessageStreaming && 'pointer-events-none opacity-50',
             ])}
           >
             {currentView === 'graph' ? (

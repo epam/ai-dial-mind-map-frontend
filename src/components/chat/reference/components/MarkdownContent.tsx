@@ -27,13 +27,13 @@ export const MarkdownContent = ({
     <div
       className={classNames(
         'scrollable-content scrollbar-hide px-2',
-        isFullscreenReference ? 'flex justify-center max-h-full' : 'max-h-[280px]',
+        isFullscreenReference ? 'flex max-h-full justify-center' : 'max-h-[280px]',
       )}
     >
       <MemoizedReactMarkdown
         className={classNames(
-          'prose whitespace-normal dark:prose-invert prose-a:text-accent-primary prose-a:no-underline hover:prose-a:underline break-words',
-          isFullscreenReference ? 'text-base max-w-full' : 'text-xs',
+          'prose wrap-break-word whitespace-normal dark:prose-invert prose-a:text-accent-primary prose-a:no-underline prose-a:hover:underline',
+          isFullscreenReference ? 'max-w-full text-base' : 'text-xs',
         )}
         remarkPlugins={[remarkGfm, remarkSupersub]}
         rehypePlugins={[rehypeRaw, rehypeSanitize]}

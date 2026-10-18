@@ -138,7 +138,7 @@ const SourcesPage = () => {
     <>
       {shouldHaveToolbar && <MainToolbar />}
       <div
-        className={classNames('w-[calc(100%-24px)] h-[calc(100%-8px)]', shouldHaveToolbar && '!h-[calc(100%-82px)]')}
+        className={classNames('h-[calc(100%-8px)] w-[calc(100%-24px)]', shouldHaveToolbar && 'h-[calc(100%-82px)]!')}
       >
         {getContent()}
       </div>
