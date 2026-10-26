@@ -84,7 +84,7 @@
     "stringz": "^2.1.0",
     "tailwind-merge": "^3.2.0",
     "yup": "^1.4.0",
-    "zod": "^3.25.67"
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
