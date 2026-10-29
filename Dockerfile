@@ -1,8 +1,8 @@
 ARG NODE_ALPINE_VERSION=3.23
 ARG RUNTIME_ALPINE_VERSION=3.23.4
 
-# Pinned Node minor instead of a floating node:24 tag.
-FROM node:24.21-alpine${NODE_ALPINE_VERSION} AS base
+# Pinned Node patch (24.22.1+ fixes CVE-2026-111497, Brotli OOB write in node:zlib).
+FROM node:24.22.2-alpine${NODE_ALPINE_VERSION} AS base
 RUN corepack disable \
     && rm -f /usr/local/bin/yarn /usr/local/bin/yarnpkg
 
