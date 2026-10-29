@@ -16,11 +16,6 @@ jest.mock('@/store/builder/hooks', () => ({
   useBuilderDispatch: jest.fn(),
 }));
 
-jest.mock('@epam/ai-dial-shared', () => ({
-  __esModule: true,
-  default: {},
-}));
-
 jest.mock('@/utils/app/file', () => ({
   constructPath: (folder: string, name: string) => `${folder}/${name}`,
   prepareFileName: (name: string) => name,

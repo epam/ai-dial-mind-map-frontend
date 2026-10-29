@@ -10,11 +10,6 @@ jest.mock('@/components/common/Modal', () => ({
   default: ({ children }: any) => <div>{children}</div>,
 }));
 
-jest.mock('@epam/ai-dial-shared', () => ({
-  __esModule: true,
-  default: {},
-}));
-
 jest.mock('lodash-es', () => ({
   debounce: (fn: any) => fn,
   throttle: (fn: any) => fn,

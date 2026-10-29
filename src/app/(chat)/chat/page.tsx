@@ -1,6 +1,6 @@
 'use client';
 
-import { ChatVisualizerConnector } from '@epam/ai-dial-chat-visualizer-connector';
+import { ChatVisualizerConnector } from '@epam/ai-dial-visualizer-connector';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useRef } from 'react';
 
@@ -23,6 +23,7 @@ import { ConversationActions } from '@/store/chat/conversation/conversation.redu
 import { useChatDispatch, useChatSelector } from '@/store/chat/hooks';
 import { PlaybackSelectors } from '@/store/chat/playback/playback.selectors';
 import { ChatUIActions, ChatUISelectors, DeviceType } from '@/store/chat/ui/ui.reducers';
+import { normalizeHostOrigins } from '@/utils/app/apps-editor-host';
 import { isClientSessionValid } from '@/utils/auth/session';
 
 const ChatPage = () => {
@@ -115,10 +116,11 @@ const ChatPage = () => {
   // dependency change (e.g. a session refresh mid-conversation) would tear it down without
   // recreating it, since re-init below only runs once (guarded by isInitialized).
   useEffect(() => {
-    const host = dialIframeAllowedHosts?.length ? dialIframeAllowedHosts : dialHost;
+    // The connector matches `event.origin` exactly, so configured full URLs are reduced to origins
+    const hosts = normalizeHostOrigins(dialIframeAllowedHosts?.length ? dialIframeAllowedHosts : [dialHost]);
 
-    if (!chatVisualizerConnector.current && host && mindmapIframeTitle) {
-      chatVisualizerConnector.current = new ChatVisualizerConnector(host, mindmapIframeTitle, data => {
+    if (!chatVisualizerConnector.current && hosts.length && mindmapIframeTitle) {
+      chatVisualizerConnector.current = new ChatVisualizerConnector(hosts, mindmapIframeTitle, data => {
         setData(data);
       });
     }

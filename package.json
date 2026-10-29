@@ -17,9 +17,9 @@
     "format:ci": "prettier --check \"**/*.{ts,tsx,md}\""
   },
   "dependencies": {
-    "@epam/ai-dial-chat-visualizer-connector": "0.42.2",
     "@epam/ai-dial-react-pdf-highlighter": "^0.1.5",
     "@epam/ai-dial-ui-kit": "^0.13.1",
+    "@epam/ai-dial-visualizer-connector": "1.3.0-dev.234",
     "@epam/pdf-highlighter-kit": "^0.0.18",
     "@floating-ui/react": "^0.27.20",
     "@google-cloud/recaptcha-enterprise": "^6.3.1",
