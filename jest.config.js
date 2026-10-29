@@ -13,7 +13,7 @@ const customJestConfig = {
     'lodash-es/(.*)': 'lodash/$1',
   },
   collectCoverage: true,
-  transformIgnorePatterns: ['/node_modules/(?!lodash-es)'],
+  transformIgnorePatterns: ['/node_modules/(?!(lodash-es|@epam/ai-dial-visualizer-connector)/)'],
   coverageDirectory: 'coverage',
   coverageReporters: ['html', 'text-summary'],
   collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/index.ts', '!src/**/*.d.ts', '!src/**/__tests__/**'],

@@ -1,8 +1,8 @@
 import {
+  connectAppsEditorHosts,
   getAppsEditorApplicationName,
-  isHostOriginAllowed,
   normalizeHostOrigins,
-  postToHost,
+  sendToAppsEditorHosts,
 } from '../apps-editor-host';
 
 describe('apps-editor-host', () => {
@@ -18,19 +18,8 @@ describe('apps-editor-host', () => {
     });
   });
 
-  describe('isHostOriginAllowed', () => {
-    it('allows any origin when none are configured or a wildcard is present', () => {
-      expect(isHostOriginAllowed('https://evil.com', [])).toBe(true);
-      expect(isHostOriginAllowed('https://evil.com', ['*'])).toBe(true);
-    });
-
-    it('allows only configured origins otherwise', () => {
-      expect(isHostOriginAllowed('https://chat.example.com', ['https://chat.example.com'])).toBe(true);
-      expect(isHostOriginAllowed('https://evil.com', ['https://chat.example.com'])).toBe(false);
-    });
-  });
-
-  describe('postToHost', () => {
+  describe('connectAppsEditorHosts', () => {
+    const HOST = 'https://chat.example.com';
     const parent = { postMessage: jest.fn() };
     let parentSpy: jest.SpyInstance;
 
@@ -41,31 +30,65 @@ describe('apps-editor-host', () => {
 
     afterEach(() => parentSpy.mockRestore());
 
-    it('posts with a wildcard target when no origins are configured', () => {
-      postToHost({ type: 'a' }, []);
+    const sendFromHost = (data: unknown, origin: string) =>
+      window.dispatchEvent(new MessageEvent('message', { data, origin, source: parent as unknown as Window }));
 
-      expect(parent.postMessage).toHaveBeenCalledWith({ type: 'a' }, '*');
+    it('posts once per configured origin through every connected client', () => {
+      const disconnect = connectAppsEditorHosts([HOST, 'http://localhost:3000'], 'Mind map', jest.fn());
+
+      sendToAppsEditorHosts(client => client.sendReadyToSave());
+
+      expect(parent.postMessage.mock.calls).toEqual([
+        [{ type: 'Mind map/readyToSave' }, HOST],
+        [{ type: 'Mind map/readyToSave' }, 'http://localhost:3000'],
+      ]);
+      disconnect();
     });
 
-    it('posts once per configured origin and survives an invalid one', () => {
-      parent.postMessage.mockImplementationOnce(() => {
-        throw new Error('invalid');
-      });
+    it('skips wildcard and invalid origins', () => {
       const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+      const disconnect = connectAppsEditorHosts(['*', 'bad', HOST], 'Mind map', jest.fn());
 
-      postToHost({ type: 'a' }, ['bad', 'https://chat.example.com']);
+      sendToAppsEditorHosts(client => client.sendLoggedOut());
 
-      expect(parent.postMessage).toHaveBeenCalledTimes(2);
-      expect(parent.postMessage).toHaveBeenLastCalledWith({ type: 'a' }, 'https://chat.example.com');
+      expect(parent.postMessage.mock.calls).toEqual([[{ type: 'Mind map/loggedOut' }, HOST]]);
+      expect(errorSpy).toHaveBeenCalledTimes(1);
+      disconnect();
       errorSpy.mockRestore();
     });
 
-    it('does nothing when not embedded in an iframe', () => {
-      parentSpy.mockReturnValue(window);
+    it('passes validated host messages with the receiving client', () => {
+      const onMessage = jest.fn();
+      const disconnect = connectAppsEditorHosts([HOST], 'Mind map', onMessage);
 
-      postToHost({ type: 'a' }, []);
+      sendFromHost({ type: 'TRIGGER_SAVE', general: { name: 'x' } }, HOST);
+      sendFromHost({ type: 'TRIGGER_SAVE' }, 'https://evil.com');
+      sendFromHost({ type: 'UNKNOWN' }, HOST);
+
+      expect(onMessage).toHaveBeenCalledTimes(1);
+      expect(onMessage).toHaveBeenCalledWith({ type: 'TRIGGER_SAVE', general: { name: 'x' } }, expect.anything());
+      disconnect();
+    });
+
+    it('stops sending and receiving after disconnect', () => {
+      const onMessage = jest.fn();
+      connectAppsEditorHosts([HOST], 'Mind map', onMessage)();
+
+      sendToAppsEditorHosts(client => client.sendReadyToSave());
+      sendFromHost({ type: 'TRIGGER_SAVE' }, HOST);
 
       expect(parent.postMessage).not.toHaveBeenCalled();
+      expect(onMessage).not.toHaveBeenCalled();
+    });
+
+    it('opens no client when not embedded in an iframe', () => {
+      parentSpy.mockReturnValue(window);
+      const disconnect = connectAppsEditorHosts([HOST], 'Mind map', jest.fn());
+
+      sendToAppsEditorHosts(client => client.sendReadyToSave());
+
+      expect(parent.postMessage).not.toHaveBeenCalled();
+      disconnect();
     });
   });
 
