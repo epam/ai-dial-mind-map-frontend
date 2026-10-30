@@ -9,3 +9,39 @@ excludes:
     - pattern: "devDependencies"
       reason: "DEV_DEPENDENCY_OF"
       comment: "Packages for development only."
+resolutions:
+  rule_violations:
+    # @react-pdf-viewer/* — package.json declares license as a URL, not SPDX.
+    # ort-config rules (revision pinned in CI) emit distinct messages per rule:
+    # - NO_LICENSE_IN_DEPENDENCY: "No license information is available for dependency '...'."
+    # - UNMAPPED_DECLARED_LICENSE: "The declared license '<url>' could not be mapped ... found in package '...'."
+    # - UNHANDLED_LICENSE: "The license <url> is currently not covered by policy rules. ..."
+    # See: https://github.com/oss-review-toolkit/ort-config/blob/460867920eca3d2ca0e3ad1cf464a1b95233d492/evaluator.rules.kts
+    - message: "(?s).*No license information is available for dependency \
+        'NPM:@react-pdf-viewer:[a-z0-9-]+:3\\.12\\.0'\\..*"
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'License terms at https://react-pdf-viewer.dev/license (non-SPDX in registry metadata)'
+    - message: "(?s).*The declared license 'https://react-pdf-viewer\\.dev/license' could not be mapped to a valid \
+        license or parsed as an SPDX expression\\. The license was found in package \
+        'NPM:@react-pdf-viewer:[a-z0-9-]+:3\\.12\\.0'\\..*"
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'UNMAPPED_DECLARED_LICENSE — URL is not an SPDX expression; terms at published URL'
+    - message:
+        "(?s).*The license https://react-pdf-viewer\\.dev/license is currently not covered by policy rules\\. \
+        The license was declared in package 'NPM:@react-pdf-viewer:[a-z0-9-]+:3\\.12\\.0'\\..*"
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'UNHANDLED_LICENSE for non-SPDX license field'
+    - message: "(?s).*No license information is available for dependency \
+        'NPM:@react-pdf-viewer/[a-z0-9-]+:3\\.12\\.0'\\..*"
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'Alternate id form'
+    - message: "(?s).*The declared license 'https://react-pdf-viewer\\.dev/license' could not be mapped to a valid \
+        license or parsed as an SPDX expression\\. The license was found in package \
+        'NPM:@react-pdf-viewer/[a-z0-9-]+:3\\.12\\.0'\\..*"
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'UNMAPPED_DECLARED_LICENSE — alternate id form'
+    - message:
+        "(?s).*The license https://react-pdf-viewer\\.dev/license is currently not covered by policy rules\\. \
+        The license was declared in package 'NPM:@react-pdf-viewer/[a-z0-9-]+:3\\.12\\.0'\\..*"
+      reason: 'CANT_FIX_EXCEPTION'
+      comment: 'UNHANDLED_LICENSE — alternate id form'
