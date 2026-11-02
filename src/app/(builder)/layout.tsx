@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import type { Metadata } from 'next';
 import { getServerSession } from 'next-auth';
 
+import { AppsEditorHost } from '@/components/builder/AppsEditorHost';
 import { NavigationHandler } from '@/components/builder/NavigationHandler';
 import { BuilderStoreProvider } from '@/components/builder/store/StoreProvider';
 import { AccessDenied } from '@/components/common/AccessDenied';
@@ -101,6 +102,7 @@ export default async function RootLayout({
           >
             <Toasts />
             <NavigationHandler />
+            <AppsEditorHost />
             <main className="h-screen w-screen flex-col bg-layer-1 text-sm text-primary">
               <div className="flex size-full flex-col sm:pt-0">
                 <div className="relative flex size-full flex-col">{children}</div>

@@ -20,3 +20,5 @@ export const selectApplicationDisplayName = createSelector(
 );
 
 export const selectIsApplicationReady = createSelector([rootSelector], state => state.isApplicationReady);
+
+export const selectApplicationError = createSelector([rootSelector], state => state.error);
