@@ -133,7 +133,7 @@ export function withCaptcha<T = unknown>(handler: (req: NextRequest, context: T,
 
       return response;
     } catch (error) {
-      logger.warn(`Error in withCaptcha middleware:`, error);
+      logger.warn(error, `Error in withCaptcha middleware:`);
       return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
   };

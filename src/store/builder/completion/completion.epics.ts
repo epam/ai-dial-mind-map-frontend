@@ -131,7 +131,7 @@ const completionStreamEpic: BuilderRootEpic = (action$, state$) =>
                       if (isEdge(el.data)) {
                         edges.push(el as Element<Edge>);
                       } else {
-                        el.data.questions = el.data.questions ?? [userMessage] ?? [];
+                        el.data.questions = el.data.questions ?? [userMessage];
                         nodes.push(el as Element<Node>);
                       }
                     }

@@ -31,7 +31,7 @@ const activeHandler = async (
     const res = await response.text();
 
     if (!response.ok) {
-      logger.warn(res, `Error occurred while changing active version`);
+      logger.warn({ response: res }, `Error occurred while changing active version`);
 
       if (response.status === 401) {
         return new NextResponse(errorsMessages.unauthorized, { status: 401 });
