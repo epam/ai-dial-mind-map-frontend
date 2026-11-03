@@ -1,4 +1,4 @@
-import { ChatVisualizerConnector } from '@epam/ai-dial-chat-visualizer-connector';
+import { ChatVisualizerConnector } from '@epam/ai-dial-visualizer-connector';
 import { renderHook } from '@testing-library/react';
 
 import { useBuilderDispatch } from '@/store/builder/hooks';
@@ -22,7 +22,7 @@ jest.mock('@/utils/app/browser-storage', () => ({
 const mockSendReady = jest.fn();
 const mockSendReadyToInteract = jest.fn();
 
-jest.mock('@epam/ai-dial-chat-visualizer-connector', () => {
+jest.mock('@epam/ai-dial-visualizer-connector', () => {
   return {
     ChatVisualizerConnector: jest.fn().mockImplementation(() => ({
       sendReady: mockSendReady,
@@ -71,8 +71,20 @@ describe('useBuilderInitialization', () => {
 
     renderHook(() => useBuilderInitialization(mockDialHost, mockIframeTitle));
 
-    expect(ChatVisualizerConnector).toHaveBeenCalledWith(mockDialHost, mockIframeTitle, expect.any(Function));
+    expect(ChatVisualizerConnector).toHaveBeenCalledWith([mockDialHost], mockIframeTitle, expect.any(Function));
     expect(mockSendReady).toHaveBeenCalled();
     expect(mockSendReadyToInteract).toHaveBeenCalled();
+  });
+
+  it('should pass the origin of a configured full dialHost URL to ChatVisualizerConnector', () => {
+    renderHook(() => useBuilderInitialization('https://example.com/chat/', 'Mindmap'));
+
+    expect(ChatVisualizerConnector).toHaveBeenCalledWith(['https://example.com'], 'Mindmap', expect.any(Function));
+  });
+
+  it('should not initialize ChatVisualizerConnector without dialHost', () => {
+    renderHook(() => useBuilderInitialization(null, 'Mindmap'));
+
+    expect(ChatVisualizerConnector).not.toHaveBeenCalled();
   });
 });
