@@ -1,7 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
 
-import { postToHost } from '@/utils/app/apps-editor-host';
-
 import { SAVE_FLUSH_TIMEOUT_MS, SAVE_SETTLE_MS, useAppsEditorHost } from '../useAppsEditorHost';
 
 const HOST = 'https://chat.example.com';
@@ -41,10 +39,7 @@ jest.mock('@/store/builder/builder/builder.reducers', () => ({
 const mockSession = jest.fn();
 jest.mock('next-auth/react', () => ({ useSession: () => mockSession() }));
 
-jest.mock('@/utils/app/apps-editor-host', () => ({
-  ...jest.requireActual('@/utils/app/apps-editor-host'),
-  postToHost: jest.fn(),
-}));
+const parent = { postMessage: jest.fn() };
 
 const setState = (overrides: Record<string, unknown> = {}) => {
   Object.assign(mockState, {
@@ -62,7 +57,7 @@ const setState = (overrides: Record<string, unknown> = {}) => {
   mockSession.mockReturnValue({ data: { user: {} }, status: 'authenticated' });
 };
 
-const sendFromHost = (data: unknown, origin = HOST, source: unknown = window.parent) => {
+const sendFromHost = (data: unknown, origin = HOST, source: unknown = parent) => {
   act(() => {
     window.dispatchEvent(new MessageEvent('message', { data, origin, source: source as Window }));
   });
@@ -75,15 +70,53 @@ const settleSave = async () => {
 };
 
 describe('useAppsEditorHost', () => {
-  const posted = () => (postToHost as jest.Mock).mock.calls.map(([message]) => message);
+  const posted = () => parent.postMessage.mock.calls.map(([message]) => message);
+  const postedTo = (origin: string) =>
+    parent.postMessage.mock.calls.filter(([, target]) => target === origin).map(([message]) => message);
+  let parentSpy: jest.SpyInstance;
 
   beforeEach(() => {
     jest.useFakeTimers();
-    (postToHost as jest.Mock).mockClear();
+    parent.postMessage.mockClear();
+    parentSpy = jest.spyOn(window, 'parent', 'get').mockReturnValue(parent as unknown as Window);
     setState();
   });
 
-  afterEach(() => jest.useRealTimers());
+  afterEach(() => {
+    parentSpy.mockRestore();
+    jest.useRealTimers();
+  });
+
+  describe('host origins', () => {
+    it('posts to the origin of the configured DIAL Chat host', () => {
+      setState({ host: `${HOST}/some/path/` });
+
+      renderHook(() => useAppsEditorHost());
+
+      expect(postedTo(HOST)).toContainEqual({ type: 'Mind map/readyToSave' });
+    });
+
+    it.each([
+      ['no host is configured', { host: '' }],
+      ['only a wildcard is allowed', { allowedHosts: ['*'] }],
+    ])('stays silent when %s', (_, overrides) => {
+      setState(overrides);
+
+      renderHook(() => useAppsEditorHost());
+
+      expect(parent.postMessage).not.toHaveBeenCalled();
+    });
+
+    it('stops posting after unmount', () => {
+      const { unmount } = renderHook(() => useAppsEditorHost());
+      unmount();
+      parent.postMessage.mockClear();
+
+      sendFromHost({ type: 'TRIGGER_SAVE' });
+
+      expect(parent.postMessage).not.toHaveBeenCalled();
+    });
+  });
 
   describe('readiness', () => {
     it('sends the prefixed readyToSave once the application is loaded', () => {
@@ -191,6 +224,18 @@ describe('useAppsEditorHost', () => {
       await settleSave();
 
       expect(posted().filter(message => message.type === 'SAVE_SUCCESS')).toHaveLength(1);
+    });
+
+    it('replies only to the allowed origin that sent the trigger', async () => {
+      const otherHost = 'https://builder.example.com';
+      setState({ allowedHosts: [otherHost, HOST] });
+      renderHook(() => useAppsEditorHost());
+
+      sendFromHost({ type: 'TRIGGER_SAVE' });
+      await settleSave();
+
+      expect(postedTo(HOST)).toContainEqual({ type: 'SAVE_SUCCESS', hasChanges: false });
+      expect(postedTo(otherHost)).not.toContainEqual(expect.objectContaining({ type: 'SAVE_SUCCESS' }));
     });
 
     it('ignores messages from other origins, other windows and other types', async () => {

@@ -3,10 +3,9 @@ import { catchError, concat, EMPTY, filter, from, ignoreElements, map, mergeMap,
 import { fromFetch } from 'rxjs/fetch';
 
 import { Application } from '@/types/application';
-import { AppsEditorOutboundMessage } from '@/types/apps-editor';
 import { BuilderRootEpic } from '@/types/store';
 import { getAppPathWithEncodedAppName } from '@/utils/app/application';
-import { getAppsEditorApplicationName, normalizeHostOrigins, postToHost } from '@/utils/app/apps-editor-host';
+import { sendToAppsEditorHosts } from '@/utils/app/apps-editor-host';
 
 import { AppearanceActions } from '../appearance/appearance.reducers';
 import { HistoryActions } from '../history/history.reducers';
@@ -92,16 +91,7 @@ const updateApplicationEpic: BuilderRootEpic = (action$, state$) =>
         }),
         tap(action => {
           if (action.type === ApplicationActions.updateApplicationSuccess.type) {
-            const applicationName = getAppsEditorApplicationName(UISelectors.selectMindmapIframeTitle(state$.value));
-            const dialIframeAllowedHosts = UISelectors.selectDialIframeAllowedHosts(state$.value);
-            const dialChatHost = UISelectors.selectDialChatHost(state$.value);
-            postToHost(
-              {
-                type: `${applicationName}/${AppsEditorOutboundMessage.UpdatedApplicationSuccess}`,
-                payload: { application: newApplication },
-              },
-              normalizeHostOrigins(dialIframeAllowedHosts?.length ? dialIframeAllowedHosts : [dialChatHost]),
-            );
+            sendToAppsEditorHosts(client => client.sendUpdatedApplication(newApplication));
           }
         }),
         globalCatchUnauthorized(),
