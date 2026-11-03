@@ -1,7 +1,8 @@
 'use client';
 
+import { AppsEditorClient, AppsEditorMessages } from '@epam/ai-dial-visualizer-connector';
 import { useSession } from 'next-auth/react';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { ApplicationSelectors } from '@/store/builder/application/application.reducer';
 import { AuthSelectors } from '@/store/builder/auth/auth.slice';
@@ -9,16 +10,10 @@ import { BuilderSelectors } from '@/store/builder/builder/builder.reducers';
 import { useBuilderSelector } from '@/store/builder/hooks';
 import { UISelectors } from '@/store/builder/ui/ui.reducers';
 import {
-  AppsEditorInboundMessage,
-  AppsEditorOutboundMessage,
-  AppsEditorSaveError,
-  AppsEditorSaveSuccess,
-} from '@/types/apps-editor';
-import {
+  connectAppsEditorHosts,
   getAppsEditorApplicationName,
-  isHostOriginAllowed,
   normalizeHostOrigins,
-  postToHost,
+  sendToAppsEditorHosts,
 } from '@/utils/app/apps-editor-host';
 import { isClientSessionValid } from '@/utils/auth/session';
 
@@ -47,10 +42,11 @@ export const useAppsEditorHost = () => {
   const isRequestInProgress = useBuilderSelector(BuilderSelectors.selectIsRequestInProgress);
   const { data: session, status: sessionStatus } = useSession();
 
-  const allowedOrigins = useMemo(
-    () => normalizeHostOrigins(dialIframeAllowedHosts?.length ? dialIframeAllowedHosts : [dialChatHost]),
-    [dialIframeAllowedHosts, dialChatHost],
-  );
+  // Keyed by value: reconnecting would destroy the client an in-flight save replies through
+  const allowedOriginsKey = normalizeHostOrigins(
+    dialIframeAllowedHosts?.length ? dialIframeAllowedHosts : [dialChatHost],
+  ).join(',');
+  const allowedOrigins = useMemo(() => allowedOriginsKey.split(',').filter(Boolean), [allowedOriginsKey]);
 
   const isLoggedOut =
     !isAllowApiKeyAuth &&
@@ -61,30 +57,15 @@ export const useAppsEditorHost = () => {
 
   const isReadyToSaveRef = useRef(isReadyToSave);
   const isRequestInProgressRef = useRef(isRequestInProgress);
-  const allowedOriginsRef = useRef(allowedOrigins);
   const pendingSaveRef = useRef<Promise<void> | null>(null);
   isReadyToSaveRef.current = isReadyToSave;
   isRequestInProgressRef.current = isRequestInProgress;
-  allowedOriginsRef.current = allowedOrigins;
 
-  const postPrefixed = useCallback(
-    (type: AppsEditorOutboundMessage) => {
-      const applicationName = getAppsEditorApplicationName(iframeTitle);
-      if (!applicationName) return;
-      postToHost({ type: `${applicationName}/${type}` }, allowedOrigins);
-    },
-    [iframeTitle, allowedOrigins],
-  );
-
+  // Declared before the readiness effects so a reconnect is in place when they re-send
   useEffect(() => {
-    if (isReadyToSave) postPrefixed(AppsEditorOutboundMessage.ReadyToSave);
-  }, [isReadyToSave, postPrefixed]);
+    const applicationName = getAppsEditorApplicationName(iframeTitle);
+    if (!applicationName) return;
 
-  useEffect(() => {
-    if (isLoggedOut) postPrefixed(AppsEditorOutboundMessage.LoggedOut);
-  }, [isLoggedOut, postPrefixed]);
-
-  useEffect(() => {
     const flushPendingWrites = async () => {
       await sleep(SAVE_SETTLE_MS);
       const deadline = Date.now() + SAVE_FLUSH_TIMEOUT_MS;
@@ -94,36 +75,33 @@ export const useAppsEditorHost = () => {
       }
     };
 
-    const reply = (message: AppsEditorSaveSuccess | AppsEditorSaveError) =>
-      postToHost(message, allowedOriginsRef.current);
-
-    const handleSave = async () => {
+    const handleSave = async (client: AppsEditorClient) => {
       if (!isReadyToSaveRef.current) {
-        reply({ type: AppsEditorOutboundMessage.SaveError, error: 'The mind map editor is not ready to save.' });
+        client.sendSaveError('The mind map editor is not ready to save.');
         return;
       }
       try {
         await flushPendingWrites();
-        reply({ type: AppsEditorOutboundMessage.SaveSuccess, hasChanges: false });
+        client.sendSaveSuccess(false);
       } catch (error) {
-        reply({
-          type: AppsEditorOutboundMessage.SaveError,
-          error: error instanceof Error ? error.message : 'Failed to save the mind map.',
-        });
+        client.sendSaveError(error instanceof Error ? error.message : 'Failed to save the mind map.');
       }
     };
 
-    const handleMessage = (event: MessageEvent) => {
-      if (event.source !== window.parent) return;
-      if (!isHostOriginAllowed(event.origin, allowedOriginsRef.current)) return;
-      if (event.data?.type !== AppsEditorInboundMessage.TriggerSave) return;
+    return connectAppsEditorHosts(allowedOrigins, applicationName, (message, client) => {
+      if (message.type !== AppsEditorMessages.TriggerSave) return;
 
-      pendingSaveRef.current ??= handleSave().finally(() => {
+      pendingSaveRef.current ??= handleSave(client).finally(() => {
         pendingSaveRef.current = null;
       });
-    };
+    });
+  }, [iframeTitle, allowedOrigins]);
 
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, []);
+  useEffect(() => {
+    if (isReadyToSave) sendToAppsEditorHosts(client => client.sendReadyToSave());
+  }, [isReadyToSave, iframeTitle, allowedOrigins]);
+
+  useEffect(() => {
+    if (isLoggedOut) sendToAppsEditorHosts(client => client.sendLoggedOut());
+  }, [isLoggedOut, iframeTitle, allowedOrigins]);
 };

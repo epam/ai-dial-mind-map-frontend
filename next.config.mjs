@@ -8,6 +8,8 @@ const pdfJsWebpackCompatibilityLoader = fileURLToPath(
 const nextConfig = () => {
   return {
     output: 'standalone',
+    // Ships untranspiled ESM, which Jest (via next/jest) only transforms for transpiled packages
+    transpilePackages: ['@epam/ai-dial-visualizer-connector'],
     experimental: {
       instrumentationHook: true,
     },

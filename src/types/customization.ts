@@ -86,11 +86,9 @@ export const CytoscapeEdgeStylesSchema = z
     width: z.number().optional(),
     'line-style': z
       .nativeEnum(EdgeLineStyle, {
-        errorMap: () => ({
-          message: `line-style must be one of ${Object.values(EdgeLineStyle)
-            .map(v => `'${v}'`)
-            .join(', ')}`,
-        }),
+        message: `line-style must be one of ${Object.values(EdgeLineStyle)
+          .map(v => `'${v}'`)
+          .join(', ')}`,
       })
       .optional(),
   })
@@ -111,7 +109,11 @@ const CytoscapeNodeStylesSchema = z
   })
   .passthrough();
 
-const CytoscapeNodeStateStylesSchema = z.record(z.nativeEnum(GraphNodeState), CytoscapeNodeStylesSchema);
+const CytoscapeNodeStateStylesSchema = z
+  .object({
+    [GraphNodeState.Hovered]: CytoscapeNodeStylesSchema.optional(),
+  })
+  .strict();
 
 const CytoscapeNodeStylesWithStatesSchema = CytoscapeNodeStylesSchema.extend({
   states: CytoscapeNodeStateStylesSchema.optional(),
@@ -204,11 +206,9 @@ const GraphConfigSchema = z.object({
 const ChatNodeSchema = z.object({
   availableNodeType: z
     .nativeEnum(ChatNodeType, {
-      errorMap: () => ({
-        message: `availableNodeType must be one of ${Object.values(ChatNodeType)
-          .map(v => `'${v}'`)
-          .join(', ')}`,
-      }),
+      message: `availableNodeType must be one of ${Object.values(ChatNodeType)
+        .map(v => `'${v}'`)
+        .join(', ')}`,
     })
     .optional(),
   'corner-radius': z.number().optional(),
@@ -291,7 +291,7 @@ export const ThemeConfigSchema = z
     displayName: z.string().optional(),
     icons: IconsSchema.optional(),
     font: FontSchema.optional(),
-    colors: z.record(z.string()).optional(),
+    colors: z.record(z.string(), z.string()).optional(),
     graph: GraphConfigSchema,
     chat: ChatConfigSchema.optional(),
     references: ReferencesConfigSchema.strict().required(),
