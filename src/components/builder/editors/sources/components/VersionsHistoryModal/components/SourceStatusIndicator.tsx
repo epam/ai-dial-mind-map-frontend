@@ -13,7 +13,7 @@ interface SourceStatusIndicatorProps {
 
 export const SourceStatusIndicator: FC<SourceStatusIndicatorProps> = ({ status, inGraph, statusDescription }) => {
   if (!status || status === SourceStatus.INPROGRESS) {
-    return <Loader size={16} containerClassName="absolute left-[-20px] !w-fit" loaderClassName="!text-primary" />;
+    return <Loader size={16} containerClassName="absolute left-[-20px] w-fit!" loaderClassName="text-primary!" />;
   }
 
   if (status === SourceStatus.FAILED) {

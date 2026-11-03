@@ -95,8 +95,8 @@ export const ColorPickerInput: React.FC<ColorPickerInputProps> = ({
       <div
         className={classNames(
           'flex items-center space-x-2 rounded border border-primary px-2 py-1',
-          mandatory && !localColor && '!border-error',
-          !isValidHex && localColor && '!border-error',
+          mandatory && !localColor && 'border-error!',
+          !isValidHex && localColor && 'border-error!',
         )}
       >
         <Tooltip
@@ -128,8 +128,8 @@ export const ColorPickerInput: React.FC<ColorPickerInputProps> = ({
         >
           <button
             className={classNames(
-              'size-6 cursor-pointer rounded border flex items-center justify-center border-primary',
-              { '!border-error': showErrorOverlay, relative: overlayNeeded },
+              'flex size-6 cursor-pointer items-center justify-center rounded border border-primary',
+              { 'border-error!': showErrorOverlay, relative: overlayNeeded },
             )}
             style={{ backgroundColor: pickerBg }}
           >

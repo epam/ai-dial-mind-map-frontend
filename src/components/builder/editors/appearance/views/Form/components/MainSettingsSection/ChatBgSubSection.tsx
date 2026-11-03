@@ -84,7 +84,7 @@ export const ChatBgSubSection = () => {
         onSuccessUpload={onSuccessUploadHandler}
         defaultIcon={<IconPhoto />}
         placeholder="No image"
-        imageContainerClassName="!p-0"
+        imageContainerClassName="p-0!"
       />
     </div>
   );

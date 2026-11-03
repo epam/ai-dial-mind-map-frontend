@@ -57,7 +57,7 @@ export const GuardrailsSettingsSection: React.FC = () => {
               preview="edit"
               onChange={val => onSetGuardrailsPrompt(val ?? '')}
               height={215}
-              className="!rounded !border !border-primary !bg-layer-2 !text-primary"
+              className="rounded! border! border-primary! bg-layer-2! text-primary!"
               previewOptions={{
                 components: {
                   a: props => <a {...props} target="_blank" rel="noopener noreferrer" />,
@@ -75,7 +75,7 @@ export const GuardrailsSettingsSection: React.FC = () => {
               preview="edit"
               onChange={val => onSetChatGuardrailsResponsePrompt(val ?? '')}
               height={215}
-              className="!rounded !border !border-primary !bg-layer-2 !text-primary"
+              className="rounded! border! border-primary! bg-layer-2! text-primary!"
               previewOptions={{
                 components: {
                   a: props => <a {...props} target="_blank" rel="noopener noreferrer" />,

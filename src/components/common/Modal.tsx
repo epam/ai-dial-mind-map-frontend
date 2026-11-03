@@ -103,7 +103,7 @@ function ModalView({
                 <button
                   type="button"
                   role="button"
-                  className="absolute right-2 top-2 rounded text-secondary hover:text-accent-primary"
+                  className="absolute top-2 right-2 rounded text-secondary hover:text-accent-primary"
                   onClick={handleClose}
                 >
                   <IconX height={24} width={24} />
@@ -112,16 +112,16 @@ function ModalView({
               {heading && typeof heading === 'string' ? (
                 <h4
                   className={classNames(
-                    'mb-2 max-h-[50px] whitespace-pre-wrap text-left text-base font-semibold',
+                    'mb-2 max-h-[50px] text-left text-base font-semibold whitespace-pre-wrap',
                     headingClassName,
                   )}
                 >
                   <Tooltip
-                    contentClassName="max-w-[400px] break-words"
+                    contentClassName="max-w-[400px] wrap-break-word"
                     tooltip={heading}
                     hideTooltip={!headingTooltipEnabled}
                   >
-                    <div className="line-clamp-2 w-full break-words" data-qa="modal-entity-name">
+                    <div className="line-clamp-2 w-full wrap-break-word" data-qa="modal-entity-name">
                       {heading}
                     </div>
                   </Tooltip>

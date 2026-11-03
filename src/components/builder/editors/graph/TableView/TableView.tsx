@@ -57,7 +57,7 @@ const TableView = () => {
         style={{
           width: table.getCenterTotalSize(),
         }}
-        className={classNames(['min-w-full table-fixed w-full', table.getRowModel().rows.length === 0 && 'h-full'])}
+        className={classNames(['w-full min-w-full table-fixed', table.getRowModel().rows.length === 0 && 'h-full'])}
       >
         <thead className="sticky top-0 z-10 bg-layer-3">
           {table.getHeaderGroups().map(headerGroup => (
@@ -67,14 +67,14 @@ const TableView = () => {
                   key={header.id}
                   colSpan={header.colSpan}
                   style={{ width: header.getSize() }}
-                  className="relative h-[36px] border border-t-0 border-tertiary px-3 py-1 text-start text-[11px] font-bold uppercase text-secondary"
+                  className="relative h-[36px] border border-t-0 border-tertiary px-3 py-1 text-start text-[11px] font-bold text-secondary uppercase"
                 >
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                   <div
                     onDoubleClick={() => header.column.resetSize()}
                     onMouseDown={header.getResizeHandler()}
                     onTouchStart={header.getResizeHandler()}
-                    className={`absolute right-0 top-0 h-full w-1 cursor-col-resize bg-transparent hover:bg-accent-primary ${
+                    className={`absolute top-0 right-0 h-full w-1 cursor-col-resize bg-transparent hover:bg-accent-primary ${
                       header.column.getIsResizing() ? 'bg-accent-primary' : ''
                     }`}
                     style={{
@@ -103,12 +103,12 @@ const TableView = () => {
                       width: cell.column.getSize(),
                     }}
                     className={classNames([
-                      'border border-tertiary h-[36px] px-3 py-1 overflow-hidden text-nowrap',
+                      'h-[36px] overflow-hidden border border-tertiary px-3 py-1 text-nowrap',
                       row.original.id === focusNodeId && 'bg-accent-primary-alpha',
                       row.original.id === rootNodeId && row.original.id !== focusNodeId && 'bg-layer-4',
                       highlightedNodeIds.length > 0 &&
                         !highlightedNodeIds.includes(row.original.id) &&
-                        'opacity-50 bg-layer-2',
+                        'bg-layer-2 opacity-50',
                     ])}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

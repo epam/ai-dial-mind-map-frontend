@@ -24,7 +24,7 @@ export const FormSection = ({
   return (
     <div
       className={classNames([
-        'flex w-full p-6 flex-col lg:flex-row',
+        'flex w-full flex-col p-6 lg:flex-row',
         withBorder && 'border-b border-primary',
         children && 'gap-4',
         className,

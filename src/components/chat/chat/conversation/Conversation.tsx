@@ -135,7 +135,7 @@ export const Conversation = () => {
       ref={chatContainerRef}
       onScroll={handleScroll}
     >
-      <div className={classNames(['h-full flex flex-col'])}>
+      <div className={classNames(['flex h-full flex-col'])}>
         {visibleMessages.map((message, messageIndex) => {
           const isFocused = message.id?.replace('-response', '') === focusMessageId;
 

@@ -102,9 +102,9 @@ export const SourceInputField = ({
   return (
     <div
       className={classNames(
-        'pl-6 w-full flex items-center outline-none',
-        isEdited && '!bg-layer-2 w-full py-0 input-form stroke-accent-primary border-accent-primary rounded-none m-0',
-        hasError && '!border-error hover:border-error focus:border-error',
+        'flex w-full items-center pl-6 outline-hidden',
+        isEdited && 'input-form m-0 w-full rounded-none border-accent-primary bg-layer-2! stroke-accent-primary py-0',
+        hasError && 'border-error! hover:border-error focus:border-error',
       )}
     >
       {hasCheckbox ? (
@@ -128,11 +128,11 @@ export const SourceInputField = ({
       )}
 
       {!isEdited && globalSourceName ? (
-        <div className="w-full overflow-x-hidden text-ellipsis text-nowrap">
+        <div className="w-full overflow-x-hidden text-nowrap text-ellipsis">
           <Tooltip
             tooltip={value}
             triggerClassName={classNames(
-              'bg-transparent pl-3 w-fit flex-1 outline-none text-ellipsis text-nowrap',
+              'w-fit flex-1 bg-transparent pl-3 text-nowrap text-ellipsis outline-hidden',
               isRemoved && 'text-secondary',
             )}
             contentClassName="text-sm px-2 text-primary"
@@ -153,7 +153,7 @@ export const SourceInputField = ({
           readOnly={!isEdited}
           onKeyDown={e => onKeyDown(e, index)}
           className={classNames(
-            'bg-transparent pl-3 py-[9px] w-full outline-none text-ellipsis',
+            'w-full bg-transparent py-[9px] pl-3 text-ellipsis outline-hidden',
             isEdited && 'pr-16',
             isRemoved && 'text-secondary',
           )}

@@ -24,7 +24,7 @@ function ContextMenuItemRenderer({
   const item = (
     <div
       className={classNames(
-        'flex w-full items-center gap-3 truncate break-words',
+        'flex w-full items-center gap-3 truncate wrap-break-word',
         !!childMenuItems && !disabled && 'text-primary',
         !!childMenuItems && className,
       )}
@@ -37,7 +37,7 @@ function ContextMenuItemRenderer({
           width={18}
         />
       )}
-      <span className="truncate break-words">
+      <span className="truncate wrap-break-word">
         {name} {additionalNameNode}
       </span>
     </div>

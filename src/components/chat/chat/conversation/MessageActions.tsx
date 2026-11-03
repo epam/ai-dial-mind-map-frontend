@@ -91,7 +91,7 @@ export const MessageActions = ({
   const renderContent = (buttonLabel: string, buttonIcon: ReactNode, text?: string) => (
     <Space
       className={classNames([
-        'text-xs text-secondary w-full mt-3 md:mt-4 chat-conversation__message-actions',
+        'chat-conversation__message-actions mt-3 w-full text-xs text-secondary md:mt-4',
         (isMessageSending || isAIGenerated) && 'justify-between',
         !isMessageSending && !isAIGenerated && 'justify-end',
       ])}
@@ -102,7 +102,7 @@ export const MessageActions = ({
           <button
             onClick={regenerateHandler}
             disabled={isRelayoutInProgress || isMessageStreaming}
-            className="flex gap-1 whitespace-nowrap text-xs font-semibold text-secondary transition duration-300 hover:text-accent-primary"
+            className="flex gap-1 text-xs font-semibold whitespace-nowrap text-secondary transition duration-300 hover:text-accent-primary"
           >
             {buttonIcon}
             <span>{buttonLabel}</span>

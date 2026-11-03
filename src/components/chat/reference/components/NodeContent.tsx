@@ -24,13 +24,13 @@ export const NodeContent = ({
   return (
     <div
       className={classNames(
-        'flex size-full overflow-y-auto overflow-x-hidden',
+        'flex size-full overflow-x-hidden overflow-y-auto',
         isFullscreenReference ? 'justify-center' : '',
       )}
     >
       <MemoizedReactMarkdown
         className={classNames(
-          'prose whitespace-normal dark:prose-invert prose-a:text-accent-primary prose-a:no-underline hover:prose-a:underline',
+          'prose whitespace-normal dark:prose-invert prose-a:text-accent-primary prose-a:no-underline prose-a:hover:underline',
           isFullscreenReference ? 'text-base' : 'text-xs',
         )}
         remarkPlugins={[remarkGfm, remarkSupersub]}
