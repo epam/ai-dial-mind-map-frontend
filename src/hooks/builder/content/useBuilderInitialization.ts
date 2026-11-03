@@ -1,10 +1,11 @@
-import { ChatVisualizerConnector } from '@epam/ai-dial-chat-visualizer-connector';
+import { ChatVisualizerConnector } from '@epam/ai-dial-visualizer-connector';
 import { useEffect, useRef } from 'react';
 
 import { useBuilderDispatch } from '@/store/builder/hooks';
 import { PreferencesActions, PreferencesState } from '@/store/builder/preferences/preferences.reducers';
 import { UIActions, UIInitialState, UIStoredState } from '@/store/builder/ui/ui.reducers';
 import { StorageKeys } from '@/types/storage';
+import { normalizeHostOrigins } from '@/utils/app/apps-editor-host';
 import { BrowserStorage } from '@/utils/app/browser-storage';
 
 export const useBuilderInitialization = (dialHost: string | null, mindmapIframeTitle: string | null) => {
@@ -23,8 +24,10 @@ export const useBuilderInitialization = (dialHost: string | null, mindmapIframeT
       dispatch(UIActions.init({ ...UIInitialState, ...uiStoredState }));
     }
 
-    if (!isInitialized.current && dialHost && mindmapIframeTitle) {
-      chatVisualizerConnector.current = new ChatVisualizerConnector(dialHost, mindmapIframeTitle, () => {});
+    // The connector matches `event.origin` exactly, so a configured full URL is reduced to its origin
+    const hosts = normalizeHostOrigins([dialHost]);
+    if (!isInitialized.current && hosts.length && mindmapIframeTitle) {
+      chatVisualizerConnector.current = new ChatVisualizerConnector(hosts, mindmapIframeTitle, () => {});
       chatVisualizerConnector.current.sendReady();
       chatVisualizerConnector.current.sendReadyToInteract();
       isInitialized.current = true;
