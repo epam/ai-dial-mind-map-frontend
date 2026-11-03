@@ -66,7 +66,7 @@ export const SemanticColorsSection: React.FC = () => {
 
   return (
     <div className="w-full max-w-[920px] overflow-x-auto">
-      <div className="inline-grid min-w-[800px] max-w-[920px] grid-cols-[100px_repeat(3,minmax(160px,160px))_20px_minmax(220px,300px)] items-center gap-3">
+      <div className="inline-grid max-w-[920px] min-w-[800px] grid-cols-[100px_repeat(3,minmax(160px,160px))_20px_minmax(220px,300px)] items-center gap-3">
         <div />
         {SemanticColorsCategoriesFieldNamesList.map(col =>
           col ? (

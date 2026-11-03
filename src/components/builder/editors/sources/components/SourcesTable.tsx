@@ -170,7 +170,7 @@ export const SourcesTable: React.FC<Props> = ({
                 <th
                   key={header.id}
                   className={classNames(
-                    'text-left pb-1 px-4 h-8 text-secondary uppercase text-[11px] leading-[150%] font-bold',
+                    'h-8 px-4 pb-1 text-left text-[11px] leading-[150%] font-bold text-secondary uppercase',
                     header.id === 'source' && selectedRows.length && 'w-auto pl-6',
                     header.id === 'source' &&
                       !selectedRows.length &&

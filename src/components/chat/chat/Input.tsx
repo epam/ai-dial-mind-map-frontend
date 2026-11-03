@@ -146,10 +146,10 @@ export const Input = ({ classes }: { classes?: string }) => {
           }
         }}
         className={classNames(
-          'flex rounded-[3px] bg-layer-3 w-full pl-4 pr-14 chat-footer__input resize-none grow max-h-[150px] overflow-y-auto',
+          'chat-footer__input flex max-h-[150px] w-full grow resize-none overflow-y-auto rounded-[3px] bg-layer-3 pr-14 pl-4',
           isTablet ? 'py-[14px]' : 'py-[12px]',
           isDesktop ? 'text-base placeholder:text-base' : 'text-sm placeholder:text-sm',
-          (!hasAppProperties || isMindmapNotFound) && 'placeholder:text-controls-disable pointer-events-none',
+          (!hasAppProperties || isMindmapNotFound) && 'pointer-events-none placeholder:text-controls-disable',
         )}
         placeholder={placeholder}
         name="message"
@@ -164,12 +164,12 @@ export const Input = ({ classes }: { classes?: string }) => {
         type="submit"
         disabled={!hasAppProperties || (isRecaptchaEnabled && (isCaptchaExecuting || !isCaptchaLoaded))}
         className={classNames([
-          'absolute right-3  hover:text-accent-primary hover:cursor-pointer group transition-colors duration-200 chat-footer__submit-btn',
+          'group chat-footer__submit-btn  absolute right-3 transition-colors duration-200 hover:cursor-pointer hover:text-accent-primary',
           isMdUp ? 'bottom-[12px]' : 'bottom-[10px]',
           !hasAppProperties ||
             (isRecaptchaEnabled &&
               (isCaptchaExecuting || !isCaptchaLoaded) &&
-              'text-controls-disable pointer-events-none'),
+              'pointer-events-none text-controls-disable'),
           isLastMessageError && 'text-error hover:text-error',
         ])}
       >

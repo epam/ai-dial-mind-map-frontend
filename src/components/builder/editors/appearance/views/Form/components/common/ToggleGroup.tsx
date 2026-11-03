@@ -60,7 +60,7 @@ export function ToggleGroup<T extends string>({
               onClick={() => onChange(opt.value)}
               disabled={opt.disabled}
               className={classNames(
-                'px-3 py-2 text-sm border-2 rounded-xl hover:shadow',
+                'rounded-xl border-2 px-3 py-2 text-sm hover:shadow',
                 buttonClassName,
                 {
                   'border-accent-primary': isActive,

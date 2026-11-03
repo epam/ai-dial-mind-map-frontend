@@ -201,7 +201,7 @@ export const TooltipContent = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
           }}
           {...context.getFloatingProps(props)}
           className={classNames(
-            'z-50 whitespace-pre-wrap rounded border border-primary bg-layer-0 py-1 text-left shadow',
+            'z-50 rounded border border-primary bg-layer-0 py-1 text-left whitespace-pre-wrap shadow',
             context.getFloatingProps(props).className as string,
           )}
           data-qa="tooltip"
@@ -213,7 +213,7 @@ export const TooltipContent = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElemen
               context={context.context}
               fill="currentColor"
               strokeWidth={1}
-              className="stroke-primary text-[var(--bg-layer-0,_#000000)]"
+              className="stroke-primary text-(--bg-layer-0,#000000)"
             />
           )}
         </div>

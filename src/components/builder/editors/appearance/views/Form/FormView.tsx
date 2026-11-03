@@ -31,7 +31,7 @@ export const FormView: React.FC = () => {
             title={section.title}
             withBorder={index + 1 < formSections.length && !section.subSections?.length}
             wrapperClassName={section.wrapperClassName}
-            className={classNames(!section.component && 'pb-0 lg:pb-0 gap-0')}
+            className={classNames(!section.component && 'gap-0 pb-0 lg:pb-0')}
           >
             {section.component}
           </FormSection>
@@ -43,7 +43,7 @@ export const FormView: React.FC = () => {
                   title={subSection.title}
                   className={classNames(subSectionIndex === 0 && 'pt-4 lg:pt-4')}
                   Icon={subSection.Icon}
-                  titleClassName="!min-w-[174px] !font-medium"
+                  titleClassName="min-w-[174px]! font-medium!"
                   wrapperClassName={subSection.wrapperClassName}
                 >
                   {subSection.component}

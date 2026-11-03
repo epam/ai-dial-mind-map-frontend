@@ -102,7 +102,7 @@ export const VersionsHistoryModal: FC<VersionsHistoryModalProps> = ({ isOpen, ha
                       }
                     }}
                     className={classNames(
-                      'checkbox peer mr-0 size-[16px] rounded-[10px] border-[1.5px] bg-layer-3 hover:cursor-pointer hover:border-success checked:border-success',
+                      'checkbox peer mr-0 size-[16px] rounded-[10px] border-[1.5px] bg-layer-3 checked:border-success hover:cursor-pointer hover:border-success',
                       !!inProgressName && 'pointer-events-none',
                     )}
                   />
@@ -225,7 +225,7 @@ export const VersionsHistoryModal: FC<VersionsHistoryModalProps> = ({ isOpen, ha
                   <th
                     key={header.id}
                     className={classNames(
-                      'text-left py-2 px-4 text-xs h-9 text-secondary font-medium text-text-secondary uppercase',
+                      'text-text-secondary h-9 px-4 py-2 text-left text-xs font-medium text-secondary uppercase',
                       header.id === 'source' && 'w-auto pl-6',
                       header.id === 'version' && 'w-[85px]',
                       header.id === 'tokens' && 'w-[80px]',
@@ -267,10 +267,10 @@ export const VersionsHistoryModal: FC<VersionsHistoryModalProps> = ({ isOpen, ha
           {inProgressName && (
             <div
               className={classNames(
-                'flex bg-layer-3 sticky border-b border-tertiary pl-[52px] py-[9px] text-sm text-primary',
+                'sticky flex border-b border-tertiary bg-layer-3 py-[9px] pl-[52px] text-sm text-primary',
               )}
             >
-              <Loader size={16} containerClassName="absolute left-[24px] !w-fit" loaderClassName="!text-primary" />
+              <Loader size={16} containerClassName="absolute left-[24px] w-fit!" loaderClassName="text-primary!" />
               {inProgressName}
             </div>
           )}
@@ -278,8 +278,8 @@ export const VersionsHistoryModal: FC<VersionsHistoryModalProps> = ({ isOpen, ha
             <div className="group relative flex flex-col">
               <div
                 className={classNames([
-                  'pl-[39px] flex items-center justify-between outline-none !bg-layer-2 text-sm w-full py-0 input-form stroke-accent-primary border-accent-primary rounded-none m-0',
-                  !isUrlValid && '!border-error hover:border-error focus:border-error',
+                  'input-form m-0 flex w-full items-center justify-between rounded-none border-accent-primary bg-layer-2! stroke-accent-primary py-0 pl-[39px] text-sm outline-hidden',
+                  !isUrlValid && 'border-error! hover:border-error focus:border-error',
                 ])}
               >
                 <input
@@ -289,7 +289,7 @@ export const VersionsHistoryModal: FC<VersionsHistoryModalProps> = ({ isOpen, ha
                   defaultValue={addingMode === 'new' ? activeSourceUrl : ''}
                   onChange={handleInputChange}
                   className={classNames(
-                    'bg-transparent pl-3 py-[9px] w-full outline-none text-ellipsis pr-16 placeholder:text-sm text-primary',
+                    'w-full bg-transparent py-[9px] pr-16 pl-3 text-ellipsis text-primary outline-hidden placeholder:text-sm',
                   )}
                   placeholder="Source URL"
                 />
@@ -330,7 +330,7 @@ export const VersionsHistoryModal: FC<VersionsHistoryModalProps> = ({ isOpen, ha
           ) : (
             !inProgressName && (
               <div
-                className={classNames('flex bg-layer-3 sticky bottom-0 border-b border-tertiary pl-[23px] py-[9px]')}
+                className={classNames('sticky bottom-0 flex border-b border-tertiary bg-layer-3 py-[9px] pl-[23px]')}
               >
                 {filteredSources.some(s => s.type === SourceType.LINK) ? (
                   <div className="flex gap-3">
@@ -339,7 +339,7 @@ export const VersionsHistoryModal: FC<VersionsHistoryModalProps> = ({ isOpen, ha
                       onClick={() => {
                         setAddingMode('new');
                       }}
-                      className={classNames('text-sm text-accent-primary flex gap-2 items-center')}
+                      className={classNames('flex items-center gap-2 text-sm text-accent-primary')}
                     >
                       <IconPlus size={18} />
                       Add new version
@@ -351,7 +351,7 @@ export const VersionsHistoryModal: FC<VersionsHistoryModalProps> = ({ isOpen, ha
                         handleAddVersion({ link: activeSourceUrl, sourceId: sourceIdInVersionsModal });
                       }}
                       className={classNames(
-                        'text-sm text-accent-primary flex gap-2 items-center pl-3 border-l border-primary',
+                        'flex items-center gap-2 border-l border-primary pl-3 text-sm text-accent-primary',
                       )}
                     >
                       <IconRefresh size={18} />
@@ -360,7 +360,7 @@ export const VersionsHistoryModal: FC<VersionsHistoryModalProps> = ({ isOpen, ha
                   </div>
                 ) : (
                   <label
-                    className={classNames('text-sm text-accent-primary flex gap-2 items-center hover:cursor-pointer')}
+                    className={classNames('flex items-center gap-2 text-sm text-accent-primary hover:cursor-pointer')}
                   >
                     <input
                       type="file"

@@ -94,7 +94,7 @@ describe('Node', () => {
       />,
     );
     expect(screen.getByTestId('chat-node')).toHaveClass(
-      'py-[6px] px-2 text-xs hover:outline hover:outline-[2.5px] hover:outline-offset-[-1px] rounded-lg chat-conversation__message-node',
+      'py-[6px] px-2 text-xs hover:outline-solid hover:outline-[2.5px] hover:-outline-offset-1 rounded-lg chat-conversation__message-node',
     );
   });
 
@@ -110,7 +110,7 @@ describe('Node', () => {
       />,
     );
     expect(screen.getByTestId('chat-node')).toHaveClass(
-      'py-[6px] px-2 text-xs hover:outline hover:outline-[2.5px] hover:outline-offset-[-1px] rounded-lg chat-conversation__message-node',
+      'py-[6px] px-2 text-xs hover:outline-solid hover:outline-[2.5px] hover:-outline-offset-1 rounded-lg chat-conversation__message-node',
     );
   });
 });

@@ -33,7 +33,7 @@ export const GraphSettingsSection = () => {
           preview="edit"
           onChange={val => onSetPrompt(val ?? '')}
           height={215}
-          className="!rounded !border !border-primary !bg-layer-2 !text-primary"
+          className="rounded! border! border-primary! bg-layer-2! text-primary!"
           previewOptions={{
             components: {
               a: props => <a {...props} target="_blank" rel="noopener noreferrer" />,

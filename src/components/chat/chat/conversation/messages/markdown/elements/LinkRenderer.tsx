@@ -23,7 +23,7 @@ export const LinkRenderer = ({ href, children }: { href?: string; children?: Rea
   return (
     <span className="relative block h-0 w-full overflow-hidden pb-[56.25%]">
       <iframe
-        className="absolute left-0 top-0 size-full border-0"
+        className="absolute top-0 left-0 size-full border-0"
         src={`https://${YoutubeDomain}/embed/${videoId}`}
         title="YouTube video player"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

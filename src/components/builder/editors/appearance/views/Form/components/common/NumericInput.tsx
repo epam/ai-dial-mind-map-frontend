@@ -92,12 +92,12 @@ export const NumericInput = ({
           onChange={handleChange}
           placeholder={placeholder}
           className={classNames([
-            'input-form peer mx-0 w-full pr-[36px] text-sm focus:border-accent-primary group-hover:border-accent-primary',
+            'input-form peer mx-0 w-full pr-[36px] text-sm group-hover:border-accent-primary focus:border-accent-primary',
             Icon && 'pl-[38px]',
           ])}
         />
-        {Icon && <Icon size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-primary" />}
-        <div className="absolute right-1 top-1/2 flex -translate-y-1/2 flex-col">
+        {Icon && <Icon size={18} className="absolute top-1/2 left-3 -translate-y-1/2 text-primary" />}
+        <div className="absolute top-1/2 right-1 flex -translate-y-1/2 flex-col">
           <button type="button" onClick={() => updateValue(true)} className="hover:text-accent-primary">
             <IconChevronUp size={16} />
           </button>

@@ -31,7 +31,7 @@ export const PlaybackInput = () => {
   return (
     <div
       className={classNames(
-        'flex h-full w-full rounded-[3px] bg-layer-3 px-1 chat-footer__input items-end',
+        'chat-footer__input flex size-full items-end rounded-[3px] bg-layer-3 px-1',
         isMdUp ? 'min-h-[48px] py-[12px]' : 'min-h-11 py-[10px]',
       )}
     >
@@ -41,7 +41,7 @@ export const PlaybackInput = () => {
         className={classNames(
           'flex size-6 items-center justify-center rounded transition-colors duration-200 hover:text-accent-primary',
           {
-            'text-controls-disable pointer-events-none': isPreviousStepDisabled,
+            'pointer-events-none text-controls-disable': isPreviousStepDisabled,
           },
         )}
         tabIndex={0}
@@ -52,8 +52,8 @@ export const PlaybackInput = () => {
 
       <div
         className={classNames(
-          'h-full flex-1 px-3 text-base font-normal bg-transparent outline-none select-text cursor-default',
-          'whitespace-pre-wrap max-h-[150px] overflow-y-auto content-center',
+          'h-full flex-1 cursor-default bg-transparent px-3 text-base font-normal outline-hidden select-text',
+          'max-h-[150px] content-center overflow-y-auto whitespace-pre-wrap',
           !value && 'text-controls-disable',
         )}
         ref={textRef}
@@ -68,7 +68,7 @@ export const PlaybackInput = () => {
         className={classNames(
           'flex size-6 items-center justify-center rounded transition-colors duration-200 hover:text-accent-primary',
           {
-            'text-controls-disable pointer-events-none': isNextStepDisabled,
+            'pointer-events-none text-controls-disable': isNextStepDisabled,
           },
         )}
         tabIndex={0}

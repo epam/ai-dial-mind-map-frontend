@@ -365,7 +365,7 @@ export const MainToolbar = () => {
               <button
                 disabled={selectedView !== 'graph' && isMessageStreaming}
                 className={classNames([
-                  'relative w-[46px] flex justify-center items-center hover:text-accent-primary',
+                  'relative flex w-[46px] items-center justify-center hover:text-accent-primary',
                   selectedView === 'graph' && 'text-accent-primary',
                 ])}
                 onClick={() => dispatch(UIActions.setCurrentView('graph'))}
@@ -380,7 +380,7 @@ export const MainToolbar = () => {
               <button
                 disabled={selectedView !== 'table' && isMessageStreaming}
                 className={classNames([
-                  'relative w-[46px] flex justify-center items-center hover:text-accent-primary',
+                  'relative flex w-[46px] items-center justify-center hover:text-accent-primary',
                   selectedView === 'table' && 'text-accent-primary',
                 ])}
                 onClick={() => dispatch(UIActions.setCurrentView('table'))}
@@ -487,7 +487,7 @@ export const MainToolbar = () => {
               <button
                 disabled={selectedCustomizeView === 'form'}
                 className={classNames([
-                  'relative w-[46px] flex justify-center items-center hover:text-accent-primary',
+                  'relative flex w-[46px] items-center justify-center hover:text-accent-primary',
                   selectedCustomizeView === 'form' && 'text-accent-primary',
                 ])}
                 onClick={() => dispatch(UIActions.setCurrentCustomizeView('form'))}
@@ -502,7 +502,7 @@ export const MainToolbar = () => {
               <button
                 disabled={selectedCustomizeView === 'json'}
                 className={classNames([
-                  'relative w-[46px] flex justify-center items-center hover:text-accent-primary',
+                  'relative flex w-[46px] items-center justify-center hover:text-accent-primary',
                   selectedCustomizeView === 'json' && 'text-accent-primary',
                 ])}
                 onClick={() => dispatch(UIActions.setCurrentCustomizeView('json'))}

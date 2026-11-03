@@ -29,7 +29,7 @@ export const ActionMenu: FC<ActionMenuProps> = ({ original, hovered, handleAddVe
       name: 'Reindex',
       Icon: IconRefresh,
       className: 'text-sm',
-      iconClassName: '!text-error',
+      iconClassName: 'text-error!',
       onClick: () => {
         if (original.type === SourceType.LINK) {
           handleAddVersion({ link: original.url, sourceId: original.id, versionId: original.version });
