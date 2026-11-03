@@ -32,7 +32,7 @@ export const Statistics: React.FC<StatisticsProps> = ({ setPinnedStatistics, pin
     <Space
       size={2}
       direction="vertical"
-      className={classNames('bg-layer-0 rounded px-3 py-2', {
+      className={classNames('rounded bg-layer-0 px-3 py-2', {
         'rounded border border-primary shadow': pinnedStatistics,
       })}
     >

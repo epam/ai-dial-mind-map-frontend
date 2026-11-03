@@ -77,7 +77,7 @@ export const ChatNodeStyleSection = () => {
           label: 'Filled',
           value: ChatNodeType.Filled,
           className: 'bg-layer-4',
-          buttonActiveClassName: 'border-accent-primary !bg-accent-primary text-controls-permanent',
+          buttonActiveClassName: 'border-accent-primary bg-accent-primary! text-controls-permanent',
         },
         {
           label: 'Outlined',
@@ -87,8 +87,8 @@ export const ChatNodeStyleSection = () => {
         {
           label: 'Imaged',
           value: ChatNodeType.Imaged,
-          className: classNames(['bg-layer-4', !useNodeIconAsBgImage && 'opacity-50 pointer-events-none']),
-          buttonActiveClassName: 'border-accent-primary !bg-accent-primary text-controls-permanent',
+          className: classNames(['bg-layer-4', !useNodeIconAsBgImage && 'pointer-events-none opacity-50']),
+          buttonActiveClassName: 'border-accent-primary bg-accent-primary! text-controls-permanent',
           disabled: !useNodeIconAsBgImage,
           tooltipText: 'Available only when a background image is configured',
         },

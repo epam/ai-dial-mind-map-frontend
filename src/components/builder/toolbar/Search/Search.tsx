@@ -142,8 +142,8 @@ export const Search = () => {
   return (
     <div
       className={classNames([
-        'relative flex flex-col gap-2 px-3 z-20',
-        isMessageStreaming && 'opacity-50 pointer-events-none',
+        'relative z-20 flex flex-col gap-2 px-3',
+        isMessageStreaming && 'pointer-events-none opacity-50',
       ])}
     >
       <div className="flex gap-2">
@@ -153,7 +153,7 @@ export const Search = () => {
             ref: refs.setReference,
             id: 'search-input',
             className:
-              'w-full bg-transparent text-[14px] leading-3 outline-none text-primary placeholder:text-secondary',
+              'w-full bg-transparent text-[14px] leading-3 outline-hidden text-primary placeholder:text-secondary',
             type: 'text',
             placeholder: 'Search...',
             value: query,
@@ -163,7 +163,7 @@ export const Search = () => {
         />
         <IconX
           size={24}
-          className={classNames(['hover:text-primary hover:cursor-pointer invisible', query && '!visible'])}
+          className={classNames(['invisible hover:cursor-pointer hover:text-primary', query && 'visible!'])}
           onClick={() => setQuery('')}
         />
       </div>
@@ -187,7 +187,7 @@ export const Search = () => {
               key={item.id}
               id={`search-result-${index}`}
               className={classNames([
-                'hover:bg-accent-tertiary-alpha px-3 py-2 border-b hover:cursor-pointer border-b-secondary last:border-none',
+                'border-b border-b-secondary px-3 py-2 last:border-none hover:cursor-pointer hover:bg-accent-tertiary-alpha',
                 focusedIndex === index && 'bg-accent-tertiary-alpha',
               ])}
               role="option"

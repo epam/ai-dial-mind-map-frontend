@@ -26,7 +26,7 @@ export const HighlightedSearchText: React.FC<HighlightedSearchTextProps> = ({ ma
   );
 
   return (
-    <span className="break-words text-[12px] text-secondary">
+    <span className="text-[12px] wrap-break-word text-secondary">
       {showPrefixEllipsis && <span>...</span>}
       <span>{before}</span>
       <span className="text-accent-tertiary">{highlight}</span>

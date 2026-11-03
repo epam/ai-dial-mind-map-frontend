@@ -57,7 +57,7 @@ export const Toasts = () => (
               <span>{!toast.icon ? <Icon size={24} className={iconClass} stroke={1.5} /> : toast.icon}</span>
               <div
                 style={{ wordBreak: 'break-word' }}
-                className="mx-0.5 whitespace-pre-wrap text-sm leading-[21px] text-primary *:!whitespace-pre-wrap"
+                className="mx-0.5 text-sm leading-[21px] whitespace-pre-wrap text-primary *:whitespace-pre-wrap!"
               >
                 {message}
               </div>

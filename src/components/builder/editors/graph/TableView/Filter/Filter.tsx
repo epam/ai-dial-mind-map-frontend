@@ -71,7 +71,7 @@ export const Filter = <TData, TValue>({
         {selectedFilters && selectedFilters.length !== options.length && (
           <span
             data-testid="bubble-badge"
-            className="absolute right-0.5 top-0 size-3 rounded-full border-2 border-secondary bg-accent-primary"
+            className="absolute top-0 right-0.5 size-3 rounded-full border-2 border-secondary bg-accent-primary"
           />
         )}
       </button>

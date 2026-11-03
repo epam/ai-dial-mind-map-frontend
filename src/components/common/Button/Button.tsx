@@ -42,7 +42,7 @@ const Button: React.FC<ButtonProps> = ({
   dataTestId,
 }) => {
   const baseClasses = classNames(
-    'inline-flex items-center gap-2 button',
+    'button inline-flex items-center gap-2',
     { [`button-${variant}`]: variant },
     className,
   );

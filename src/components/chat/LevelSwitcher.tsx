@@ -32,7 +32,7 @@ export const LevelSwitcher = ({ classes, onChange }: { classes?: string; onChang
           className={classNames([
             baseButtonClasses,
             'rounded-l-[10px]',
-            depth === 1 && 'text-accent-primary level-switcher__button--active',
+            depth === 1 && 'level-switcher__button--active text-accent-primary',
             disabled && 'pointer-events-none',
           ])}
           disabled={disabled}
@@ -50,7 +50,7 @@ export const LevelSwitcher = ({ classes, onChange }: { classes?: string; onChang
           className={classNames([
             baseButtonClasses,
             'rounded-r-[10px]',
-            depth === 2 && 'text-accent-primary level-switcher__button--active',
+            depth === 2 && 'level-switcher__button--active text-accent-primary',
             disabled && 'pointer-events-none',
           ])}
           disabled={disabled}

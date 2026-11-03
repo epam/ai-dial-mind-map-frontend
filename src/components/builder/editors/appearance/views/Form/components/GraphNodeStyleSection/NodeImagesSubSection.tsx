@@ -100,7 +100,7 @@ export const NodeImagesSubSection = () => {
           onSuccessUpload={getOnSuccessUploadHandler(type)}
           defaultIcon={<IconPhoto />}
           placeholder="No icon"
-          imageContainerClassName="!p-0"
+          imageContainerClassName="p-0!"
         />
       ))}
     </div>

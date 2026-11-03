@@ -39,7 +39,7 @@ export const SearchInput = <TData, TValue>({ column, setIsOpen, isOpen }: Props<
         {!!currentValue.length && (
           <span
             data-testid="bubble-badge"
-            className="absolute right-0.5 top-0 size-3 rounded-full border-2 border-secondary bg-accent-primary"
+            className="absolute top-0 right-0.5 size-3 rounded-full border-2 border-secondary bg-accent-primary"
           />
         )}
       </button>
@@ -56,7 +56,7 @@ export const SearchInput = <TData, TValue>({ column, setIsOpen, isOpen }: Props<
           autoFocus={isOpen}
           onBlur={handleBlur}
           placeholder="Search..."
-          className="w-full max-w-[200px] border-b border-secondary bg-transparent text-[14px] leading-3 text-primary outline-none placeholder:text-secondary"
+          className="w-full max-w-[200px] border-b border-secondary bg-transparent text-[14px] leading-3 text-primary outline-hidden placeholder:text-secondary"
         />
       </div>
     </div>
