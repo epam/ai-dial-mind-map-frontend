@@ -147,7 +147,7 @@
     }
   },
   "optionalDependencies": {
-    "@next/swc-linux-x64-gnu": "*",
-    "@next/swc-linux-x64-musl": "*"
+    "@next/swc-linux-x64-gnu": "15.5.29",
+    "@next/swc-linux-x64-musl": "15.5.29"
   }
 }
